@@ -231,7 +231,7 @@
   <div class="card" style="background:#F2FBF6; border-color:#CFEFDD; margin-bottom:20px;">
     <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:700; color:var(--good); text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;">Confirmed / locked assumptions</div>
     <div style="font-size:12.5px; color:var(--ink); line-height:1.6;">
-      ₹1 Cr target (Sep–Dec) is <b>new online/D2C revenue only</b> — offline NE revenue (₹3 Cr/yr) is intentionally excluded from this plan.
+      ₹1 Cr target (Sep–Dec) is <b>new online/D2C revenue only</b> — offline NE revenue (₹3 Cr/yr) is intentionally excluded. Online demand is <b>rest of India</b> (Bengaluru and Hyderabad first).
       Founder capital is available to deploy (modest, not large). Target AOV starts at <b>₹599 in Sep</b> and steps up monthly to <b>₹899 by Mar ’27</b> (7-month blend <b>₹749</b>). Free shipping above <b>₹699</b>.
       Shelf life is <b>60 days</b>. Current shipping is <b>₹120/order</b> (target ≤ ₹150 blended). Bulk packaging cost is <b>₹10–15/unit</b>. GTIN &amp; GST are already live.
       <b>August 2026 is reserved for planning &amp; prep</b> (packaging sign-off, marketplace listings, content stockpile) — the revenue ramp itself starts <b>September 2026</b>.
@@ -322,26 +322,26 @@
         <div class="row2" style="margin-bottom:8px;">
           <div class="field" style="margin-bottom:8px;">
             <label style="font-weight:500;">Website (D2C)</label>
-            <input type="number" id="chWebsite" value="50" min="0" max="100" step="1">
+            <input type="number" id="chWebsite" value="45" min="0" max="100" step="1">
           </div>
           <div class="field" style="margin-bottom:8px;">
             <label style="font-weight:500;">Marketplace</label>
-            <input type="number" id="chMarketplace" value="10" min="0" max="100" step="1">
+            <input type="number" id="chMarketplace" value="15" min="0" max="100" step="1">
           </div>
         </div>
         <div class="row2" style="margin-bottom:8px;">
           <div class="field" style="margin-bottom:8px;">
             <label style="font-weight:500;">Quick commerce</label>
-            <input type="number" id="chQcomm" value="0" min="0" max="100" step="1">
+            <input type="number" id="chQcomm" value="8" min="0" max="100" step="1">
           </div>
           <div class="field" style="margin-bottom:8px;">
             <label style="font-weight:500;">Community / WhatsApp</label>
-            <input type="number" id="chCommunity" value="40" min="0" max="100" step="1">
+            <input type="number" id="chCommunity" value="28" min="0" max="100" step="1">
           </div>
         </div>
         <div class="field" style="margin-bottom:0;">
           <label style="font-weight:500;">Corporate gifting / B2B</label>
-          <input type="number" id="chB2B" value="0" min="0" max="100" step="1">
+          <input type="number" id="chB2B" value="4" min="0" max="100" step="1">
         </div>
       </div>
 
@@ -1132,7 +1132,7 @@ $('exportCsvBtn').addEventListener('click', exportCsv);
 // Autosave — browser storage keyed to this page. Reopen later in the
 // same browser and every input (targets, ramp, channels, costs) restores.
 // ---------------------------------------------------------------
-const STORAGE_KEY = 'krispino-planning-tool-progress-v3';
+const STORAGE_KEY = 'krispino-planning-tool-progress-v4';
 const saveStatusEl = $('saveStatus');
 function showSaveStatus(msg){ saveStatusEl.textContent = msg; }
 

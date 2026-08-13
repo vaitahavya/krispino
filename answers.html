@@ -283,14 +283,14 @@
       <b>How this works:</b> every field below is editable — a text box, a bulleted list, a flex box, or a table cell, depending on the shape of the answer. Type over any suggested value, or fill in what's left blank. Everything you type is <b>autosaved right in this page</b> as you go (no download, no extra file) — close the tab and reopen this same file later and your edits are still there. Use <b>Export CSV</b> or <b>Print</b> if you want a separate copy to read or share, and <b>Clear saved data</b> to wipe the autosave and start over.
     </div>
     <div class="prep-banner">
-      <b>Timeline:</b> August 2026 is reserved for planning &amp; prep (packaging sign-off, marketplace listings, content stockpile) — it is not counted in the revenue ramp. All figures below run <b>September–December 2026</b> (4 months) against the ₹1 Cr online-only target. Change the assumptions below and the live tables recalculate automatically — everything else on this page is still a static suggestion.
+      <b>Timeline:</b> August 2026 is reserved for planning &amp; prep (packaging sign-off, marketplace listings, content stockpile) — it is not counted in the revenue ramp. All figures below run <b>September–December 2026</b> (4 months) against the ₹1 Cr online-only target. Change the assumptions below <b>or the channel % split in Section 1</b> and every indigo cell (platform sales, community, B2B, website traffic, marketing spend) recalculates.
     </div>
 
     <div class="assump-panel">
       <div class="ap-head">
         <div>
           <div class="ap-title">Live assumptions <span class="calc-badge">Drives tables below</span></div>
-          <div class="ap-hint">Matches the Krispino Planning Tool and the Business Plan sheet (Sep AOV ₹599). Edit any field and every indigo-highlighted table cell recalculates instantly.</div>
+          <div class="ap-hint">Matches the Krispino Planning Tool and the Business Plan sheet (Sep AOV ₹599). Edit any field — or the % column in “Which channel will contribute how much?” — and indigo cells across the sheet recalculate instantly.</div>
         </div>
         <button type="button" class="ap-reset" id="apResetBtn">Reset to defaults</button>
       </div>
@@ -371,13 +371,14 @@ const SECTIONS = [
       ]
     },
     { q: 'Which channel will contribute how much?', type: 'table', calc: 'channel',
+      calcNotes: { website: 'Changing any % here updates website traffic, platform sales, community, B2B, and spend-linked revenue.' },
       headers: ['Channel', '% Split', 'Monthly Avg', 'Weekly Avg', 'No. of orders / month'],
       rows: [
-        ['Website', '50%', '', '', ''],
-        ['Marketplace', '10%', '', '', ''],
-        ['Quick Commerce', '0%', '', '', ''],
-        ['Community / WhatsApp', '40%', '', '', ''],
-        ['Corporate Gifting / B2B', '0%', '', '', ''],
+        ['Website', '45%', '', '', ''],
+        ['Marketplace', '15%', '', '', ''],
+        ['Quick Commerce', '8%', '', '', ''],
+        ['Community / WhatsApp', '28%', '', '', ''],
+        ['Corporate Gifting / B2B', '4%', '', '', ''],
       ]
     },
   ]
@@ -632,10 +633,10 @@ const SECTIONS = [
     { q: 'Delivery TAT by region', type: 'table',
       headers: ['Region', 'TAT'],
       rows: [
-        ['Kerala', '2–4 days'],
-        ['South', '4–6 days'],
+        ['Bengaluru / Hyderabad (hubs)', '2–4 days'],
+        ['Other metros (Mumbai, Pune, Chennai, NCR)', '4–6 days'],
         ['Rest of India', '6–9 days'],
-        ['NE / J&K', '10–14 days'],
+        ['NE / J&K (not a target)', '10–14 days — fulfil if ordered'],
       ]
     },
     { q: 'Damaged order target', type: 'table',
@@ -748,13 +749,13 @@ const SECTIONS = [
       headers: ['Metric', 'Value'],
       rows: [['Current monthly traffic', '20 sessions (Website tab — not 20,000)']]
     },
-    { q: 'Target monthly traffic', type: 'table',
+    { q: 'Target monthly traffic', type: 'table', calc: 'web-traffic',
       headers: ['Metric', 'Value'],
-      rows: [['Target monthly traffic', '1,10,000']]
+      rows: [['Target monthly traffic', '']]
     },
-    { q: 'Target weekly traffic', type: 'table',
+    { q: 'Target weekly traffic', type: 'table', calc: 'web-traffic',
       headers: ['Metric', 'Value'],
-      rows: [['Target weekly traffic', '27,500']]
+      rows: [['Target weekly traffic', '']]
     },
     { q: 'Target conversion rate', type: 'table',
       headers: ['Stage', 'Conversion'],
@@ -772,23 +773,36 @@ const SECTIONS = [
       headers: ['Metric', 'Target'],
       rows: [['Checkout completion', '55–65% of cart-to-checkout']]
     },
-    { q: 'Weekly website improvement plan', a: 'Wednesday.' },
-    { q: 'Weekly website performance report', type: 'table',
-      headers: ['Metric', 'This week'],
+    { q: 'Weekly website improvement plan', type: 'table',
+      headers: ['Week focus', 'Change', 'Success metric'],
       rows: [
-        ['Sessions', ''],
-        ['Conversion rate', ''],
-        ['AOV', ''],
-        ['Cart-to-checkout %', ''],
-        ['Checkout completion %', ''],
-        ['Top-selling SKU', ''],
+        ['Wed 1', 'Hero SKU PDP above fold + ₹699 combo', 'CVR ≥ 2.0%'],
+        ['Wed 2', 'COD + UPI both visible; remove extra checkout fields', 'Checkout completion ≥ 55%'],
+        ['Wed 3', 'Free-ship bar at ₹699 on cart', 'AOV ≥ ₹599'],
+        ['Wed 4', 'Reviews + UGC on Banana Chips PDP', 'ATC rate +10%'],
+      ]
+    },
+    { q: 'Weekly website performance report', type: 'table', calc: 'web-report',
+      headers: ['Metric', 'How it is calculated', 'Sep (launch week)', 'Dec (peak week)'],
+      rows: [
+        ['Sessions / week', 'Website orders ÷ conversion rate (scales with Website % in Sec 1)', '', ''],
+        ['Conversion rate', 'Paid orders ÷ sessions — PDP, checkout, and reviews lift CVR by Dec', '2.0%', '3.0%'],
+        ['Orders / week', 'Sessions × CVR', '', ''],
+        ['AOV', 'Revenue ÷ orders. Free-ship bar at ₹699 lifts Dec basket', '', ''],
+        ['Revenue / week', 'Orders × AOV — Website share of the ₹1 Cr window', '', ''],
+        ['Add-to-cart rate', '% of sessions that add a SKU (hero PDP + UGC)', '7%', '9%'],
+        ['Cart-to-checkout', 'ATC → checkout start (COD + UPI visible, fewer fields)', '40%', '50%'],
+        ['Checkout completion', 'Checkout start → paid order', '55%', '65%'],
+        ['RTO %', 'Reverse / undelivered of prepaid + COD — keep ≤ 3%', '3%', '3%'],
+        ['Paid vs organic sessions', 'Meta/Google vs SEO, direct, influencer, WhatsApp', '55 / 45', '45 / 55'],
+        ['Top-selling SKU', 'Merchandising focus that week', 'Banana Chips 180g', 'Festive combo ₹699'],
       ]
     },
   ]
 },
 {
   id: 'sec8', title: '8. Social Media Campaign Plan',
-  note: 'Content-calendar specifics need your creative/content team\'s input — the cadence numbers below are general D2C starting benchmarks, not Krispino-specific research. August is the month to stockpile this content before the September launch.',
+  note: 'Content-calendar specifics need your creative/content team\'s input — the cadence numbers below are general D2C starting benchmarks, not Krispino-specific research. August is the month to stockpile this content before the September launch. Language mix is for rest-of-India D2C: English first, Malayalam second (brand origin / recipes — not a market geo).',
   questions: [
     { q: 'Number of reels per week', type: 'table',
       headers: ['Format', 'Per week'],
@@ -816,11 +830,13 @@ const SECTIONS = [
       ]
     },
     { q: 'Language-wise content split', type: 'table',
-      headers: ['Language', 'Share'],
+      headers: ['Language', 'Share', 'Use'],
       rows: [
-        ['Malayalam', '45%'],
-        ['English', '40%'],
-        ['Hindi', '15%'],
+        ['English', '40%', 'National D2C, PDPs, ads, Amazon/Flipkart copy'],
+        ['Malayalam', '25%', 'Brand origin, recipes, founder/UGC — 2nd by volume, not a geo target'],
+        ['Hindi', '20%', 'North / Hindi-belt Reels, captions, community replies'],
+        ['Tamil', '8%', 'Chennai / Coimbatore discovery; Instamart/Blinkit creative later'],
+        ['Telugu', '7%', 'Hyderabad community + QC creative'],
       ]
     },
     { q: 'Campaign theme for each month', type: 'table',
@@ -838,30 +854,39 @@ const SECTIONS = [
       rows: [['Reach', '6,00,000']]
     },
     { q: 'Reporting format for content performance', type: 'table',
-      headers: ['Metric', 'This week'],
+      headers: ['Metric', 'Sep target'],
       rows: [
-        ['Post / reel', ''],
-        ['Platform', ''],
-        ['Reach / views', ''],
-        ['Engagement', ''],
-        ['Link clicks / traffic', ''],
-        ['Attributed orders', ''],
+        ['Post / reel', '4–5 reels + 3 static'],
+        ['Platform', 'Instagram 70% / Facebook 30%'],
+        ['Reach / views', '1,50,000 / week'],
+        ['Engagement', '3.5% ER'],
+        ['Link clicks / traffic', '2,250 (1.5% CTR on 1.5 L views)'],
+        ['Attributed orders', '45 (2% CVR on clicks)'],
       ]
     },
   ]
 },
 {
   id: 'sec9', title: '9. Influencer Marketing Plan',
-  note: '',
+  note: 'Funnel below uses 4,00,000 campaign views and Sep AOV ₹599. The sheet’s 2% on views is not a site conversion rate — applying it to views would imply 8,000 orders per campaign.',
   questions: [
     { q: 'Influencers to contact per week', type: 'table',
       headers: ['Metric', 'Value'],
       rows: [
         ['To contact / week', '40–50'],
-        ['Focus', 'Hyper-local nano — product + commission only'],
+        ['Focus', 'Hyper-local nano in Bengaluru and Hyderabad — product + commission only'],
       ]
     },
-    { q: 'Influencers to close per week', a: 'Sheet has a date in this cell (12 Oct 2026) — treat as a pipeline milestone, not a weekly close count. Re-fill a number when you set one.' },
+    { q: 'Influencers to close per week', type: 'table',
+      headers: ['Metric', 'Number'],
+      rows: [
+        ['Contacted / week', '40–50'],
+        ['Close rate (nano / barter)', '18%'],
+        ['Closes / week', '8'],
+        ['Go live same week', '2 (matches videos-live target)'],
+        ['Pipeline sitting', '6 in content / legal / product-ship'],
+      ]
+    },
     { q: 'Sample boxes to send per week', a: '5.' },
     { q: 'Videos expected live per week', a: '2 (Hema to upload content live — Weekly tab).' },
     { q: 'Cost per influencer category', type: 'table',
@@ -872,8 +897,18 @@ const SECTIONS = [
         ['Macro', 'Not the starting bet — nano/micro first'],
       ]
     },
-    { q: 'Expected views per campaign', a: '4,00,000.' },
-    { q: 'Expected orders per influencer', a: '2% conversion on views (Influencer tab).' },
+    { q: 'Expected views per campaign', type: 'table',
+      headers: ['Metric', 'Value'],
+      rows: [['Campaign views', '4,00,000']]
+    },
+    { q: 'Expected orders per influencer', type: 'table',
+      headers: ['Scenario', 'Views', 'CTR %', 'Website visits', 'CVR %', 'Orders', 'Revenue @ ₹599 AOV'],
+      rows: [
+        ['Conservative — passive content', '4,00,000', '0.5%', '2,000', '1.2%', '24', '₹14,376'],
+        ['Moderate — standard CTA', '4,00,000', '1.5%', '6,000', '2.0%', '120', '₹71,880'],
+        ['Aggressive — discount / high intent', '4,00,000', '3.0%', '12,000', '3.5%', '420', '₹2,51,580'],
+      ]
+    },
     { q: 'Coupon-code-wise sales tracking', a: 'Shopflo — unique code per creator.' },
     { q: 'Target CAC from influencers', type: 'table',
       headers: ['Metric', 'Amount'],
@@ -887,17 +922,17 @@ const SECTIONS = [
 },
 {
   id: 'sec10', title: '10. Marketplace & Quick Commerce',
-  note: '',
+  note: 'Online geo is rest of India (Bengaluru and Hyderabad first). QC starts Bengaluru (Nov), then Hyderabad. 8% of the ₹1 Cr Sep–Dec mix is a Nov–Dec burst, not a Sep run-rate. QC AOV ₹280 (1–2 packs); marketplace ₹450; website ₹599.',
   questions: [
     { q: 'Platform-wise target launch date', type: 'table',
       headers: ['Platform', 'Target launch', 'Notes'],
       rows: [
         ['Flipkart', '22 Sep 2026', 'Priority — 0% commission under ₹1,000'],
         ['Amazon Seller Central', '6 Oct 2026', 'Grocery category gated'],
-        ['Zepto', '3 Nov 2026', 'Kochi first'],
-        ['Blinkit', '17 Nov 2026', 'Kerala, 3–4 SKUs only'],
-        ['Swiggy Instamart', '17 Nov 2026', 'Run parallel with Blinkit'],
-        ['Amazon Now', 'Not scheduled 2026', 'Monitor; no Kerala coverage yet'],
+        ['Zepto', '3 Nov 2026', 'Bengaluru first, then Hyderabad'],
+        ['Blinkit', '17 Nov 2026', 'Bengaluru, 3–4 SKUs only'],
+        ['Swiggy Instamart', '17 Nov 2026', 'Bengaluru parallel with Blinkit; pick a winner in 8 weeks'],
+        ['Amazon Now', 'Monitor Q4 2026', 'Already live in Bengaluru / NCR / Mumbai — use the Amazon relationship'],
       ]
     },
     { q: 'Weekly follow-up plan', type: 'table',
@@ -910,10 +945,11 @@ const SECTIONS = [
       ]
     },
     { q: 'SKUs to list first', type: 'table',
-      headers: ['Platform', 'First SKUs'],
+      headers: ['Platform', 'First SKUs', 'Why'],
       rows: [
-        ['Amazon / Flipkart', 'Banana Chips, Jackfruit, Chilli Tapioca, Kanthari / Baby Murukku, Kozhikodan Mixture'],
-        ['Blinkit', '3–4 SKUs in Kerala only — not the full catalog'],
+        ['Flipkart / Amazon', 'Banana Chips 180g, Chilli Tapioca, Baby Murukku, Kozhikodan Mixture, Jackfruit', 'Price < ₹1,000 (Flipkart 0% comm), recognizable, ship-safe'],
+        ['Zepto (Bengaluru)', 'Banana Chips 180g, Chilli Tapioca 200g, Baby Murukku 140g, Kozhikodan 180g', 'Impulse packs, dark-store fit, MRP ₹132–204'],
+        ['Blinkit / Instamart (Bengaluru)', 'Same 3–4 SKUs only — do not list full catalog', 'Ad-wallet and dark-store slot cost; prove 1 city first, then Hyderabad'],
       ]
     },
     { q: 'Platform-wise pricing', type: 'table',
@@ -932,21 +968,38 @@ const SECTIONS = [
         ['Quick Commerce', '₹119', '34.0%'],
       ]
     },
-    { q: 'Expected monthly sales', type: 'table', calc: 'platform-sales',
-      headers: ['Platform', 'Monthly', 'Weekly'],
+    { q: 'Expected monthly sales', type: 'table', calc: 'platform-month',
+      headers: ['Platform', 'Sep', 'Oct', 'Nov', 'Dec', 'Sep–Dec total', 'AOV used', 'Dec orders / month'],
       rows: [
-        ['Marketplace', '₹8.55 L', '₹1.97 L'],
-        ['Quick Commerce', '₹4.28 L', '₹0.98 L'],
+        ['Flipkart', '', '', '', '', '', '₹450', ''],
+        ['Amazon', '', '', '', '', '', '₹450', ''],
+        ['Zepto Bengaluru', '', '', '', '', '', '₹280', ''],
+        ['Blinkit Bengaluru', '', '', '', '', '', '₹280', ''],
+        ['Instamart Bengaluru', '', '', '', '', '', '₹280', ''],
+        ['Amazon Now', '', '', '', '', '', '—', ''],
+        ['Marketplace total', '', '', '', '', '', '₹450', ''],
+        ['Quick commerce total', '', '', '', '', '', '₹280', ''],
       ]
     },
-    { q: 'Expected weekly sales', a: 'See table above — same figures, weekly column.' },
+    { q: 'Expected weekly sales', type: 'table', calc: 'platform-week',
+      headers: ['Platform', 'Sep / week', 'Oct / week', 'Nov / week', 'Dec / week'],
+      rows: [
+        ['Flipkart', '', '', '', ''],
+        ['Amazon', '', '', '', ''],
+        ['Zepto Bengaluru', '', '', '', ''],
+        ['Blinkit Bengaluru', '', '', '', ''],
+        ['Instamart Bengaluru', '', '', '', ''],
+        ['Marketplace total', '', '', '', ''],
+        ['Quick commerce total', '', '', '', ''],
+      ]
+    },
     { q: 'Listing cost / commission / logistics impact', type: 'table',
       headers: ['Platform', 'Commission', 'Logistics / extra cost'],
       rows: [
         ['Marketplace', '~22%', '₹120 / order freight'],
         ['Flipkart < ₹1,000', '0%', 'Priority platform'],
         ['Quick commerce', '~30% bundled', 'No separate logistics line'],
-        ['Blinkit ads', '', '~₹25,000 / SKU / state wallet + ₹2–3 L/month min — launch thin'],
+        ['Blinkit ads', '~28% + fulfilment', '₹25,000 / SKU / state wallet + ₹2–3 L/month min — 3 SKUs, Bengaluru only'],
       ]
     },
     { q: 'Owner for each platform', type: 'table',
@@ -954,14 +1007,14 @@ const SECTIONS = [
       rows: [
         ['Flipkart & Amazon', 'Growth / Marketing; weekly close: V + Giri'],
         ['Zepto / Blinkit / Instamart', 'Founder + Growth; weekly close: V, Bhavana, Giri'],
-        ['Amazon Now', 'Founder (monitor)'],
+        ['Amazon Now', 'Founder (Bengaluru / NCR / Mumbai — already live, monitor)'],
       ]
     },
   ]
 },
 {
   id: 'sec11', title: '11. Community & WhatsApp Sales',
-  note: '',
+  note: 'Communities are Bengaluru and Hyderabad (stock staged there). Online demand is rest of India.',
   questions: [
     { q: 'Communities to contact per week', type: 'table',
       headers: ['Period', 'Communities / week'],
@@ -987,7 +1040,7 @@ const SECTIONS = [
         ['Groups to target', '30'],
         ['Owned announcement groups by Dec', '25–35'],
         ['Contacts by Dec', '1,200–2,000'],
-        ['Approach', 'Apartment/RWA via secretary; office groups post-tasting only; never post uninvited'],
+        ['Approach', 'Bengaluru and Hyderabad RWA/apartments first (stock held in those cities); office groups post-tasting only; never post uninvited.'],
       ]
     },
     { q: 'Sampling plan', type: 'table',
@@ -1001,22 +1054,22 @@ const SECTIONS = [
         ['Office timing', '4–5 PM'],
       ]
     },
-    { q: 'Weekly sales target', type: 'table',
+    { q: 'Weekly sales target', type: 'table', calc: 'community-week',
       headers: ['Month', 'Weekly target'],
       rows: [
-        ['Sep', '₹5,100'],
-        ['Oct', '₹12,300'],
-        ['Nov', '₹25,800'],
-        ['Dec', '₹33,300'],
+        ['Sep', ''],
+        ['Oct', ''],
+        ['Nov', ''],
+        ['Dec', ''],
       ]
     },
-    { q: 'Monthly sales target', type: 'table',
+    { q: 'Monthly sales target', type: 'table', calc: 'community-month',
       headers: ['Month', 'Monthly target', 'Approx. orders'],
       rows: [
-        ['Sep', '₹22,000', '44'],
-        ['Oct', '₹53,000', '106'],
-        ['Nov', '₹1,11,000', '190'],
-        ['Dec', '₹1,43,000', '230'],
+        ['Sep', '', ''],
+        ['Oct', '', ''],
+        ['Nov', '', ''],
+        ['Dec', '', ''],
       ]
     },
     { q: 'Repeat-order plan', a: 'Retargeting with numbers received + WhatsApp automation. A ₹500 order of 4–5 pouches is consumed in 2–4 weeks; monthly reorder (e.g. first Saturday = Krispino Day) is the natural cycle.' },
@@ -1045,7 +1098,16 @@ const SECTIONS = [
   note: '',
   questions: [
     { q: 'Number of corporate leads to contact weekly', a: '20–25.' },
-    { q: 'Number of samples to send weekly', a: 'Sheet cell looks like a date (7 May 2026) — not a count. Re-fill a weekly sample number when you set one.' },
+    { q: 'Number of samples to send weekly', type: 'table',
+      headers: ['Metric', 'Number'],
+      rows: [
+        ['Leads contacted / week', '20–25'],
+        ['Sample send rate', '~35% of leads'],
+        ['Samples / week', '8'],
+        ['Expected conversions / week', '1.6 (20% of samples)'],
+        ['At MOQ 25 × ₹699', '~₹28,000 revenue per converted account'],
+      ]
+    },
     { q: 'Expected conversion rate', a: '20% of samples sent.' },
     { q: 'Gift box price points', type: 'table',
       headers: ['Tier', 'Price'],
@@ -1057,15 +1119,25 @@ const SECTIONS = [
     },
     { q: 'Minimum order quantity', a: '25.' },
     { q: 'Margin per gift box', a: '25%.' },
-    { q: 'Monthly corporate sales target', type: 'table',
-      headers: ['Month', 'Gifting parked in Community tab'],
+    { q: 'Monthly corporate sales target', type: 'table', calc: 'b2b-month',
+      headers: ['Month', 'Revenue', 'Orders (accounts)', 'Notes'],
       rows: [
-        ['Nov', '₹30,000'],
-        ['Dec', '₹45,000'],
-        ['Corporate tab', 'Not filled — treat Community numbers as a starter, not the B2B plan'],
+        ['Sep', '', '', 'First box + repeat test'],
+        ['Oct', '', '', 'Diwali pitch starts'],
+        ['Nov', '', '', 'Diwali close'],
+        ['Dec', '', '', 'New-year / Q4 leftover budgets'],
+        ['Sep–Dec total', '', '', 'Matches Corporate Gifting / B2B % in Sec 1'],
       ]
     },
-    { q: 'Weekly corporate sales target', a: 'Not filled on the Corporate tab.' },
+    { q: 'Weekly corporate sales target', type: 'table', calc: 'b2b-week',
+      headers: ['Month', 'Weekly revenue'],
+      rows: [
+        ['Sep', ''],
+        ['Oct', ''],
+        ['Nov', ''],
+        ['Dec', ''],
+      ]
+    },
   ]
 },
 {
@@ -1091,30 +1163,41 @@ const SECTIONS = [
       rows: [['Sep–Dec blended', '~₹1.04 L / week']]
     },
     { q: 'Budget by channel', type: 'table', calc: 'stream',
-      headers: ['Stream', '%', 'Amount'],
+      headers: ['Stream', '%', 'Period amount', 'Monthly spend'],
       rows: [
-        ['Marketplace ads', '30%', '₹6.16 L'],
-        ['Paid social', '30%', '₹6.16 L'],
-        ['Influencer / UGC', '15%', '₹3.08 L'],
-        ['D2C site & CRM', '20%', '₹4.10 L'],
-        ['Contingency', '5%', '₹1.03 L'],
+        ['Marketplace ads', '30%', '', ''],
+        ['Paid social', '30%', '', ''],
+        ['Influencer / UGC', '15%', '', ''],
+        ['D2C site & CRM', '20%', '', ''],
+        ['Contingency', '5%', '', ''],
       ]
     },
-    { q: 'Expected revenue from each spend area', type: 'table',
+    { q: 'Expected revenue from each spend area', type: 'table', calc: 'spend-rev',
       headers: ['Spend area', 'Expected revenue'],
       rows: [
-        ['Marketplace ads', '₹30.8 L'],
-        ['Paid social', '₹21.6 L'],
-        ['Influencer / UGC', '₹9.2 L'],
-        ['D2C site', '₹32.8 L'],
-        ['Community / WhatsApp', '₹19.6 L'],
+        ['Marketplace ads', ''],
+        ['Paid social', ''],
+        ['Influencer / UGC', ''],
+        ['D2C site', ''],
+        ['Community / WhatsApp', ''],
       ]
     },
     { q: 'Expected CAC', type: 'table',
       headers: ['Metric', 'Amount'],
       rows: [['Expected CAC', '₹89.8 / order']]
     },
-    { q: 'Expected ROAS', a: '' },
+    { q: 'Expected ROAS', type: 'table',
+      headers: ['Channel', 'Target ROAS', 'Implied CAC @ ₹599 AOV'],
+      rows: [
+        ['Blended (18% mkt spend)', '5.6×', '₹107'],
+        ['Marketplace ads (Flipkart/Amazon)', '5.0×', '₹120'],
+        ['Paid social', '3.5×', '₹171'],
+        ['D2C site / CRM', '4.5×', '₹133'],
+        ['Influencer / UGC', '2.5×', '₹240'],
+        ['Quick commerce ads', '2.8×', '₹214 (on ₹280 QC AOV: ₹100)'],
+        ['Stop / reallocate below', '2.0×', '₹300'],
+      ]
+    },
     { q: 'Maximum acceptable CAC', type: 'table',
       headers: ['Metric', 'Amount'],
       rows: [['Maximum acceptable CAC', '₹112 / order']]
@@ -1144,9 +1227,9 @@ const SECTION14 = {
         ['Sep modeled (Section 4)', '₹599'],
       ]
     },
-    { q: 'Website traffic target', type: 'table',
+    { q: 'Website traffic target', type: 'table', calc: 'web-traffic',
       headers: ['Metric', 'Value'],
-      rows: [['Weekly traffic', '27,500']]
+      rows: [['Weekly traffic', '']]
     },
     { q: 'Conversion target', type: 'table',
       headers: ['Stage', 'Rate'],
@@ -1165,16 +1248,76 @@ const SECTION14 = {
         ['Carousel', '1'],
       ]
     },
-    { q: 'Influencer outreach', a: '' },
-    { q: 'Influencer posts going live', a: 'Hema to upload content live.' },
-    { q: 'Paid ads', a: 'V.' },
-    { q: 'Community sales', a: '' },
-    { q: 'Corporate/B2B outreach', a: '' },
-    { q: 'Marketplace follow-ups', a: 'V and Giri reaching out and closing.' },
-    { q: 'Quick commerce follow-ups', a: 'V, Bhavana and Giri reaching out and closing.' },
-    { q: 'Packaging progress', a: 'Designing to be started; vendor to be closed.' },
-    { q: 'Website changes', a: 'To be discussed.' },
-    { q: 'Customer reviews and feedback', a: '' },
+    { q: 'Influencer outreach', type: 'table',
+      headers: ['Metric', 'Weekly'],
+      rows: [
+        ['Contact', '40–50'],
+        ['Close', '8'],
+        ['Go live', '2'],
+      ]
+    },
+    { q: 'Influencer posts going live', type: 'table',
+      headers: ['Metric', 'Weekly'],
+      rows: [['Videos live', '2 — Hema uploads']]
+    },
+    { q: 'Paid ads', type: 'table',
+      headers: ['Channel', 'Weekly spend (Sep)', 'Owner'],
+      rows: [
+        ['Marketplace ads', '₹1.15 L', 'V'],
+        ['Paid social', '₹1.15 L', 'V'],
+        ['QC ads (from Nov)', '₹0 until Nov, then ₹0.40 L', 'V'],
+      ]
+    },
+    { q: 'Community sales', type: 'table', calc: 'community-week',
+      headers: ['Month', 'Weekly target'],
+      rows: [
+        ['Sep', ''],
+        ['Oct', ''],
+        ['Nov', ''],
+        ['Dec', ''],
+      ]
+    },
+    { q: 'Corporate/B2B outreach', type: 'table',
+      headers: ['Metric', 'Weekly'],
+      rows: [
+        ['Leads', '20–25'],
+        ['Samples', '8'],
+        ['Sep revenue', '₹4,600'],
+        ['Nov–Dec revenue', '₹34,600'],
+      ]
+    },
+    { q: 'Marketplace follow-ups', type: 'table',
+      headers: ['Platform', 'Weekly action', 'Owner'],
+      rows: [
+        ['Flipkart', 'Listing QA, Buy Box, 0% comm SKUs live', 'V + Giri'],
+        ['Amazon', 'Category approval + 5 hero ASINs', 'V + Giri'],
+      ]
+    },
+    { q: 'Quick commerce follow-ups', type: 'table',
+      headers: ['Platform', 'Weekly action', 'Owner'],
+      rows: [
+        ['Zepto', 'Bengaluru NPI + 4 SKUs, no ads until week 2 live; Hyderabad next', 'V, Bhavana, Giri'],
+        ['Blinkit', 'Bengaluru 3 SKUs; do not pay ₹2–3 L ads until 50 orders/week', 'V, Bhavana, Giri'],
+        ['Instamart', 'Bengaluru parallel with Blinkit; pick winner in 8 weeks, then Hyderabad', 'V, Bhavana, Giri'],
+      ]
+    },
+    { q: 'Packaging progress', a: 'Designing to be started; vendor to be closed. Target lock in 2 weeks, print 2–3 weeks, launch 4–5 weeks.' },
+    { q: 'Website changes', type: 'table',
+      headers: ['Change', 'By'],
+      rows: [
+        ['₹699 free-ship bar + combo PDP', 'Sep week 1'],
+        ['COD + UPI checkout', 'Sep week 2'],
+        ['Shopflo influencer codes', 'Sep week 2'],
+      ]
+    },
+    { q: 'Customer reviews and feedback', type: 'table',
+      headers: ['Metric', 'Target'],
+      rows: [
+        ['72-hour WhatsApp response', '45–60%'],
+        ['Reviews / 100 orders', '8 (site) · 12 (Amazon)'],
+        ['Damage replace SLA', '24 hours'],
+      ]
+    },
   ]
 };
 
@@ -1184,27 +1327,56 @@ const SECTION15 = {
   questions: [
     { q: 'Monthly review date', a: '25th of each month.' },
     { q: 'Monthly dashboard format', type: 'table',
-      headers: ['Metric', 'Target vs actual'],
+      headers: ['Metric', 'Sep target', 'Dec target'],
       rows: [
-        ['Revenue', ''],
-        ['Orders', ''],
-        ['AOV', ''],
-        ['Channel-wise breakdown', ''],
-        ['Marketing spend vs revenue', ''],
-        ['Blended CAC vs ₹112 ceiling', ''],
+        ['Revenue', '₹8.99 L', '₹29.96 L'],
+        ['Orders', '1,500', '4,000'],
+        ['AOV', '₹599', '₹749'],
+        ['Channel-wise', 'Site 45 / MP 15 / QC 0 / WA 28 / B2B 4', 'Site 45 / MP 15 / QC 8 / WA 28 / B2B 4'],
+        ['Marketing spend vs revenue', '18% · ₹1.62 L', '18% · ₹5.39 L'],
+        ['Blended CAC vs ₹112 ceiling', '₹90', '₹90'],
       ]
     },
-    { q: 'Data sources', a: '' },
+    { q: 'Data sources', type: 'table',
+      headers: ['Metric', 'Source'],
+      rows: [
+        ['Website revenue / AOV / CVR', 'Shopify + GA4'],
+        ['Influencer / coupon orders', 'Shopflo'],
+        ['Amazon / Flipkart', 'Seller Central / Flipkart Seller Hub'],
+        ['Zepto / Blinkit / Instamart', 'Brand portals + weekly settlement'],
+        ['Paid social', 'Meta Ads Manager'],
+        ['WhatsApp / community', 'Shopflo tags + Google Sheet'],
+      ]
+    },
     { q: 'Owner for each metric', a: 'See Section 16 owner table.' },
-    { q: 'Decision-making process when targets are missed', a: 'If actuals fall more than 15% below target for 2 consecutive months, reallocate marketing toward whichever channel is converting rather than holding the 50/10/0/40/0 (Website / Marketplace / QC / Community-WA / B2B) split rigid.' },
+    { q: 'Decision-making process when targets are missed', a: 'If actuals fall more than 15% below target for 2 consecutive months, reallocate marketing toward whichever channel is converting rather than holding the 45/15/8/28/4 (Website / Marketplace / QC / Community-WA / B2B) split rigid.' },
   ]
 };
 
 const SECTION16 = {
   id: 'sec16', title: '16. Team Roles & Responsibilities',
-  note: 'From Ravi\'s original meeting notes: Giri, Vaitahavya, Hema, and Bhavana are the workstream owners, with Ravi chairing. Fill in the table below during or right after the meeting.',
-  people: ['Giri', 'Vaitahavya', 'Hema', 'Bhavana'],
+  note: 'Ownership from the team RACI sheet. Giri, Vaitahavya (V), Hema, and Bhavana are workstream owners; Ravi chairs. Names in order are owner, then co-owners. Per-person detail tables follow.',
+  people: ['Giri', 'Vaitahavya', 'Hema', 'Bhavana', 'Ravi'],
   cols: ['Proposed role', 'Weekly responsibilities', 'Monthly responsibilities', 'Measurable KPIs', 'Support needed from others', 'Dependencies on founders/management'],
+  ownership: {
+    q: 'Who owns each workstream',
+    type: 'table',
+    headers: ['Responsibility', 'Owner', 'Co-owner', 'Support'],
+    rows: [
+      ['Who owns revenue planning', 'Giri', 'V', ''],
+      ['Who owns packaging', 'Bhavana', 'V', ''],
+      ['Who owns pricing', 'Giri', 'Hema', ''],
+      ['Who owns website and analytics', 'Hema', 'V', 'Bhavana'],
+      ['Who owns content calendar', 'Bhavana', 'V', 'Hema'],
+      ['Who owns influencer onboarding', 'Giri', 'V', 'Bhavana'],
+      ['Who owns community sales', 'Bhavana', 'V', 'Ravi'],
+      ['Who owns marketplace follow-ups', 'V', 'Giri', ''],
+      ['Who owns quick-commerce follow-ups', 'V', 'Giri', 'Bhavana'],
+      ['Who owns corporate gifting', 'Hema', 'Bhavana', 'V'],
+      ['Who owns weekly reporting', 'V', 'Bhavana', 'Giri'],
+      ['Who owns monthly reporting', 'V', 'Bhavana', 'Giri'],
+    ],
+  },
 };
 
 const SECTION17 = {
@@ -1229,7 +1401,7 @@ const SECTION17 = {
     { t: 'Weekly planning format', done: false },
     { t: 'Weekly reporting format', done: false },
     { t: 'Monthly review format', done: false },
-    { t: 'Team roles and responsibilities', done: false },
+    { t: 'Team roles and responsibilities', done: true },
     { t: 'KPI dashboard', done: false },
     { t: 'Risks and mitigation plan', done: false },
   ]
@@ -1289,7 +1461,16 @@ const CALC_COLS = {
   minaov:              ['label', 'out:minaov'],
   'platform-margin':   ['label', 'out:margin', 'out:marginPct'],
   'platform-sales':    ['label', 'out:monthly', 'out:weekly'],
-  stream:              ['label', 'src:pct', 'out:amount'],
+  'platform-month':    ['label', 'out:m0', 'out:m1', 'out:m2', 'out:m3', 'out:total', 'aov', 'out:decorders'],
+  'platform-week':     ['label', 'out:m0', 'out:m1', 'out:m2', 'out:m3'],
+  'community-month':   ['label', 'out:revenue', 'out:orders'],
+  'community-week':    ['label', 'out:weekly'],
+  'b2b-month':         ['label', 'out:revenue', 'out:orders', 'note'],
+  'b2b-week':          ['label', 'out:weekly'],
+  stream:              ['label', 'src:pct', 'out:amount', 'out:monthly'],
+  'spend-rev':         ['label', 'out:revenue'],
+  'web-report':        ['label', 'formula', 'out:sep', 'out:dec'],
+  'web-traffic':       ['label', 'out:value'],
 };
 
 // ---------------------------------------------------------------
@@ -1408,6 +1589,13 @@ renderQSection(SECTION15);
   el.className = 'qsec';
   el.id = SECTION16.id;
   el.innerHTML = `<h2>${SECTION16.title}</h2><p class="research-note">${SECTION16.note}</p>`;
+  const ownCard = document.createElement('div');
+  ownCard.className = 'qcard';
+  ownCard.innerHTML = `
+      <div class="qtext"><span>${SECTION16.ownership.q}</span><span class="tag sugg">Suggested</span></div>
+      ${renderAnswerField(SECTION16.ownership, SECTION16.title)}
+    `;
+  el.appendChild(ownCard);
   SECTION16.people.forEach(person => {
     const wrap = document.createElement('div');
     wrap.innerHTML = `<div style="font-family:'Poppins',sans-serif; font-weight:700; font-size:13px; color:var(--slate); margin:14px 0 6px;">${person}</div>`;
@@ -1512,6 +1700,28 @@ function getAssumptions() {
   };
 }
 
+function setOut(tr, name, value) {
+  const el = tr.querySelector('[data-calc-out="' + name + '"]');
+  if (el) el.value = value;
+}
+function fmtMoneyOrDash(n) {
+  return !n || n < 1 ? '—' : fmtINR(n);
+}
+
+// Platform mix inside Marketplace / QC (of that channel's Sep–Dec total).
+const PLATFORM_SPLIT = {
+  flipkart:           { parent: 'marketplace', share: 8 / 15, months: [0.10, 0.30, 0.3125, 0.2875], aov: 450 },
+  amazon:             { parent: 'marketplace', share: 7 / 15, months: [0, 0.228571, 0.385714, 0.385714], aov: 450 },
+  zeptobengaluru:     { parent: 'quickcommerce', share: 4 / 8, months: [0, 0, 0.45, 0.55], aov: 280 },
+  blinkitbengaluru:   { parent: 'quickcommerce', share: 2.5 / 8, months: [0, 0, 0.36, 0.64], aov: 280 },
+  instamartbengaluru: { parent: 'quickcommerce', share: 1.5 / 8, months: [0, 0, 1 / 3, 2 / 3], aov: 280 },
+  amazonnow:          { parent: 'quickcommerce', share: 0, months: [0, 0, 0, 0], aov: 280 },
+};
+const RAMP_WA = { sep: 0.067, oct: 0.161, nov: 0.337, dec: 0.435 };
+const RAMP_B2B = { sep: 0.05, oct: 0.20, nov: 0.375, dec: 0.375 };
+const MONTH_KEYS = ['sep', 'oct', 'nov', 'dec'];
+const MONTH_WEEKS = [weeksInMonth(2026, 9), weeksInMonth(2026, 10), weeksInMonth(2026, 11), weeksInMonth(2026, 12)];
+
 function recalcTables() {
   const A = getAssumptions();
   const months = monthsBetween(A.startMonth, A.endMonth);
@@ -1521,22 +1731,35 @@ function recalcTables() {
   if (!totalWeeks) totalWeeks = n * 4.33;
   const cogsFrac = A.cogsPct / 100;
 
-  // ---- Channel split (Sec 1) — also feeds Platform-wise expected sales (Sec 10) ----
+  // ---- Channel split (Sec 1) — source of truth for %; all linked tables read this ----
   const channelPct = {};
   document.querySelectorAll('table[data-calc-group="channel"] tr[data-calc-row]').forEach(tr => {
     const key = tr.dataset.calcRow;
     const srcInput = tr.querySelector('[data-calc-src="pct"]');
     const pct = srcInput ? (parseFloat(srcInput.value) || 0) : 0;
     channelPct[key] = pct;
-    const outMonthly = tr.querySelector('[data-calc-out="monthly"]');
-    const outWeekly = tr.querySelector('[data-calc-out="weekly"]');
-    const outOrders = tr.querySelector('[data-calc-out="orders"]');
-    if (outMonthly) outMonthly.value = fmtINR(A.targetRevenue * pct / 100 / n);
-    if (outWeekly) outWeekly.value = fmtINR(A.targetRevenue * pct / 100 / totalWeeks);
-    // Monthly orders = (channel share of monthly revenue) ÷ AOV
+    const monthlyRev = A.targetRevenue * pct / 100 / n;
+    setOut(tr, 'monthly', fmtINR(monthlyRev));
+    setOut(tr, 'weekly', fmtINR(A.targetRevenue * pct / 100 / totalWeeks));
     const monthlyUnits = A.aov > 0 ? (A.targetRevenue / n) / A.aov : 0;
-    if (outOrders) outOrders.value = fmtNum(monthlyUnits * pct / 100);
+    setOut(tr, 'orders', fmtNum(monthlyUnits * pct / 100));
   });
+  const pctOf = (...keys) => {
+    for (let i = 0; i < keys.length; i++) {
+      if (channelPct[keys[i]] != null) return channelPct[keys[i]];
+    }
+    return 0;
+  };
+  const webPct = pctOf('website');
+  const mpPct = pctOf('marketplace');
+  const qcPct = pctOf('quickcommerce');
+  const waPct = pctOf('communitywhatsapp');
+  const b2bPct = pctOf('corporategiftingb2b');
+  const webTotal = A.targetRevenue * webPct / 100;
+  const mpTotal = A.targetRevenue * mpPct / 100;
+  const qcTotal = A.targetRevenue * qcPct / 100;
+  const waTotal = A.targetRevenue * waPct / 100;
+  const b2bTotal = A.targetRevenue * b2bPct / 100;
 
   // ---- Contribution margin per order (Sec 3) — also feeds Platform-wise margin (Sec 10) ----
   const margins = {
@@ -1547,30 +1770,124 @@ function recalcTables() {
   document.querySelectorAll('table[data-calc-group="margin"] tr[data-calc-row], table[data-calc-group="platform-margin"] tr[data-calc-row]').forEach(tr => {
     const m = margins[tr.dataset.calcRow];
     if (m === undefined) return;
-    const outMargin = tr.querySelector('[data-calc-out="margin"]');
-    const outPct = tr.querySelector('[data-calc-out="marginPct"]');
-    if (outMargin) outMargin.value = fmtRupee(m);
-    if (outPct) outPct.value = fmtPct(A.aov ? (m / A.aov * 100) : 0);
+    setOut(tr, 'margin', fmtRupee(m));
+    setOut(tr, 'marginPct', fmtPct(A.aov ? (m / A.aov * 100) : 0));
   });
 
   // ---- Minimum profitable AOV (Sec 3) — Quick Commerce row has no fixed floor, left static ----
   document.querySelectorAll('table[data-calc-group="minaov"] tr[data-calc-row]').forEach(tr => {
-    const out = tr.querySelector('[data-calc-out="minaov"]');
-    if (!out) return;
     const key = tr.dataset.calcRow;
     let floor = 0;
     if (key === 'website') floor = (1 - cogsFrac) > 0 ? A.logisticsCost / (1 - cogsFrac) : 0;
     else if (key === 'marketplace') floor = (1 - cogsFrac - A.mpCommission/100) > 0 ? A.logisticsCost / (1 - cogsFrac - A.mpCommission/100) : 0;
-    out.value = fmtRupee(floor);
+    setOut(tr, 'minaov', fmtRupee(floor));
   });
 
-  // ---- Platform-wise expected sales (Sec 10) — mirrors the channel table's % split ----
+  // ---- Legacy 2-col platform sales (if present) ----
   document.querySelectorAll('table[data-calc-group="platform-sales"] tr[data-calc-row]').forEach(tr => {
     const pct = channelPct[tr.dataset.calcRow] || 0;
-    const outMonthly = tr.querySelector('[data-calc-out="monthly"]');
-    const outWeekly = tr.querySelector('[data-calc-out="weekly"]');
-    if (outMonthly) outMonthly.value = fmtINR(A.targetRevenue * pct / 100 / n);
-    if (outWeekly) outWeekly.value = fmtINR(A.targetRevenue * pct / 100 / totalWeeks);
+    setOut(tr, 'monthly', fmtINR(A.targetRevenue * pct / 100 / n));
+    setOut(tr, 'weekly', fmtINR(A.targetRevenue * pct / 100 / totalWeeks));
+  });
+
+  // ---- Platform monthly / weekly (Sec 10) — phasing × channel % ----
+  const parentTotal = { marketplace: mpTotal, quickcommerce: qcTotal };
+  const monthRev = {};
+  Object.keys(PLATFORM_SPLIT).forEach(key => {
+    const spec = PLATFORM_SPLIT[key];
+    const total = (parentTotal[spec.parent] || 0) * spec.share;
+    monthRev[key] = spec.months.map(w => total * w);
+  });
+  monthRev.marketplacetotal = [0, 1, 2, 3].map(i => (monthRev.flipkart[i] || 0) + (monthRev.amazon[i] || 0));
+  monthRev.quickcommercetotal = [0, 1, 2, 3].map(i =>
+    (monthRev.zeptobengaluru[i] || 0) + (monthRev.blinkitbengaluru[i] || 0) + (monthRev.instamartbengaluru[i] || 0));
+  const aovByPlatform = {
+    flipkart: 450, amazon: 450, marketplacetotal: 450,
+    zeptobengaluru: 280, blinkitbengaluru: 280, instamartbengaluru: 280, amazonnow: 280, quickcommercetotal: 280,
+  };
+  document.querySelectorAll('table[data-calc-group="platform-month"] tr[data-calc-row]').forEach(tr => {
+    const vals = monthRev[tr.dataset.calcRow];
+    if (!vals) return;
+    vals.forEach((v, i) => setOut(tr, 'm' + i, fmtMoneyOrDash(v)));
+    const tot = vals.reduce((a, b) => a + b, 0);
+    setOut(tr, 'total', fmtMoneyOrDash(tot));
+    const aov = aovByPlatform[tr.dataset.calcRow];
+    setOut(tr, 'decorders', aov && vals[3] ? fmtNum(vals[3] / aov) : '—');
+  });
+  document.querySelectorAll('table[data-calc-group="platform-week"] tr[data-calc-row]').forEach(tr => {
+    const vals = monthRev[tr.dataset.calcRow];
+    if (!vals) return;
+    vals.forEach((v, i) => setOut(tr, 'm' + i, fmtMoneyOrDash(v / (MONTH_WEEKS[i] || 4.3))));
+  });
+
+  // ---- Community (Sec 11 + 14) and B2B (Sec 12) — ramp × channel % ----
+  const waMonth = MONTH_KEYS.map(k => waTotal * RAMP_WA[k]);
+  const b2bMonth = MONTH_KEYS.map(k => b2bTotal * RAMP_B2B[k]);
+  const communityAov = 500;
+  const b2bBox = 25 * 699;
+  document.querySelectorAll('table[data-calc-group="community-month"] tr[data-calc-row]').forEach(tr => {
+    const idx = MONTH_KEYS.indexOf(tr.dataset.calcRow);
+    if (idx < 0) return;
+    setOut(tr, 'revenue', fmtINR(waMonth[idx]));
+    setOut(tr, 'orders', fmtNum(communityAov ? waMonth[idx] / communityAov : 0));
+  });
+  document.querySelectorAll('table[data-calc-group="community-week"] tr[data-calc-row]').forEach(tr => {
+    const idx = MONTH_KEYS.indexOf(tr.dataset.calcRow);
+    if (idx < 0) return;
+    setOut(tr, 'weekly', fmtINR(waMonth[idx] / (MONTH_WEEKS[idx] || 4.3)));
+  });
+  document.querySelectorAll('table[data-calc-group="b2b-month"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'sepdectotal') {
+      setOut(tr, 'revenue', fmtINR(b2bTotal));
+      setOut(tr, 'orders', fmtNum(b2bBox ? b2bTotal / b2bBox : 0));
+      return;
+    }
+    const idx = MONTH_KEYS.indexOf(key);
+    if (idx < 0) return;
+    setOut(tr, 'revenue', fmtINR(b2bMonth[idx]));
+    setOut(tr, 'orders', fmtNum(b2bBox ? b2bMonth[idx] / b2bBox : 0));
+  });
+  document.querySelectorAll('table[data-calc-group="b2b-week"] tr[data-calc-row]').forEach(tr => {
+    const idx = MONTH_KEYS.indexOf(tr.dataset.calcRow);
+    if (idx < 0) return;
+    setOut(tr, 'weekly', fmtINR(b2bMonth[idx] / (MONTH_WEEKS[idx] || 4.3)));
+  });
+
+  // ---- Website weekly scorecard + traffic (Sec 7 + 14) ----
+  const sepCvr = 0.02, decCvr = 0.03;
+  const sepAov = A.aov;
+  const decAov = A.aov <= 599 ? 749 : Math.round(A.aov * 1.25);
+  const avgWeeks = totalWeeks / n;
+  const sepOrdersW = sepAov > 0 ? (webTotal / n / sepAov) / avgWeeks : 0;
+  const sepSessW = sepCvr > 0 ? sepOrdersW / sepCvr : 0;
+  const decSessW = sepSessW * 1.15;
+  const decOrdersW = decSessW * decCvr;
+  const sepRevW = sepOrdersW * sepAov;
+  const decRevW = decOrdersW * decAov;
+  document.querySelectorAll('table[data-calc-group="web-report"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'sessionsweek') {
+      setOut(tr, 'sep', fmtNum(sepSessW));
+      setOut(tr, 'dec', fmtNum(decSessW));
+    } else if (key === 'conversionrate') {
+      setOut(tr, 'sep', '2.0%');
+      setOut(tr, 'dec', '3.0%');
+    } else if (key === 'ordersweek') {
+      setOut(tr, 'sep', fmtNum(sepOrdersW));
+      setOut(tr, 'dec', fmtNum(decOrdersW));
+    } else if (key === 'aov') {
+      setOut(tr, 'sep', fmtRupee(sepAov));
+      setOut(tr, 'dec', fmtRupee(decAov));
+    } else if (key === 'revenueweek') {
+      setOut(tr, 'sep', fmtINR(sepRevW));
+      setOut(tr, 'dec', fmtINR(decRevW));
+    }
+  });
+  document.querySelectorAll('table[data-calc-group="web-traffic"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'targetweeklytraffic' || key === 'weeklytraffic') setOut(tr, 'value', fmtNum(sepSessW));
+    else if (key === 'targetmonthlytraffic') setOut(tr, 'value', fmtNum(sepSessW * avgWeeks));
   });
 
   // ---- Marketing budget by stream (Sec 13) ----
@@ -1578,8 +1895,21 @@ function recalcTables() {
   document.querySelectorAll('table[data-calc-group="stream"] tr[data-calc-row]').forEach(tr => {
     const srcInput = tr.querySelector('[data-calc-src="pct"]');
     const pct = srcInput ? (parseFloat(srcInput.value) || 0) : 0;
-    const out = tr.querySelector('[data-calc-out="amount"]');
-    if (out) out.value = fmtINR(totalBudget * pct / 100);
+    const periodAmt = totalBudget * pct / 100;
+    setOut(tr, 'amount', fmtINR(periodAmt));
+    setOut(tr, 'monthly', fmtINR(periodAmt / n));
+  });
+
+  // Spend-area expected revenue tracks the channel that spend supports
+  document.querySelectorAll('table[data-calc-group="spend-rev"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    let rev = 0;
+    if (key === 'marketplaceads') rev = mpTotal;
+    else if (key === 'paidsocial') rev = webTotal * 0.48;
+    else if (key === 'influencerugc') rev = webTotal * 0.20;
+    else if (key === 'd2csite') rev = webTotal;
+    else if (key === 'communitywhatsapp') rev = waTotal;
+    setOut(tr, 'revenue', fmtINR(rev));
   });
   fitWrapFields();
 }
@@ -1657,7 +1987,7 @@ document.getElementById('printBtn').addEventListener('click', () => window.print
 // file), no separate download. Reopen this same HTML file later in the
 // same browser and your edits are restored automatically.
 // ---------------------------------------------------------------
-const STORAGE_KEY = 'krispino-answers-worksheet-progress-v3';
+const STORAGE_KEY = 'krispino-answers-worksheet-progress-v5';
 const saveStatusEl = document.getElementById('saveStatus');
 function showSaveStatus(msg) { saveStatusEl.textContent = msg; }
 
