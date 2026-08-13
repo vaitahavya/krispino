@@ -91,9 +91,12 @@
     color:var(--indigo); background:var(--sugg-bg); border:1px solid var(--sugg-border); border-radius:8px;
     padding:1px 7px; margin-left:8px; vertical-align:middle;
   }
-  table.ans-table td input[data-calc-out]{background:var(--sugg-bg); font-weight:700; color:var(--indigo); cursor:default;}
-  table.ans-table td input[data-calc-out]:focus{outline:1px solid var(--sugg-border);}
-  table.ans-table td input[data-calc-src]{background:#FFFDF5; font-weight:700;}
+  table.ans-table td input[data-calc-out],
+  table.ans-table td textarea[data-calc-out]{background:var(--sugg-bg); font-weight:700; color:var(--indigo); cursor:default;}
+  table.ans-table td input[data-calc-out]:focus,
+  table.ans-table td textarea[data-calc-out]:focus{outline:1px solid var(--sugg-border);}
+  table.ans-table td input[data-calc-src],
+  table.ans-table td textarea[data-calc-src]{background:#FFFDF5; font-weight:700;}
   .calc-note{display:block; font-size:10px; color:var(--muted); padding:2px 6px 0; line-height:1.3;}
 
   section.qsec{margin-bottom:34px; scroll-margin-top:70px;}
@@ -105,6 +108,7 @@
 
   .qcard{
     background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:10px;
+    overflow-x:auto;
   }
   .qcard .qtext{font-size:13px; font-weight:600; color:var(--ink); margin-bottom:8px; display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
   .qcard .tag{
@@ -119,44 +123,85 @@
     resize:vertical; transition:border-color .15s, box-shadow .15s;
   }
   .qcard textarea:focus, .qcard input:focus{outline:none; border-color:var(--indigo); box-shadow:0 0 0 3px rgba(79,70,229,0.12);}
+  .qcard table textarea.cell-wrap{
+    border:none; background:transparent; padding:5px 6px; border-radius:0; box-shadow:none;
+  }
+  .qcard table textarea.cell-wrap:focus{box-shadow:none;}
 
   /* Bullet-list answer type */
   .bullet-list{display:flex; flex-direction:column; gap:6px;}
-  .bullet-row{display:flex; align-items:center; gap:8px;}
+  .qcard > textarea{
+    min-height:4.5em; line-height:1.5; overflow:hidden; white-space:pre-wrap;
+    overflow-wrap:anywhere; field-sizing:content; resize:none;
+  }
+  .bullet-row{display:flex; align-items:flex-start; gap:8px;}
+  .bullet-row textarea.cell-wrap{
+    flex:1; min-height:1.6em; border:1px solid var(--line); border-radius:8px; padding:8px 10px;
+    background:#FBFBFE; resize:none; overflow:hidden; line-height:1.45;
+    white-space:pre-wrap; overflow-wrap:anywhere; field-sizing:content;
+  }
   .bullet-row .bmark{color:var(--indigo); font-weight:800; font-size:14px; flex-shrink:0; width:14px; text-align:center;}
   .bullet-row input{flex:1;}
 
-  /* Flexbox answer type — wrapping, extendable boxes */
-  .flex-list{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px;}
+  /* Flexbox answer type — column cards, wrapping text */
+  .flex-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));
+    gap:12px;
+    margin-bottom:10px;
+    counter-reset:flexbox;
+  }
   .flex-item{
-    display:flex; align-items:center; gap:6px; flex:1 1 220px; min-width:180px;
-    background:#FBFBFE; border:1px solid var(--line); border-radius:8px; padding:2px 4px 2px 11px;
+    display:flex; flex-direction:column; gap:8px; min-height:132px;
+    background:#FBFBFE; border:1px solid var(--line); border-radius:12px; padding:12px 12px 10px;
     transition:border-color .15s, box-shadow .15s;
   }
   .flex-item:focus-within{border-color:var(--indigo); box-shadow:0 0 0 3px rgba(79,70,229,0.12);}
-  .flex-item input{flex:1; border:none; background:transparent; padding:7px 2px; min-width:60px;}
-  .flex-item input:focus{outline:none; box-shadow:none;}
+  .flex-item-bar{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+  .flex-n{
+    counter-increment:flexbox;
+    font-family:'Poppins',sans-serif; font-size:10px; font-weight:700; letter-spacing:.04em;
+    text-transform:uppercase; color:var(--indigo); background:var(--sugg-bg); border:1px solid var(--sugg-border);
+    border-radius:20px; padding:2px 8px;
+  }
+  .flex-n::before{content:"Box " counter(flexbox);}
+  .flex-item textarea{
+    flex:1; width:100%; min-height:88px; border:none; background:transparent;
+    padding:0; font-family:'Inter',system-ui,sans-serif; font-size:13px; line-height:1.5; color:var(--ink);
+    resize:vertical; field-sizing:content;
+  }
+  .flex-item textarea:focus{outline:none; box-shadow:none;}
   .flex-item .rm{
-    flex-shrink:0; width:20px; height:20px; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; width:22px; height:22px; display:flex; align-items:center; justify-content:center;
     border-radius:50%; color:var(--muted); font-size:15px; font-weight:700; cursor:pointer; line-height:1;
   }
   .flex-item .rm:hover{background:var(--open-bg); color:var(--warn);}
   .flex-add-btn{
     font-family:'Inter',sans-serif; font-size:12px; font-weight:600; color:var(--indigo); background:var(--sugg-bg);
-    border:1px dashed var(--sugg-border); border-radius:8px; padding:7px 13px; cursor:pointer;
+    border:1px dashed var(--sugg-border); border-radius:8px; padding:8px 14px; cursor:pointer;
   }
   .flex-add-btn:hover{background:var(--sugg-border);}
 
   /* Table answer type */
-  table.ans-table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  table.ans-table{width:100%; border-collapse:collapse; font-size:12.5px; table-layout:fixed;}
   table.ans-table th{
     text-align:left; font-family:'Poppins',sans-serif; font-size:10px; font-weight:700; color:var(--muted);
     background:#F3F4F8; padding:7px 9px; text-transform:uppercase; letter-spacing:.03em; border:1px solid var(--line);
   }
-  table.ans-table td{padding:5px; border:1px solid var(--line); vertical-align:middle;}
-  table.ans-table td.label-cell{font-weight:700; background:#FAFAFE; white-space:nowrap;}
-  table.ans-table td input{width:100%; border:none; background:transparent; font:inherit; padding:5px 6px;}
-  table.ans-table td input:focus{outline:1px solid var(--indigo); border-radius:4px;}
+  table.ans-table td{padding:5px; border:1px solid var(--line); vertical-align:top; word-break:break-word;}
+  table.ans-table td.label-cell{font-weight:700; background:#FAFAFE; white-space:normal; width:22%; overflow-wrap:anywhere;}
+  table.ans-table td input,
+  table.ans-table td textarea.cell-wrap{
+    width:100%; border:none; background:transparent; font:inherit; padding:5px 6px;
+    display:block; box-sizing:border-box;
+  }
+  table.ans-table td textarea.cell-wrap{
+    min-height:1.6em; line-height:1.45; resize:none; overflow:hidden;
+    white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word;
+    field-sizing:content;
+  }
+  table.ans-table td input:focus,
+  table.ans-table td textarea.cell-wrap:focus{outline:1px solid var(--indigo); border-radius:4px;}
 
   table.owner-table{width:100%; border-collapse:collapse; font-size:12.5px; margin-bottom:16px;}
   table.owner-table th{
@@ -164,8 +209,12 @@
     background:var(--slate); padding:8px 9px; text-transform:uppercase; letter-spacing:.03em;
   }
   table.owner-table td{padding:6px; border:1px solid var(--line); vertical-align:top;}
-  table.owner-table td input{width:100%; border:none; background:transparent; font:inherit; padding:4px;}
-  table.owner-table td input:focus{outline:1px solid var(--indigo); border-radius:4px;}
+  table.owner-table td textarea.cell-wrap{
+    width:100%; min-height:2.4em; border:none; background:transparent; font:inherit; padding:4px;
+    display:block; box-sizing:border-box; resize:none; overflow:hidden; line-height:1.45;
+    white-space:pre-wrap; overflow-wrap:anywhere; field-sizing:content;
+  }
+  table.owner-table td textarea.cell-wrap:focus{outline:1px solid var(--indigo); border-radius:4px;}
   table.owner-table td.name-cell{font-weight:700; background:#FAFAFE; width:110px;}
 
   .checklist{list-style:none; margin:0; padding:0;}
@@ -183,7 +232,7 @@
     .sidebar, .topbar .actions, .note-banner, .prep-banner{display:none !important;}
     .app{display:block;}
     .main{max-width:100%; padding:0;}
-    .qcard{break-inside:avoid; border:1px solid #ccc;}
+    .flex-item{break-inside:avoid;}
     section.qsec{break-inside:avoid-page;}
   }
   @media (max-width:900px){
@@ -234,7 +283,7 @@
       <b>How this works:</b> every field below is editable — a text box, a bulleted list, a flex box, or a table cell, depending on the shape of the answer. Type over any suggested value, or fill in what's left blank. Everything you type is <b>autosaved right in this page</b> as you go (no download, no extra file) — close the tab and reopen this same file later and your edits are still there. Use <b>Export CSV</b> or <b>Print</b> if you want a separate copy to read or share, and <b>Clear saved data</b> to wipe the autosave and start over.
     </div>
     <div class="prep-banner">
-      <b>Timeline:</b> August 2026 is reserved for planning &amp; prep (packaging sign-off, marketplace listings, content stockpile) — it is not counted in the revenue ramp. All figures below run <b>September–December 2026</b> (4 months) against the ₹1.14 Cr online-only target. Change the assumptions below and the live tables recalculate automatically — everything else on this page is still a static suggestion.
+      <b>Timeline:</b> August 2026 is reserved for planning &amp; prep (packaging sign-off, marketplace listings, content stockpile) — it is not counted in the revenue ramp. All figures below run <b>September–December 2026</b> (4 months) against the ₹1 Cr online-only target. Change the assumptions below and the live tables recalculate automatically — everything else on this page is still a static suggestion.
     </div>
 
     <div class="assump-panel">
@@ -246,7 +295,7 @@
         <button type="button" class="ap-reset" id="apResetBtn">Reset to defaults</button>
       </div>
       <div class="ap-grid">
-        <div class="ap-field"><label>Target revenue (₹)</label><input type="number" id="ap_targetRevenue" value="11400000" step="10000"></div>
+        <div class="ap-field"><label>Target revenue (₹)</label><input type="number" id="ap_targetRevenue" value="10000000" step="10000"></div>
         <div class="ap-field"><label>Start month</label><input type="month" id="ap_startMonth" value="2026-09"></div>
         <div class="ap-field"><label>End month</label><input type="month" id="ap_endMonth" value="2026-12"></div>
         <div class="ap-field"><label>AOV (₹)</label><input type="number" id="ap_aov" value="599" step="1"></div>
@@ -275,12 +324,52 @@
 const SECTIONS = [
 {
   id: 'sec1', title: '1. Revenue Target & Sales Plan',
-  note: 'Figures follow the Krispino Business Plan sheet (AOV Strategy + Revenue tabs). Sep–Dec is the ₹1.14 Cr interim window; the AOV tab also plans ₹2 Cr through Mar ’27. Live tables below use the assumptions panel (default AOV ₹599 = Sep starting AOV).',
+  note: 'Figures follow the Krispino Business Plan sheet (AOV Strategy + Revenue tabs). Sep–Dec is the ₹1 Cr interim window; the AOV tab also plans ₹2 Cr through Mar ’27. Live tables below use the assumptions panel (default AOV ₹599 = Sep starting AOV).',
   questions: [
-    { q: 'How much revenue should we target each month?', a: 'From the AOV Strategy tab: Sep ₹8.99 L (1,500 orders @ ₹599) → Oct ₹29.21 L (4,500 @ ₹649) → Nov ₹31.46 L (4,500 @ ₹699) → Dec ₹29.96 L (4,000 @ ₹749). Sep–Dec total ₹99.6 L. The ₹1.14 Cr / Mar ₹2 Cr tops are still in Notes — use the calculator if you hold a different ramp.' },
-    { q: 'How much revenue should we target each week?', a: 'Sep (AOV tab): ₹2.25 L/week average, front-loaded — Week 1 ₹4.49 L (50% of Sep orders) → Week 2 ₹2.70 L (30%) → Weeks 3–4 ₹0.90 L each (10% each). Later months: divide that month\'s revenue by its weeks.' },
-    { q: 'How many orders are needed weekly?', a: 'Sep: 1,500 orders/month, 500/week on the Revenue tab (AOV tab splits them 750 / 450 / 150 / 150). Then Oct–Nov 4,500/month (~1,125/week) and Dec 4,000/month (~1,000/week). 7-month plan: 26,500 orders, ~3,785/month, ~126/day.' },
-    { q: 'What should be the minimum AOV?', a: '₹599 commercial floor (Revenue tab + Sep AOV + 3-item combo). Pricing tab also notes a ₹380 contribution floor (shipping + ₹150 CAC). Weekly reporting AOV target is ₹699; 7-month blend is ₹749.' },
+    { q: 'How much revenue should we target each month?', type: 'table',
+      headers: ['Month', 'Revenue', 'Orders', 'AOV'],
+      rows: [
+        ["Sep '26", '₹8.99 L', '1,500', '₹599'],
+        ["Oct '26", '₹29.21 L', '4,500', '₹649'],
+        ["Nov '26", '₹31.46 L', '4,500', '₹699'],
+        ["Dec '26", '₹29.96 L', '4,000', '₹749'],
+        ['Sep–Dec total', '~₹99.6 L (₹1 Cr target)', '14,500', 'blend'],
+        ["Jan '27", '₹39.95 L', '5,000', '₹799'],
+        ["Feb '27", '₹29.72 L', '3,500', '₹849'],
+        ["Mar '27", '₹31.47 L', '3,500', '₹899'],
+        ['7-month total', '₹2.01 Cr', '26,500', '₹749 blend'],
+      ]
+    },
+    { q: 'How much revenue should we target each week?', type: 'table',
+      headers: ['Sep week', 'Share of Sep orders', 'Orders', 'Revenue'],
+      rows: [
+        ['Week 1', '50%', '750', '₹4.49 L'],
+        ['Week 2', '30%', '450', '₹2.70 L'],
+        ['Week 3', '10%', '150', '₹0.90 L'],
+        ['Week 4', '10%', '150', '₹0.90 L'],
+        ['Sep total', '100%', '1,500', '₹8.99 L'],
+        ['Later months', 'Even split', 'month ÷ weeks', 'month revenue ÷ weeks'],
+      ]
+    },
+    { q: 'How many orders are needed weekly?', type: 'table',
+      headers: ['Month', 'Orders / month', 'Orders / week'],
+      rows: [
+        ["Sep '26", '1,500', '500 (or 750 / 450 / 150 / 150)'],
+        ["Oct '26", '4,500', '~1,125'],
+        ["Nov '26", '4,500', '~1,125'],
+        ["Dec '26", '4,000', '~1,000'],
+        ['7-month plan', '26,500 total · ~3,785 / month', '~126 / day'],
+      ]
+    },
+    { q: 'What should be the minimum AOV?', type: 'table',
+      headers: ['Floor', 'Amount', 'Source'],
+      rows: [
+        ['Commercial / combo floor', '₹599', 'Revenue tab + Sep AOV + 3-item combo'],
+        ['Contribution floor', '₹380', 'Pricing tab — shipping + ₹150 CAC'],
+        ['Weekly reporting target', '₹699', 'Weekly Planning tab'],
+        ['7-month blend', '₹749', 'AOV Strategy tab'],
+      ]
+    },
     { q: 'Which channel will contribute how much?', type: 'table', calc: 'channel',
       headers: ['Channel', '% Split', 'Monthly Avg', 'Weekly Avg', 'No. of orders / month'],
       rows: [
@@ -297,36 +386,116 @@ const SECTIONS = [
   id: 'sec2', title: '2. Product & SKU Strategy',
   note: 'Hero SKUs, pack sizes, and monthly pack targets from the Product and SKU Strategy tab.',
   questions: [
-    { q: 'Top 5–10 SKUs to focus on', type: 'bullets', items: [
-      'Banana Chips – Coconut Oil (180g, ₹204) — 800 packs/month, 40–45% margin — D2C, Amazon/marketplaces, influencers, B2B',
-      'Jackfruit Chips (180g, ₹272) — 500 packs/month, 40–45% margin — D2C, influencers, gifting, marketplaces',
-      'Chilli Tapioca Chips (200g, ₹179) — 700 packs/month, 45–50% margin — D2C, influencers, marketplaces',
-      'Kanthari Murukku (140g, ₹132) — 500 packs/month, 45–50% margin — D2C, influencers, combos',
-      'Baby Murukku (140g, ₹159) — 700 packs/month, 45–50% margin — D2C, B2B, office snacks, marketplaces',
-      'Kozhikodan Mixture (180g, ₹162) — 500 packs/month, 45–50% margin — D2C, B2B, marketplaces, combos',
-      'Madhuraseva (140g, ₹135) — 500 packs/month, 45–50% margin — D2C, discovery boxes, gifting, influencers',
-    ]},
-    { q: 'Expected monthly sales per SKU', a: 'Hero-SKU table: Banana Chips 800, Chilli Tapioca 700, Baby Murukku 700, Jackfruit / Kanthari / Kozhikodan / Madhuraseva 500 each — 4,200 packs/month total.' },
-    { q: 'Expected weekly sales per SKU', a: 'Banana Chips 175–200 · Jackfruit 120–130 · Chilli Tapioca 150–175 · Kanthari 100–125 · Baby Murukku 150–200 · Kozhikodan 100–125 · Madhuraseva 100–125 · ~1,100 packs/week total.' },
-    { q: 'Product-wise margin estimate', a: 'Target gross margin 40–45% on banana/jackfruit chips; 45–50% on murukku, mixture, tapioca, and Madhuraseva (Product tab).' },
-    { q: 'Product-wise reorder potential', a: 'Very high: Banana Chips, Chilli Tapioca, Baby Murukku, Kozhikodan Mixture. High: Jackfruit Chips, Kanthari Murukku. Medium–high: Madhuraseva (discovery/gifting).' },
-    { q: 'Product-wise channel fit', type: 'flexbox', items: [
-      'D2C / website: all seven hero SKUs',
-      'Marketplace: Banana Chips, Chilli Tapioca, Baby Murukku, Kozhikodan Mixture, Jackfruit',
-      'Influencers: Banana, Jackfruit, Chilli Tapioca, Kanthari, Madhuraseva',
-      'B2B / office: Banana Chips, Baby Murukku, Kozhikodan Mixture',
-      'Gifting / combos: Jackfruit, Kanthari, Madhuraseva, Kozhikodan',
-    ]},
+    { q: 'Top 5–10 SKUs to focus on', type: 'table',
+      headers: ['Hero SKU', 'Pack / price', 'Monthly', 'Weekly', 'Margin', 'Channel fit'],
+      rows: [
+        ['Banana Chips – Coconut Oil', '180g · ₹204', '800 packs', '175–200', '40–45%', 'D2C, Amazon, influencers, B2B'],
+        ['Jackfruit Chips', '180g · ₹272', '500 packs', '120–130', '40–45%', 'D2C, influencers, gifting, marketplaces'],
+        ['Chilli Tapioca Chips', '200g · ₹179', '700 packs', '150–175', '45–50%', 'D2C, influencers, marketplaces'],
+        ['Kanthari Murukku', '140g · ₹132', '500 packs', '100–125', '45–50%', 'D2C, influencers, combos'],
+        ['Baby Murukku', '140g · ₹159', '700 packs', '150–200', '45–50%', 'D2C, B2B, office snacks, marketplaces'],
+        ['Kozhikodan Mixture', '180g · ₹162', '500 packs', '100–125', '45–50%', 'D2C, B2B, marketplaces, combos'],
+        ['Madhuraseva', '140g · ₹135', '500 packs', '100–125', '45–50%', 'D2C, discovery boxes, gifting, influencers'],
+        ['TOTAL', '', '4,200 packs', '~1,100/week', '—', ''],
+      ]
+    },
+    { q: 'Expected monthly sales per SKU', type: 'table',
+      headers: ['Hero SKU', 'Packs / month'],
+      rows: [
+        ['Banana Chips – Coconut Oil', '800'],
+        ['Chilli Tapioca Chips', '700'],
+        ['Baby Murukku', '700'],
+        ['Jackfruit Chips', '500'],
+        ['Kanthari Murukku', '500'],
+        ['Kozhikodan Mixture', '500'],
+        ['Madhuraseva', '500'],
+        ['TOTAL', '4,200'],
+      ]
+    },
+    { q: 'Expected weekly sales per SKU', type: 'table',
+      headers: ['Hero SKU', 'Packs / week'],
+      rows: [
+        ['Banana Chips – Coconut Oil', '175–200'],
+        ['Jackfruit Chips', '120–130'],
+        ['Chilli Tapioca Chips', '150–175'],
+        ['Kanthari Murukku', '100–125'],
+        ['Baby Murukku', '150–200'],
+        ['Kozhikodan Mixture', '100–125'],
+        ['Madhuraseva', '100–125'],
+        ['TOTAL', '~1,100'],
+      ]
+    },
+    { q: 'Product-wise margin estimate', type: 'table',
+      headers: ['Hero SKU', 'Target gross margin'],
+      rows: [
+        ['Banana Chips – Coconut Oil', '40–45%'],
+        ['Jackfruit Chips', '40–45%'],
+        ['Chilli Tapioca Chips', '45–50%'],
+        ['Kanthari Murukku', '45–50%'],
+        ['Baby Murukku', '45–50%'],
+        ['Kozhikodan Mixture', '45–50%'],
+        ['Madhuraseva', '45–50%'],
+      ]
+    },
+    { q: 'Product-wise reorder potential', type: 'table',
+      headers: ['Hero SKU', 'Reorder potential'],
+      rows: [
+        ['Banana Chips – Coconut Oil', 'Very high'],
+        ['Chilli Tapioca Chips', 'Very high'],
+        ['Baby Murukku', 'Very high'],
+        ['Kozhikodan Mixture', 'Very high'],
+        ['Jackfruit Chips', 'High'],
+        ['Kanthari Murukku', 'High'],
+        ['Madhuraseva', 'Medium–high (discovery / gifting)'],
+      ]
+    },
+    { q: 'Product-wise channel fit', type: 'table',
+      headers: ['Channel', 'Hero SKUs'],
+      rows: [
+        ['D2C / website', 'All seven hero SKUs'],
+        ['Marketplace', 'Banana Chips, Chilli Tapioca, Baby Murukku, Kozhikodan Mixture, Jackfruit'],
+        ['Influencers', 'Banana, Jackfruit, Chilli Tapioca, Kanthari, Madhuraseva'],
+        ['B2B / office', 'Banana Chips, Baby Murukku, Kozhikodan Mixture'],
+        ['Gifting / combos', 'Jackfruit, Kanthari, Madhuraseva, Kozhikodan'],
+      ]
+    },
   ]
 },
 {
   id: 'sec3', title: '3. Pricing Strategy',
   note: '',
   questions: [
-    { q: 'MRP', a: 'Rs.135 – Rs.680 (Pricing tab).' },
-    { q: 'Selling price', a: 'Rs.108 – Rs.544 on website (MRP × 0.80, 20% standard discount). Marketplace: MRP × 0.90 (Rs.122–612). Quick commerce: full MRP (Rs.135–680).' },
-    { q: 'Discount limit', a: '20% everyday / 30% max for promotions (Planned Discount % ceiling). ~65–67% is the absolute breakeven floor — never go there except genuine clearance.' },
-    { q: 'Free-shipping threshold', a: '₹699 (~15% above estimated AOV of ~₹597, rounded).' },
+    { q: 'MRP', type: 'table',
+      headers: ['Range', 'Amount'],
+      rows: [
+        ['Low', '₹135'],
+        ['High', '₹680'],
+      ]
+    },
+    { q: 'Selling price', type: 'table',
+      headers: ['Channel', 'Rule', 'Customer price'],
+      rows: [
+        ['Website', 'MRP × 0.80 (20% standard discount)', '₹108 – ₹544'],
+        ['Marketplace', 'MRP × 0.90', '₹122 – ₹612'],
+        ['Quick commerce', 'Full MRP, 0% customer discount', '₹135 – ₹680'],
+      ]
+    },
+    { q: 'Discount limit', type: 'table',
+      headers: ['Rule', 'Discount'],
+      rows: [
+        ['Everyday', '20%'],
+        ['Promotions max', '30%'],
+        ['Absolute breakeven floor', '~65–67% — never, except genuine clearance'],
+      ]
+    },
+    { q: 'Free-shipping threshold', type: 'table',
+      headers: ['Metric', 'Amount'],
+      rows: [
+        ['Free-shipping threshold', '₹699'],
+        ['Estimated AOV (pricing tab)', '~₹597'],
+        ['Gap above estimated AOV', '~15%'],
+      ]
+    },
     { q: 'Contribution margin per order', type: 'table', calc: 'margin',
       calcNotes: { quickcommerce: 'bundled commission, no separate logistics' },
       headers: ['Channel', 'Margin / Order', 'Margin %'],
@@ -344,11 +513,14 @@ const SECTIONS = [
         ['Quick Commerce', 'No fixed floor — margin holds as a constant % of AOV'],
       ]
     },
-    { q: 'Price difference across website, marketplace and quick commerce', type: 'flexbox', items: [
-      'Website: MRP × 0.80 (Rs.108–544) — best margin, no commission',
-      'Marketplace: MRP × 0.90 (Rs.122–612) — ~22% commission',
-      'Quick Commerce: full MRP (Rs.135–680), 0% customer discount, ~30% commission — similar per-pack profit to marketplace, sometimes slightly less',
-    ]},
+    { q: 'Price difference across website, marketplace and quick commerce', type: 'table',
+      headers: ['Channel', 'Customer price rule', 'Commission / note'],
+      rows: [
+        ['Website', 'MRP × 0.80 (₹108–544)', 'Best margin, no commission'],
+        ['Marketplace', 'MRP × 0.90 (₹122–612)', '~22% commission'],
+        ['Quick Commerce', 'Full MRP (₹135–680)', '~30% commission; similar per-pack profit to marketplace'],
+      ]
+    },
   ]
 },
 {
@@ -368,31 +540,111 @@ const SECTIONS = [
         ['7-month total / blend', '₹749', '26,500', '₹2.01 Cr'],
       ]
     },
-    { q: 'Weekly AOV target', a: 'Sep weeks all at ₹599 AOV (Revenue tab weekly AOV reporting target is ₹699 as a later-month steer). Sep order mix: Week 1 50% (750) · Week 2 30% (450) · Weeks 3–4 10% each (150).' },
-    { q: 'Combo names', type: 'bullets', items: [
-      'Tapioca fusion — all tapioca flavours',
-      'Kerala Classics — Kerala heritage snacks',
-      'Tea time snacks — banana chips, mixture, murukku',
-      'Party time snacks — banana chips, mixture, murukku, peanut candy, sesame candy',
-      'Kerala Premium snacks — Nendran banana chips',
-      'Kanthari punch — for spicy lovers',
-    ]},
-    { q: 'Combo contents', a: 'See combo names above. Free-shipping combos on the Shipping tab: Murukku Trio ₹699 (3×400g); Kerala Snack Box ₹799 (5–6 pouches); Festival Hamper ₹999–1,299.' },
-    { q: 'Combo price', a: '₹599 (3 items) · ₹699 (5 items) · ₹799 (6 items) — all at or above the ₹699 free-shipping line except the 3-item ₹599 box (just at Sep AOV).' },
-    { q: 'Expected margin per combo', a: '25% at ₹599 · 35% at ₹699 · 25% at ₹799 (AOV tab).' },
-    { q: 'Expected monthly and weekly combo sales', a: 'Planning grid: 2,500 combos/month as 625 @ ₹599 + 1,250 @ ₹699 + 625 @ ₹799 ≈ ₹17.48 L/month, mix 25% / 50% / 25%. Same grid copied Sep–Mar on the tab (₹1.22 Cr if held flat — overlay, not a second revenue target).' },
+    { q: 'Weekly AOV target', type: 'table',
+      headers: ['Sep week', 'AOV', 'Share of Sep orders', 'Orders'],
+      rows: [
+        ['Week 1', '₹599', '50%', '750'],
+        ['Week 2', '₹599', '30%', '450'],
+        ['Week 3', '₹599', '10%', '150'],
+        ['Week 4', '₹599', '10%', '150'],
+        ['Weekly reporting steer', '₹699', 'later months', 'Weekly Planning tab'],
+      ]
+    },
+    { q: 'Combo names', type: 'table',
+      headers: ['Combo', 'Contents'],
+      rows: [
+        ['Tapioca fusion', 'All tapioca flavours'],
+        ['Kerala Classics', 'Kerala heritage snacks'],
+        ['Tea time snacks', 'Banana chips, mixture, murukku'],
+        ['Party time snacks', 'Banana chips, mixture, murukku, peanut candy, sesame candy'],
+        ['Kerala Premium snacks', 'Nendran banana chips'],
+        ['Kanthari punch', 'For spicy lovers'],
+      ]
+    },
+    { q: 'Combo contents', type: 'table',
+      headers: ['Free-ship combo', 'Target price', 'Composition'],
+      rows: [
+        ['Murukku Trio', '₹699', '3 × 400g varieties'],
+        ['Kerala Snack Box', '₹799', 'Mixed 5–6 pouch assortment'],
+        ['Festival Hamper', '₹999–1,299', 'Gift-boxed, higher-margin, seasonal'],
+      ]
+    },
+    { q: 'Combo price', type: 'table',
+      headers: ['Price', 'Items', 'Vs free-shipping ₹699'],
+      rows: [
+        ['₹599', '3', 'At Sep AOV; just below free-ship line'],
+        ['₹699', '5', 'At free-ship threshold'],
+        ['₹799', '6', 'Above free-ship threshold'],
+      ]
+    },
+    { q: 'Expected margin per combo', type: 'table',
+      headers: ['Combo price', 'Expected margin'],
+      rows: [
+        ['₹599', '25%'],
+        ['₹699', '35%'],
+        ['₹799', '25%'],
+      ]
+    },
+    { q: 'Expected monthly and weekly combo sales', type: 'table',
+      headers: ['Price', 'Combos / month', 'Mix', 'Revenue / month'],
+      rows: [
+        ['₹599', '625', '25%', ''],
+        ['₹699', '1,250', '50%', ''],
+        ['₹799', '625', '25%', ''],
+        ['Total', '2,500', '100%', '~₹17.48 L'],
+        ['If held Sep–Mar', '', '', '~₹1.22 Cr overlay, not a second revenue target'],
+      ]
+    },
   ]
 },
 {
   id: 'sec5', title: '5. Shipping & Logistics',
   note: '',
   questions: [
-    { q: 'Current shipping cost per order', a: '₹120 (actual, last month).' },
-    { q: 'Target shipping cost per order', a: '≤ ₹150 blended at national scale. Ladder on the Shipping tab: ₹120 now → ₹135 @ 50 orders → ₹145 @ 150 → ₹150 @ 500 → ₹170 @ ~3,815 orders/month.' },
-    { q: 'Shipping cost as % of AOV', a: 'Current 24% at last-month AOV. Targets: ≤19% at ₹800 AOV; ≤15% at ₹950. At Sep AOV ₹599 and ₹120 freight: ~20%.' },
-    { q: 'Free-shipping threshold', a: '₹699.' },
-    { q: 'Delivery TAT by region', a: 'Kerala 2–4 d · South 4–6 d · Rest of India 6–9 d · NE/J&K 10–14 d.' },
-    { q: 'Damaged order target', a: '<3% first 90 days → <1.5% steady state.' },
+    { q: 'Current shipping cost per order', type: 'table',
+      headers: ['Metric', 'Amount'],
+      rows: [['Current freight / order', '₹120 (actual, last month)']]
+    },
+    { q: 'Target shipping cost per order', type: 'table',
+      headers: ['Volume', 'Freight / order'],
+      rows: [
+        ['Now (~10 orders)', '₹120'],
+        ['50 orders', '₹135'],
+        ['150 orders', '₹145'],
+        ['500 orders', '₹150'],
+        ['~3,815 orders / month', '₹170'],
+        ['National-scale target', '≤ ₹150 blended'],
+      ]
+    },
+    { q: 'Shipping cost as % of AOV', type: 'table',
+      headers: ['Case', '% of AOV'],
+      rows: [
+        ['Current (last-month AOV)', '24%'],
+        ['Sep AOV ₹599 @ ₹120 freight', '~20%'],
+        ['Target at ₹800 AOV', '≤ 19%'],
+        ['Target at ₹950 AOV', '≤ 15%'],
+      ]
+    },
+    { q: 'Free-shipping threshold', type: 'table',
+      headers: ['Metric', 'Amount'],
+      rows: [['Free-shipping threshold', '₹699']]
+    },
+    { q: 'Delivery TAT by region', type: 'table',
+      headers: ['Region', 'TAT'],
+      rows: [
+        ['Kerala', '2–4 days'],
+        ['South', '4–6 days'],
+        ['Rest of India', '6–9 days'],
+        ['NE / J&K', '10–14 days'],
+      ]
+    },
+    { q: 'Damaged order target', type: 'table',
+      headers: ['Period', 'Target'],
+      rows: [
+        ['First 90 days', '< 3%'],
+        ['Steady state', '< 1.5%'],
+      ]
+    },
     { q: 'Return/RTO target', type: 'table',
       headers: ['Channel', 'RTO Target'],
       rows: [
@@ -401,8 +653,30 @@ const SECTIONS = [
         ['Quick Commerce', 'Prepaid-heavy; no separate RTO line in the sheet'],
       ]
     },
-    { q: 'Monthly logistics cost estimate', a: 'Today ~₹1,650 (10 orders). Scaling ladder: ₹8,900 @ 50 · ₹28,350 @ 150 · ₹1.15 L @ 500 · ₹10.87 L @ 3,815 orders (freight + pack + labour + COD/RTO).' },
-    { q: 'Weekly logistics report format', a: 'Orders shipped | AOV | Freight/order (≤₹150) | Freight as % of AOV (≤19%) | Packaging/order (≤₹30) | Total logistics/order (≤₹193) | On-time % | Damage % | RTO %.' },
+    { q: 'Monthly logistics cost estimate', type: 'table',
+      headers: ['Volume', 'Freight', 'Packaging', 'Labour', 'COD + RTO', 'Total / order', 'Monthly total'],
+      rows: [
+        ['Now (10)', '₹120', '₹30', '₹15', '₹0', '₹165', '₹1,650'],
+        ['50 orders', '₹135', '₹28', '₹15', '₹0', '₹178', '₹8,900'],
+        ['150 orders', '₹145', '₹26', '₹18', '₹0', '₹189', '₹28,350'],
+        ['500 orders', '₹150', '₹24', '₹20', '₹35', '₹229', '₹1,14,500'],
+        ['3,815 orders', '₹170', '₹20', '₹25', '₹70', '₹285', '₹10,87,275'],
+      ]
+    },
+    { q: 'Weekly logistics report format', type: 'table',
+      headers: ['Metric', 'Target'],
+      rows: [
+        ['Orders shipped', ''],
+        ['AOV', ''],
+        ['Freight / order', '≤ ₹150'],
+        ['Freight as % of AOV', '≤ 19%'],
+        ['Packaging / order', '≤ ₹30'],
+        ['Total logistics / order', '≤ ₹193'],
+        ['On-time %', ''],
+        ['Damage %', ''],
+        ['RTO %', ''],
+      ]
+    },
   ]
 },
 {
@@ -419,37 +693,136 @@ const SECTIONS = [
       'Madhuraseva',
     ]},
     { q: 'Cost per new pack', a: '₹10–15.' },
-    { q: 'MOQ impact', a: '₹1,00,000–1,50,000 — pilot 2,000 packs per SKU, 10,000 packs total. Sheet note: double the MOQ amount if you scale.' },
-    { q: 'Total packaging investment required', a: '₹3.25–4 L (strategy/design ₹1–1.5 L · prototypes ₹15–25k · 10,000 packs ~₹1.5 L · proofs ₹15–25k · contingency ₹20–30k).' },
-    { q: 'Design completion timeline', a: '2 weeks.' },
-    { q: 'Print timeline', a: '2–3 weeks.' },
-    { q: 'Launch timeline', a: '4–5 weeks.' },
-    { q: 'Expected impact on sales/conversion', a: 'Conservative +5–8% conversion · base +8–12% · strong upside +12–20%.' },
+    { q: 'MOQ impact', type: 'table',
+      headers: ['Item', 'Amount'],
+      rows: [
+        ['Pilot packs per SKU', '2,000'],
+        ['Pilot packs total', '10,000'],
+        ['MOQ cash', '₹1,00,000–1,50,000'],
+        ['If you scale', 'Double the MOQ amount'],
+      ]
+    },
+    { q: 'Total packaging investment required', type: 'table',
+      headers: ['Component', 'Budget'],
+      rows: [
+        ['Packaging strategy + design system', '₹1,00,000–₹1,50,000'],
+        ['5 SKU adaptations / artwork', 'Included above'],
+        ['Prototypes / physical samples', '₹15,000–₹25,000'],
+        ['Initial packaging — 10,000 packs', '~₹1,50,000'],
+        ['Testing / colour proofs / revisions', '₹15,000–₹25,000'],
+        ['Contingency', '₹20,000–₹30,000'],
+        ['Total', '₹3.25–4 L'],
+      ]
+    },
+    { q: 'Design completion timeline', type: 'table',
+      headers: ['Stage', 'Duration'],
+      rows: [
+        ['Design', '2 weeks'],
+        ['Print', '2–3 weeks'],
+        ['Launch', '4–5 weeks'],
+      ]
+    },
+    { q: 'Print timeline', type: 'table',
+      headers: ['Stage', 'Duration'],
+      rows: [['Print', '2–3 weeks']]
+    },
+    { q: 'Launch timeline', type: 'table',
+      headers: ['Stage', 'Duration'],
+      rows: [['Launch', '4–5 weeks']]
+    },
+    { q: 'Expected impact on sales/conversion', type: 'table',
+      headers: ['Case', 'Conversion lift'],
+      rows: [
+        ['Conservative', '+5–8%'],
+        ['Base', '+8–12%'],
+        ['Strong upside', '+12–20%'],
+      ]
+    },
   ]
 },
 {
   id: 'sec7', title: '7. Website & Conversion',
   note: '',
   questions: [
-    { q: 'Current monthly traffic', a: '20 (Website tab — treat as current sessions, not 20,000).' },
-    { q: 'Target monthly traffic', a: '1,10,000 (Website tab; Notes also lists 1,10,000).' },
-    { q: 'Target weekly traffic', a: '27,500.' },
-    { q: 'Target conversion rate', a: 'Start at 2% and go to 3.5% in 6 months. Hero products 3.5–5%.' },
-    { q: 'Target cart-to-checkout rate', a: '40–50% of add-to-cart.' },
-    { q: 'Target checkout completion rate', a: '55–65% of cart-to-checkout.' },
+    { q: 'Current monthly traffic', type: 'table',
+      headers: ['Metric', 'Value'],
+      rows: [['Current monthly traffic', '20 sessions (Website tab — not 20,000)']]
+    },
+    { q: 'Target monthly traffic', type: 'table',
+      headers: ['Metric', 'Value'],
+      rows: [['Target monthly traffic', '1,10,000']]
+    },
+    { q: 'Target weekly traffic', type: 'table',
+      headers: ['Metric', 'Value'],
+      rows: [['Target weekly traffic', '27,500']]
+    },
+    { q: 'Target conversion rate', type: 'table',
+      headers: ['Stage', 'Conversion'],
+      rows: [
+        ['Start', '2%'],
+        ['In 6 months', '3.5%'],
+        ['Hero products', '3.5–5%'],
+      ]
+    },
+    { q: 'Target cart-to-checkout rate', type: 'table',
+      headers: ['Metric', 'Target'],
+      rows: [['Cart → checkout', '40–50% of add-to-cart']]
+    },
+    { q: 'Target checkout completion rate', type: 'table',
+      headers: ['Metric', 'Target'],
+      rows: [['Checkout completion', '55–65% of cart-to-checkout']]
+    },
     { q: 'Weekly website improvement plan', a: 'Wednesday.' },
-    { q: 'Weekly website performance report', a: 'Monday / Tuesday. Template: Sessions | Conversion rate | AOV | Cart-to-checkout % | Checkout completion % | Top-selling SKU.' },
+    { q: 'Weekly website performance report', type: 'table',
+      headers: ['Metric', 'This week'],
+      rows: [
+        ['Sessions', ''],
+        ['Conversion rate', ''],
+        ['AOV', ''],
+        ['Cart-to-checkout %', ''],
+        ['Checkout completion %', ''],
+        ['Top-selling SKU', ''],
+      ]
+    },
   ]
 },
 {
   id: 'sec8', title: '8. Social Media Campaign Plan',
   note: 'Content-calendar specifics need your creative/content team\'s input — the cadence numbers below are general D2C starting benchmarks, not Krispino-specific research. August is the month to stockpile this content before the September launch.',
   questions: [
-    { q: 'Number of reels per week', a: '4–5.' },
-    { q: 'Number of posts per week', a: '3 static posts.' },
-    { q: 'Number of stories per week', a: 'Daily.' },
-    { q: 'Number of product videos per week', a: '2, plus 1 educational/ingredient carousel.' },
-    { q: 'Language-wise content split', a: 'Malayalam 45% · English 40% · Hindi 15%.' },
+    { q: 'Number of reels per week', type: 'table',
+      headers: ['Format', 'Per week'],
+      rows: [
+        ['Reels', '4–5'],
+        ['Static posts', '3'],
+        ['Stories', 'Daily'],
+        ['Product / UGC videos', '2'],
+        ['Carousel (educational / ingredient)', '1'],
+      ]
+    },
+    { q: 'Number of posts per week', type: 'table',
+      headers: ['Format', 'Per week'],
+      rows: [['Static posts', '3']]
+    },
+    { q: 'Number of stories per week', type: 'table',
+      headers: ['Format', 'Per week'],
+      rows: [['Stories', 'Daily']]
+    },
+    { q: 'Number of product videos per week', type: 'table',
+      headers: ['Format', 'Per week'],
+      rows: [
+        ['Product / UGC videos', '2'],
+        ['Carousel', '1'],
+      ]
+    },
+    { q: 'Language-wise content split', type: 'table',
+      headers: ['Language', 'Share'],
+      rows: [
+        ['Malayalam', '45%'],
+        ['English', '40%'],
+        ['Hindi', '15%'],
+      ]
+    },
     { q: 'Campaign theme for each month', type: 'table',
       headers: ['Month', 'Theme'],
       rows: [
@@ -460,15 +833,34 @@ const SECTIONS = [
       ]
     },
     { q: 'Weekly posting schedule', a: 'Instagram and Facebook. Timings to be A/B tested.' },
-    { q: 'Expected reach, engagement and sales impact', a: '6,00,000 reach (Social tab).' },
-    { q: 'Reporting format for content performance', a: 'Views to traffic (sheet). Plus: Post/reel | Platform | Reach | Engagement | Link clicks | Attributed orders.' },
+    { q: 'Expected reach, engagement and sales impact', type: 'table',
+      headers: ['Metric', 'Value'],
+      rows: [['Reach', '6,00,000']]
+    },
+    { q: 'Reporting format for content performance', type: 'table',
+      headers: ['Metric', 'This week'],
+      rows: [
+        ['Post / reel', ''],
+        ['Platform', ''],
+        ['Reach / views', ''],
+        ['Engagement', ''],
+        ['Link clicks / traffic', ''],
+        ['Attributed orders', ''],
+      ]
+    },
   ]
 },
 {
   id: 'sec9', title: '9. Influencer Marketing Plan',
   note: '',
   questions: [
-    { q: 'Influencers to contact per week', a: '40–50. Focus hyper-local nano — product + commission only.' },
+    { q: 'Influencers to contact per week', type: 'table',
+      headers: ['Metric', 'Value'],
+      rows: [
+        ['To contact / week', '40–50'],
+        ['Focus', 'Hyper-local nano — product + commission only'],
+      ]
+    },
     { q: 'Influencers to close per week', a: 'Sheet has a date in this cell (12 Oct 2026) — treat as a pipeline milestone, not a weekly close count. Re-fill a number when you set one.' },
     { q: 'Sample boxes to send per week', a: '5.' },
     { q: 'Videos expected live per week', a: '2 (Hema to upload content live — Weekly tab).' },
@@ -483,17 +875,55 @@ const SECTIONS = [
     { q: 'Expected views per campaign', a: '4,00,000.' },
     { q: 'Expected orders per influencer', a: '2% conversion on views (Influencer tab).' },
     { q: 'Coupon-code-wise sales tracking', a: 'Shopflo — unique code per creator.' },
-    { q: 'Target CAC from influencers', a: '₹239.6 (Influencer tab). Hard cap vs blended max CAC ₹112/order (Marketing tab) — influencer CAC is above the blended ceiling, so keep this line small until codes prove out.' },
+    { q: 'Target CAC from influencers', type: 'table',
+      headers: ['Metric', 'Amount'],
+      rows: [
+        ['Influencer CAC (sheet)', '₹239.6'],
+        ['Blended max CAC (Marketing tab)', '₹112 / order'],
+        ['Note', 'Influencer CAC is above the blended ceiling — keep this line small until codes prove out'],
+      ]
+    },
   ]
 },
 {
   id: 'sec10', title: '10. Marketplace & Quick Commerce',
   note: '',
   questions: [
-    { q: 'Platform-wise target launch date', a: 'Flipkart 22 Sep 2026 · Amazon Seller Central 6 Oct · Zepto 3 Nov (Kochi first) · Blinkit 17 Nov (Kerala, 3–4 SKUs) · Swiggy Instamart 17 Nov · Amazon Now: monitor, not scheduled for 2026.' },
-    { q: 'Weekly follow-up plan', a: 'Every Monday, 15–20 min, Founder + Growth. Stage-gate per platform. Escalate to Founder the same day if blocked >3 working days. Owners: V + Giri marketplace; V, Bhavana, Giri quick commerce.' },
-    { q: 'SKUs to list first', a: 'Hero set: Banana Chips, Jackfruit, Chilli Tapioca, Kanthari / Baby Murukku, Kozhikodan Mixture. Blinkit: 3–4 SKUs in Kerala only, not the full catalog.' },
-    { q: 'Platform-wise pricing', a: 'Marketplace ~MRP × 0.90; Flipkart 0% commission on items <₹1,000 (all current SKUs qualify). Quick commerce: full MRP, ~30% commission.' },
+    { q: 'Platform-wise target launch date', type: 'table',
+      headers: ['Platform', 'Target launch', 'Notes'],
+      rows: [
+        ['Flipkart', '22 Sep 2026', 'Priority — 0% commission under ₹1,000'],
+        ['Amazon Seller Central', '6 Oct 2026', 'Grocery category gated'],
+        ['Zepto', '3 Nov 2026', 'Kochi first'],
+        ['Blinkit', '17 Nov 2026', 'Kerala, 3–4 SKUs only'],
+        ['Swiggy Instamart', '17 Nov 2026', 'Run parallel with Blinkit'],
+        ['Amazon Now', 'Not scheduled 2026', 'Monitor; no Kerala coverage yet'],
+      ]
+    },
+    { q: 'Weekly follow-up plan', type: 'table',
+      headers: ['Item', 'Detail'],
+      rows: [
+        ['Cadence', 'Every Monday, 15–20 min'],
+        ['Who', 'Founder + Growth'],
+        ['Covers', 'Stage-gate per platform'],
+        ['Escalation', 'Same day to Founder if blocked > 3 working days'],
+      ]
+    },
+    { q: 'SKUs to list first', type: 'table',
+      headers: ['Platform', 'First SKUs'],
+      rows: [
+        ['Amazon / Flipkart', 'Banana Chips, Jackfruit, Chilli Tapioca, Kanthari / Baby Murukku, Kozhikodan Mixture'],
+        ['Blinkit', '3–4 SKUs in Kerala only — not the full catalog'],
+      ]
+    },
+    { q: 'Platform-wise pricing', type: 'table',
+      headers: ['Platform', 'Price rule', 'Commission'],
+      rows: [
+        ['Marketplace (general)', 'MRP × 0.90', '~22%'],
+        ['Flipkart items < ₹1,000', 'Same listing price', '0%'],
+        ['Quick commerce', 'Full MRP', '~30%'],
+      ]
+    },
     { q: 'Platform-wise margin', type: 'table', calc: 'platform-margin',
       calcNotes: { marketplace: 'after marketplace commission + logistics', quickcommerce: 'bundled commission, no separate logistics' },
       headers: ['Platform', 'Margin / Order', 'Margin %'],
@@ -510,26 +940,104 @@ const SECTIONS = [
       ]
     },
     { q: 'Expected weekly sales', a: 'See table above — same figures, weekly column.' },
-    { q: 'Listing cost / commission / logistics impact', type: 'flexbox', items: [
-      'Marketplace: ~22% commission + ₹120 logistics/order (Flipkart 0% below ₹1,000 is the exception — priority platform)',
-      'Quick Commerce: ~30% commission, bundled fulfilment, no separate logistics line. Blinkit: reported ~₹25,000/SKU/state ad-wallet + ₹2–3 L/month min ads — launch thin',
-    ]},
-    { q: 'Owner for each platform', a: 'Flipkart & Amazon: Growth/Marketing. Zepto / Blinkit / Instamart: Founder + Growth. Amazon Now: Founder (monitor). Weekly close: V and Giri (marketplace); V, Bhavana, Giri (quick commerce).' },
+    { q: 'Listing cost / commission / logistics impact', type: 'table',
+      headers: ['Platform', 'Commission', 'Logistics / extra cost'],
+      rows: [
+        ['Marketplace', '~22%', '₹120 / order freight'],
+        ['Flipkart < ₹1,000', '0%', 'Priority platform'],
+        ['Quick commerce', '~30% bundled', 'No separate logistics line'],
+        ['Blinkit ads', '', '~₹25,000 / SKU / state wallet + ₹2–3 L/month min — launch thin'],
+      ]
+    },
+    { q: 'Owner for each platform', type: 'table',
+      headers: ['Platform', 'Owner'],
+      rows: [
+        ['Flipkart & Amazon', 'Growth / Marketing; weekly close: V + Giri'],
+        ['Zepto / Blinkit / Instamart', 'Founder + Growth; weekly close: V, Bhavana, Giri'],
+        ['Amazon Now', 'Founder (monitor)'],
+      ]
+    },
   ]
 },
 {
   id: 'sec11', title: '11. Community & WhatsApp Sales',
   note: '',
   questions: [
-    { q: 'Communities to contact per week', a: '2 now; ramp 3 (Sep) → 4 (Oct) → 5 (Nov–Dec).' },
-    { q: 'Offices to contact per week', a: '2 now; ramp 3 (Sep) → 6 (Oct) → 7 (Nov–Dec).' },
-    { q: 'WhatsApp groups to target', a: '30. Apartment/RWA first via the secretary; office groups post-tasting only. Build 25–35 owned announcement-only groups, 1,200–2,000 contacts by December. Never post uninvited.' },
-    { q: 'Sampling plan', a: 'Manned tasting tables, not individual samples. ₹850/activation, 40–120 people, 12–18% conversion, 4–9× return. Offices at 4–5 PM.' },
-    { q: 'Weekly sales target', a: '₹5,100 (Sep) → ₹12,300 (Oct) → ₹25,800 (Nov) → ₹33,300 (Dec).' },
-    { q: 'Monthly sales target', a: '₹22,000 (Sep) → ₹53,000 (Oct) → ₹1,11,000 (Nov) → ₹1,43,000 (Dec). Approx. orders/month 44 → 106 → 190 → 230.' },
+    { q: 'Communities to contact per week', type: 'table',
+      headers: ['Period', 'Communities / week'],
+      rows: [
+        ['Now', '2'],
+        ['Sep', '3'],
+        ['Oct', '4'],
+        ['Nov–Dec', '5'],
+      ]
+    },
+    { q: 'Offices to contact per week', type: 'table',
+      headers: ['Period', 'Offices / week'],
+      rows: [
+        ['Now', '2'],
+        ['Sep', '3'],
+        ['Oct', '6'],
+        ['Nov–Dec', '7'],
+      ]
+    },
+    { q: 'WhatsApp groups to target', type: 'table',
+      headers: ['Metric', 'Value'],
+      rows: [
+        ['Groups to target', '30'],
+        ['Owned announcement groups by Dec', '25–35'],
+        ['Contacts by Dec', '1,200–2,000'],
+        ['Approach', 'Apartment/RWA via secretary; office groups post-tasting only; never post uninvited'],
+      ]
+    },
+    { q: 'Sampling plan', type: 'table',
+      headers: ['Metric', 'Value'],
+      rows: [
+        ['Format', 'Manned tasting tables, not individual samples'],
+        ['Cost / activation', '₹850'],
+        ['People / activation', '40–120'],
+        ['Conversion', '12–18%'],
+        ['Return', '4–9×'],
+        ['Office timing', '4–5 PM'],
+      ]
+    },
+    { q: 'Weekly sales target', type: 'table',
+      headers: ['Month', 'Weekly target'],
+      rows: [
+        ['Sep', '₹5,100'],
+        ['Oct', '₹12,300'],
+        ['Nov', '₹25,800'],
+        ['Dec', '₹33,300'],
+      ]
+    },
+    { q: 'Monthly sales target', type: 'table',
+      headers: ['Month', 'Monthly target', 'Approx. orders'],
+      rows: [
+        ['Sep', '₹22,000', '44'],
+        ['Oct', '₹53,000', '106'],
+        ['Nov', '₹1,11,000', '190'],
+        ['Dec', '₹1,43,000', '230'],
+      ]
+    },
     { q: 'Repeat-order plan', a: 'Retargeting with numbers received + WhatsApp automation. A ₹500 order of 4–5 pouches is consumed in 2–4 weeks; monthly reorder (e.g. first Saturday = Krispino Day) is the natural cycle.' },
-    { q: 'Customer feedback process', a: 'Scan on packaging + WhatsApp forms. Individual WhatsApp at 72 hours, two questions, photo request. 45–60% response target. Damage replaced within 24 hours.' },
-    { q: 'Referral tracking method', a: 'Community champion codes (KRISP-[COMMUNITY], 10% product credit), give-₹75-get-₹75, source tag on every order. Google Sheet + Shopflo.' },
+    { q: 'Customer feedback process', type: 'table',
+      headers: ['Step', 'Detail'],
+      rows: [
+        ['Capture', 'Scan on packaging + WhatsApp forms'],
+        ['Follow-up', 'Individual WhatsApp at 72 hours, two questions, photo request'],
+        ['Response target', '45–60%'],
+        ['Damage', 'Replace within 24 hours'],
+      ]
+    },
+    { q: 'Referral tracking method', type: 'table',
+      headers: ['Layer', 'Detail'],
+      rows: [
+        ['Community champion', 'KRISP-[COMMUNITY], 10% product credit'],
+        ['Individual', 'Give ₹75 / get ₹75'],
+        ['Source tag', 'On every order'],
+        ['Tools', 'Google Sheet + Shopflo'],
+      ]
+    },
   ]
 },
 {
@@ -539,10 +1047,24 @@ const SECTIONS = [
     { q: 'Number of corporate leads to contact weekly', a: '20–25.' },
     { q: 'Number of samples to send weekly', a: 'Sheet cell looks like a date (7 May 2026) — not a count. Re-fill a weekly sample number when you set one.' },
     { q: 'Expected conversion rate', a: '20% of samples sent.' },
-    { q: 'Gift box price points', a: '₹399–499 Standard · ₹699–899 Premium · ₹1,299–1,499 Deluxe.' },
+    { q: 'Gift box price points', type: 'table',
+      headers: ['Tier', 'Price'],
+      rows: [
+        ['Standard', '₹399–499'],
+        ['Premium', '₹699–899'],
+        ['Deluxe', '₹1,299–1,499'],
+      ]
+    },
     { q: 'Minimum order quantity', a: '25.' },
     { q: 'Margin per gift box', a: '25%.' },
-    { q: 'Monthly corporate sales target', a: 'Not filled on the Corporate tab. Community tab parks gifting as ₹30k (Nov) / ₹45k (Dec) inside the WhatsApp monthly total — treat as a starter, not the B2B plan.' },
+    { q: 'Monthly corporate sales target', type: 'table',
+      headers: ['Month', 'Gifting parked in Community tab'],
+      rows: [
+        ['Nov', '₹30,000'],
+        ['Dec', '₹45,000'],
+        ['Corporate tab', 'Not filled — treat Community numbers as a starter, not the B2B plan'],
+      ]
+    },
     { q: 'Weekly corporate sales target', a: 'Not filled on the Corporate tab.' },
   ]
 },
@@ -550,9 +1072,24 @@ const SECTIONS = [
   id: 'sec13', title: '13. Marketing Budget Plan',
   note: '',
   questions: [
-    { q: 'Total budget required', a: '₹20.52 L at 18% of the ₹1.14 Cr Dec window (unchanged %). Marketing tab does not restate a 7-month ₹2 Cr budget.' },
-    { q: 'Budget by month', a: '₹5.13 L/month (Marketing tab).' },
-    { q: 'Budget by week', a: '₹1.18 L/week (₹1,17,900 on the tab).' },
+    { q: 'Total budget required', type: 'table',
+      headers: ['Window', 'Budget (18% of revenue)'],
+      rows: [
+        ['Sep–Dec ₹1 Cr', '₹18 L'],
+        ['7-month ₹2 Cr', 'Not restated on Marketing tab'],
+      ]
+    },
+    { q: 'Budget by month', type: 'table',
+      headers: ['Basis', 'Amount'],
+      rows: [
+        ['18% of ₹1 Cr ÷ 4 months', '₹4.5 L / month'],
+        ['Marketing tab (old ₹1.14 Cr window)', '₹5.13 L / month'],
+      ]
+    },
+    { q: 'Budget by week', type: 'table',
+      headers: ['Basis', 'Amount'],
+      rows: [['Sep–Dec blended', '~₹1.04 L / week']]
+    },
     { q: 'Budget by channel', type: 'table', calc: 'stream',
       headers: ['Stream', '%', 'Amount'],
       rows: [
@@ -563,10 +1100,25 @@ const SECTIONS = [
         ['Contingency', '5%', '₹1.03 L'],
       ]
     },
-    { q: 'Expected revenue from each spend area', a: 'Marketplace ads ₹30.8 L · Paid social ₹21.6 L · Influencer/UGC ₹9.2 L · D2C site ₹32.8 L · Community/WhatsApp ₹19.6 L (Marketing tab).' },
-    { q: 'Expected CAC', a: '₹89.8/order.' },
+    { q: 'Expected revenue from each spend area', type: 'table',
+      headers: ['Spend area', 'Expected revenue'],
+      rows: [
+        ['Marketplace ads', '₹30.8 L'],
+        ['Paid social', '₹21.6 L'],
+        ['Influencer / UGC', '₹9.2 L'],
+        ['D2C site', '₹32.8 L'],
+        ['Community / WhatsApp', '₹19.6 L'],
+      ]
+    },
+    { q: 'Expected CAC', type: 'table',
+      headers: ['Metric', 'Amount'],
+      rows: [['Expected CAC', '₹89.8 / order']]
+    },
     { q: 'Expected ROAS', a: '' },
-    { q: 'Maximum acceptable CAC', a: '₹112/order (Marketing tab).' },
+    { q: 'Maximum acceptable CAC', type: 'table',
+      headers: ['Metric', 'Amount'],
+      rows: [['Maximum acceptable CAC', '₹112 / order']]
+    },
     { q: 'Stop-loss rules for campaigns', a: 'Pause or re-scope any channel whose trailing-7-day CAC exceeds ₹112/order for 2 consecutive weeks, and move budget to whatever is converting.' },
   ]
 },
@@ -578,11 +1130,41 @@ const SECTION14 = {
   note: 'The brief lists these as items the weekly execution structure must cover, without a separate "Need clear answers" block — treated the same way here: fill in a weekly target/owner for each. Applies from the September ramp start (August runs on the prep checklist in Section 6/10 instead).',
   questions: [
     { q: 'Revenue target', a: 'Follows the Monthly Targets table, split evenly across the month\'s weeks (Month 1 = Sep has its own explicit weekly breakdown in the calculator).' },
-    { q: 'Orders target', a: 'Sep 1,500/month (see Section 1 / 4). Weekly reporting AOV tab: 500/week in Sep on the Revenue tab.' },
-    { q: 'AOV target', a: '₹699 on the Weekly Planning tab (Sep modeled AOV is still ₹599 — see Section 4).' },
-    { q: 'Website traffic target', a: '27,500/week (see Section 7).' },
-    { q: 'Conversion target', a: '2% starting, 3.5% in 6 months (see Section 7).' },
-    { q: 'Content calendar', a: 'Reels 4–5 · Static 3 · Stories daily · Product/UGC videos 2 · Carousel 1.' },
+    { q: 'Orders target', type: 'table',
+      headers: ['Period', 'Orders'],
+      rows: [
+        ['Sep / month', '1,500'],
+        ['Sep / week (Revenue tab)', '500'],
+      ]
+    },
+    { q: 'AOV target', type: 'table',
+      headers: ['Source', 'AOV'],
+      rows: [
+        ['Weekly Planning tab', '₹699'],
+        ['Sep modeled (Section 4)', '₹599'],
+      ]
+    },
+    { q: 'Website traffic target', type: 'table',
+      headers: ['Metric', 'Value'],
+      rows: [['Weekly traffic', '27,500']]
+    },
+    { q: 'Conversion target', type: 'table',
+      headers: ['Stage', 'Rate'],
+      rows: [
+        ['Start', '2%'],
+        ['In 6 months', '3.5%'],
+      ]
+    },
+    { q: 'Content calendar', type: 'table',
+      headers: ['Format', 'Per week'],
+      rows: [
+        ['Reels', '4–5'],
+        ['Static posts', '3'],
+        ['Stories', 'Daily'],
+        ['Product / UGC videos', '2'],
+        ['Carousel', '1'],
+      ]
+    },
     { q: 'Influencer outreach', a: '' },
     { q: 'Influencer posts going live', a: 'Hema to upload content live.' },
     { q: 'Paid ads', a: 'V.' },
@@ -601,7 +1183,17 @@ const SECTION15 = {
   note: '',
   questions: [
     { q: 'Monthly review date', a: '25th of each month.' },
-    { q: 'Monthly dashboard format', a: 'Revenue (target vs. actual) | Orders | AOV | Channel-wise breakdown | Marketing spend vs. revenue | Blended CAC vs. ₹112 ceiling.' },
+    { q: 'Monthly dashboard format', type: 'table',
+      headers: ['Metric', 'Target vs actual'],
+      rows: [
+        ['Revenue', ''],
+        ['Orders', ''],
+        ['AOV', ''],
+        ['Channel-wise breakdown', ''],
+        ['Marketing spend vs revenue', ''],
+        ['Blended CAC vs ₹112 ceiling', ''],
+      ]
+    },
     { q: 'Data sources', a: '' },
     { q: 'Owner for each metric', a: 'See Section 16 owner table.' },
     { q: 'Decision-making process when targets are missed', a: 'If actuals fall more than 15% below target for 2 consecutive months, reallocate marketing toward whichever channel is converting rather than holding the 50/10/0/40/0 (Website / Marketplace / QC / Community-WA / B2B) split rigid.' },
@@ -708,7 +1300,8 @@ const nav = document.getElementById('sideNav');
 
 // Builds one removable chip/box for the flexbox answer type.
 function flexItemHTML(value, sectionTitle, qEsc, idx) {
-  return `<div class="flex-item"><input type="text" value="${String(value||'').replace(/"/g,'&quot;')}" data-section="${sectionTitle}" data-question="${qEsc} — item ${idx}" placeholder="Fill in..."><span class="rm" data-flex-remove title="Remove">&times;</span></div>`;
+  const text = String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  return `<div class="flex-item"><div class="flex-item-bar"><span class="flex-n"></span><span class="rm" data-flex-remove title="Remove">&times;</span></div><textarea rows="4" data-section="${sectionTitle}" data-question="${qEsc} — item ${idx}" placeholder="Fill in...">${text}</textarea></div>`;
 }
 
 function renderAnswerField(item, sectionTitle) {
@@ -727,10 +1320,10 @@ function renderAnswerField(item, sectionTitle) {
     const wrap = document.createElement('div');
     wrap.className = 'bullet-list';
     if (items.length === 0) {
-      wrap.innerHTML = `<div class="bullet-row"><span class="bmark">•</span><input type="text" data-section="${sectionTitle}" data-question="${item.q.replace(/"/g,'&quot;')} — item 1" placeholder="Fill in..."></div>`;
+      wrap.innerHTML = `<div class="bullet-row"><span class="bmark">•</span><textarea class="cell-wrap" rows="1" data-section="${sectionTitle}" data-question="${item.q.replace(/"/g,'&quot;')} — item 1" placeholder="Fill in..."></textarea></div>`;
     } else {
       wrap.innerHTML = items.map((it, i) => `
-        <div class="bullet-row"><span class="bmark">•</span><input type="text" value="${it.replace(/"/g,'&quot;')}" data-section="${sectionTitle}" data-question="${item.q.replace(/"/g,'&quot;')} — item ${i+1}"></div>
+        <div class="bullet-row"><span class="bmark">•</span><textarea class="cell-wrap" rows="1" data-section="${sectionTitle}" data-question="${item.q.replace(/"/g,'&quot;')} — item ${i+1}">${String(it).replace(/&/g,'&amp;').replace(/</g,'&lt;')}</textarea></div>
       `).join('');
     }
     return wrap.outerHTML;
@@ -761,7 +1354,8 @@ function renderAnswerField(item, sectionTitle) {
           }
           const note = (!staticRow && calcNotes[rowKey] && ci === r.length - 1)
             ? `<span class="calc-note">${calcNotes[rowKey]}</span>` : '';
-          html += `<td><input type="text" value="${String(cell).replace(/"/g,'&quot;')}" data-section="${sectionTitle}" data-question="${item.q.replace(/"/g,'&quot;')} — ${r[0]} — ${colName}"${calcAttr}>${note}</td>`;
+          const text = String(cell).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+          html += `<td><textarea class="cell-wrap" rows="1" data-section="${sectionTitle}" data-question="${item.q.replace(/"/g,'&quot;')} — ${r[0]} — ${colName}"${calcAttr}>${text}</textarea>${note}</td>`;
         }
       });
       html += '</tr>';
@@ -821,7 +1415,7 @@ renderQSection(SECTION15);
     table.className = 'owner-table';
     let rows = '';
     SECTION16.cols.forEach(col => {
-      rows += `<tr><td class="name-cell">${col}</td><td><input type="text" data-section="16. Team Roles & Responsibilities" data-question="${person} — ${col}" placeholder="Fill in..."></td></tr>`;
+      rows += `<tr><td class="name-cell">${col}</td><td><textarea class="cell-wrap" rows="2" data-section="16. Team Roles & Responsibilities" data-question="${person} — ${col}" placeholder="Fill in..."></textarea></td></tr>`;
     });
     table.innerHTML = rows;
     wrap.appendChild(table);
@@ -871,8 +1465,9 @@ document.addEventListener('click', (e) => {
     const secEsc = addBtn.dataset.flexSection;
     const idx = list.querySelectorAll('.flex-item').length + 1;
     list.insertAdjacentHTML('beforeend', flexItemHTML('', secEsc, qEsc, idx));
-    const newInput = list.lastElementChild.querySelector('input');
+    const newInput = list.lastElementChild.querySelector('textarea, input');
     if (newInput) newInput.focus();
+    fitWrapFields();
     return;
   }
   const rmBtn = e.target.closest('[data-flex-remove]');
@@ -882,7 +1477,7 @@ document.addEventListener('click', (e) => {
     if (list.querySelectorAll('.flex-item').length > 1) {
       box.remove();
     } else {
-      const inp = box.querySelector('input');
+      const inp = box.querySelector('textarea, input');
       if (inp) { inp.value = ''; inp.focus(); }
     }
     return;
@@ -893,7 +1488,7 @@ document.addEventListener('click', (e) => {
 // Live calculation — assumptions panel drives every calc-tagged table cell
 // ---------------------------------------------------------------
 const AP_DEFAULTS = {
-  targetRevenue: 11400000, startMonth: '2026-09', endMonth: '2026-12',
+  targetRevenue: 10000000, startMonth: '2026-09', endMonth: '2026-12',
   aov: 599, cogsPct: 41, logisticsCost: 120, mpCommission: 22, qcCommission: 30, mktPct: 18,
 };
 function getAssumptions() {
@@ -930,12 +1525,12 @@ function recalcTables() {
   const channelPct = {};
   document.querySelectorAll('table[data-calc-group="channel"] tr[data-calc-row]').forEach(tr => {
     const key = tr.dataset.calcRow;
-    const srcInput = tr.querySelector('input[data-calc-src="pct"]');
+    const srcInput = tr.querySelector('[data-calc-src="pct"]');
     const pct = srcInput ? (parseFloat(srcInput.value) || 0) : 0;
     channelPct[key] = pct;
-    const outMonthly = tr.querySelector('input[data-calc-out="monthly"]');
-    const outWeekly = tr.querySelector('input[data-calc-out="weekly"]');
-    const outOrders = tr.querySelector('input[data-calc-out="orders"]');
+    const outMonthly = tr.querySelector('[data-calc-out="monthly"]');
+    const outWeekly = tr.querySelector('[data-calc-out="weekly"]');
+    const outOrders = tr.querySelector('[data-calc-out="orders"]');
     if (outMonthly) outMonthly.value = fmtINR(A.targetRevenue * pct / 100 / n);
     if (outWeekly) outWeekly.value = fmtINR(A.targetRevenue * pct / 100 / totalWeeks);
     // Monthly orders = (channel share of monthly revenue) ÷ AOV
@@ -952,15 +1547,15 @@ function recalcTables() {
   document.querySelectorAll('table[data-calc-group="margin"] tr[data-calc-row], table[data-calc-group="platform-margin"] tr[data-calc-row]').forEach(tr => {
     const m = margins[tr.dataset.calcRow];
     if (m === undefined) return;
-    const outMargin = tr.querySelector('input[data-calc-out="margin"]');
-    const outPct = tr.querySelector('input[data-calc-out="marginPct"]');
+    const outMargin = tr.querySelector('[data-calc-out="margin"]');
+    const outPct = tr.querySelector('[data-calc-out="marginPct"]');
     if (outMargin) outMargin.value = fmtRupee(m);
     if (outPct) outPct.value = fmtPct(A.aov ? (m / A.aov * 100) : 0);
   });
 
   // ---- Minimum profitable AOV (Sec 3) — Quick Commerce row has no fixed floor, left static ----
   document.querySelectorAll('table[data-calc-group="minaov"] tr[data-calc-row]').forEach(tr => {
-    const out = tr.querySelector('input[data-calc-out="minaov"]');
+    const out = tr.querySelector('[data-calc-out="minaov"]');
     if (!out) return;
     const key = tr.dataset.calcRow;
     let floor = 0;
@@ -972,8 +1567,8 @@ function recalcTables() {
   // ---- Platform-wise expected sales (Sec 10) — mirrors the channel table's % split ----
   document.querySelectorAll('table[data-calc-group="platform-sales"] tr[data-calc-row]').forEach(tr => {
     const pct = channelPct[tr.dataset.calcRow] || 0;
-    const outMonthly = tr.querySelector('input[data-calc-out="monthly"]');
-    const outWeekly = tr.querySelector('input[data-calc-out="weekly"]');
+    const outMonthly = tr.querySelector('[data-calc-out="monthly"]');
+    const outWeekly = tr.querySelector('[data-calc-out="weekly"]');
     if (outMonthly) outMonthly.value = fmtINR(A.targetRevenue * pct / 100 / n);
     if (outWeekly) outWeekly.value = fmtINR(A.targetRevenue * pct / 100 / totalWeeks);
   });
@@ -981,16 +1576,28 @@ function recalcTables() {
   // ---- Marketing budget by stream (Sec 13) ----
   const totalBudget = A.targetRevenue * A.mktPct / 100;
   document.querySelectorAll('table[data-calc-group="stream"] tr[data-calc-row]').forEach(tr => {
-    const srcInput = tr.querySelector('input[data-calc-src="pct"]');
+    const srcInput = tr.querySelector('[data-calc-src="pct"]');
     const pct = srcInput ? (parseFloat(srcInput.value) || 0) : 0;
-    const out = tr.querySelector('input[data-calc-out="amount"]');
+    const out = tr.querySelector('[data-calc-out="amount"]');
     if (out) out.value = fmtINR(totalBudget * pct / 100);
+  });
+  fitWrapFields();
+}
+
+function fitWrapFields() {
+  document.querySelectorAll('textarea.cell-wrap, .qcard > textarea, .flex-item textarea').forEach(el => {
+    el.style.height = 'auto';
+    el.style.height = Math.max(el.scrollHeight, 26) + 'px';
   });
 }
 
 document.querySelectorAll('.assump-panel input').forEach(inp => inp.addEventListener('input', recalcTables));
 document.addEventListener('input', (e) => {
-  if (e.target.matches && e.target.matches('input[data-calc-src]')) recalcTables();
+  if (e.target.matches && e.target.matches('[data-calc-src]')) recalcTables();
+  if (e.target.matches && e.target.matches('textarea.cell-wrap, .qcard > textarea, .flex-item textarea')) {
+    e.target.style.height = 'auto';
+    e.target.style.height = Math.max(e.target.scrollHeight, 26) + 'px';
+  }
 });
 document.getElementById('apResetBtn').addEventListener('click', () => {
   document.getElementById('ap_targetRevenue').value = AP_DEFAULTS.targetRevenue;
@@ -1050,7 +1657,7 @@ document.getElementById('printBtn').addEventListener('click', () => window.print
 // file), no separate download. Reopen this same HTML file later in the
 // same browser and your edits are restored automatically.
 // ---------------------------------------------------------------
-const STORAGE_KEY = 'krispino-answers-worksheet-progress-v2';
+const STORAGE_KEY = 'krispino-answers-worksheet-progress-v3';
 const saveStatusEl = document.getElementById('saveStatus');
 function showSaveStatus(msg) { saveStatusEl.textContent = msg; }
 
@@ -1145,7 +1752,7 @@ function applySaveData(data) {
         addBtn.click();
         guard++;
       }
-      const inputs = list.querySelectorAll('.flex-item input');
+      const inputs = list.querySelectorAll('.flex-item textarea, .flex-item input');
       items.forEach((it, i) => { if (inputs[i]) inputs[i].value = it.value; });
     } else {
       // Not a flexbox on this page (e.g. a fixed bullet list) — restore whatever slots still exist.

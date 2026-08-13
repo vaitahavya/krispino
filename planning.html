@@ -231,7 +231,7 @@
   <div class="card" style="background:#F2FBF6; border-color:#CFEFDD; margin-bottom:20px;">
     <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:700; color:var(--good); text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;">Confirmed / locked assumptions</div>
     <div style="font-size:12.5px; color:var(--ink); line-height:1.6;">
-      ₹1.14 Cr target is <b>new online/D2C revenue only</b> — offline NE revenue (₹3 Cr/yr) is intentionally excluded from this plan.
+      ₹1 Cr target (Sep–Dec) is <b>new online/D2C revenue only</b> — offline NE revenue (₹3 Cr/yr) is intentionally excluded from this plan.
       Founder capital is available to deploy (modest, not large). Target AOV starts at <b>₹599 in Sep</b> and steps up monthly to <b>₹899 by Mar ’27</b> (7-month blend <b>₹749</b>). Free shipping above <b>₹699</b>.
       Shelf life is <b>60 days</b>. Current shipping is <b>₹120/order</b> (target ≤ ₹150 blended). Bulk packaging cost is <b>₹10–15/unit</b>. GTIN &amp; GST are already live.
       <b>August 2026 is reserved for planning &amp; prep</b> (packaging sign-off, marketplace listings, content stockpile) — the revenue ramp itself starts <b>September 2026</b>.
@@ -246,11 +246,11 @@
     <div class="input-col">
       <div class="card">
         <h2>Target &amp; Timeline</h2>
-        <p class="hint">Set the goal and the window you're planning across. ₹1.14 Cr is new online/D2C revenue only — offline NE revenue (₹3 Cr/yr) is intentionally excluded.</p>
+        <p class="hint">Set the goal and the window you're planning across. ₹1 Cr (Sep–Dec) is new online/D2C revenue only — offline NE revenue (₹3 Cr/yr) is intentionally excluded.</p>
 
         <div class="field">
           <label>Total revenue target (₹) <span class="fhint">enter full number, e.g. 10000000 = ₹1 Cr</span></label>
-          <input type="number" id="targetRevenue" value="11400000" min="0" step="1000">
+          <input type="number" id="targetRevenue" value="10000000" min="0" step="1000">
         </div>
 
         <div class="field">
@@ -1060,7 +1060,7 @@ function currentMonthStr(){
 function applyPreset(name, silent){
   const today = currentMonthStr();
   let start, end, hint;
-  if (name === 'dec26'){ start = '2026-09'; end = '2026-12'; hint = 'Sep 2026 → Dec 2026 — interim milestone (₹1.14 Cr online-only). AOV steps 599 → 749 across these months; calculator uses the Sep starting AOV unless you change it.'; }
+  if (name === 'dec26'){ start = '2026-09'; end = '2026-12'; hint = 'Sep 2026 → Dec 2026 — ₹1 Cr online-only. AOV steps 599 → 749 across these months; calculator uses the Sep starting AOV unless you change it.'; }
   else if (name === 'mar27'){ start = '2026-09'; end = '2027-03'; hint = 'Sep 2026 → Mar 2027 — ₹2 Cr / ~26,500 orders in the AOV plan (blend AOV ₹749). Raise the revenue target to ₹2,00,00,000 to match that tab.'; }
   else if (name === 'm3'){ start = today; end = addMonths(today, 2); hint = 'Rolling 3-month window starting this month.'; }
   else if (name === 'm6'){ start = today; end = addMonths(today, 5); hint = 'Rolling 6-month window starting this month.'; }
@@ -1132,7 +1132,7 @@ $('exportCsvBtn').addEventListener('click', exportCsv);
 // Autosave — browser storage keyed to this page. Reopen later in the
 // same browser and every input (targets, ramp, channels, costs) restores.
 // ---------------------------------------------------------------
-const STORAGE_KEY = 'krispino-planning-tool-progress-v2';
+const STORAGE_KEY = 'krispino-planning-tool-progress-v3';
 const saveStatusEl = $('saveStatus');
 function showSaveStatus(msg){ saveStatusEl.textContent = msg; }
 
