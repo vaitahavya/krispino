@@ -232,8 +232,8 @@
     <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:700; color:var(--good); text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;">Confirmed / locked assumptions</div>
     <div style="font-size:12.5px; color:var(--ink); line-height:1.6;">
       ₹1.14 Cr target is <b>new online/D2C revenue only</b> — offline NE revenue (₹3 Cr/yr) is intentionally excluded from this plan.
-      Founder capital is available to deploy (modest, not large). AOV averages <b>₹90</b>, up to <b>₹150</b> by SKU weight. Free shipping above <b>₹599</b>.
-      Shelf life is <b>60 days</b> — a 5–7 day pan-India transit window is not a constraint. Bulk packaging cost is <b>~₹7/unit</b>. GTIN &amp; GST are already live.
+      Founder capital is available to deploy (modest, not large). Target AOV starts at <b>₹599 in Sep</b> and steps up monthly to <b>₹899 by Mar ’27</b> (7-month blend <b>₹749</b>). Free shipping above <b>₹699</b>.
+      Shelf life is <b>60 days</b>. Current shipping is <b>₹120/order</b> (target ≤ ₹150 blended). Bulk packaging cost is <b>₹10–15/unit</b>. GTIN &amp; GST are already live.
       <b>August 2026 is reserved for planning &amp; prep</b> (packaging sign-off, marketplace listings, content stockpile) — the revenue ramp itself starts <b>September 2026</b>.
       All fields below are editable — these are just the confirmed starting point.
       Everything you change is <b>autosaved in this browser</b> as you go — close the tab and reopen this page later and your numbers are still there. Use <b>Export CSV</b> for a shareable copy, and <b>Clear saved data</b> to wipe the autosave.
@@ -284,7 +284,7 @@
 
         <div class="field" style="margin-bottom:0;">
           <label>Free shipping threshold (₹) <span class="fhint">confirmed — orders above this ship free</span></label>
-          <input type="number" id="freeShipThreshold" value="599" min="0" step="10">
+          <input type="number" id="freeShipThreshold" value="699" min="0" step="10">
         </div>
       </div>
 
@@ -322,26 +322,26 @@
         <div class="row2" style="margin-bottom:8px;">
           <div class="field" style="margin-bottom:8px;">
             <label style="font-weight:500;">Website (D2C)</label>
-            <input type="number" id="chWebsite" value="30" min="0" max="100" step="1">
+            <input type="number" id="chWebsite" value="50" min="0" max="100" step="1">
           </div>
           <div class="field" style="margin-bottom:8px;">
             <label style="font-weight:500;">Marketplace</label>
-            <input type="number" id="chMarketplace" value="30" min="0" max="100" step="1">
+            <input type="number" id="chMarketplace" value="10" min="0" max="100" step="1">
           </div>
         </div>
         <div class="row2" style="margin-bottom:8px;">
           <div class="field" style="margin-bottom:8px;">
             <label style="font-weight:500;">Quick commerce</label>
-            <input type="number" id="chQcomm" value="15" min="0" max="100" step="1">
+            <input type="number" id="chQcomm" value="0" min="0" max="100" step="1">
           </div>
           <div class="field" style="margin-bottom:8px;">
             <label style="font-weight:500;">Community / WhatsApp</label>
-            <input type="number" id="chCommunity" value="15" min="0" max="100" step="1">
+            <input type="number" id="chCommunity" value="40" min="0" max="100" step="1">
           </div>
         </div>
         <div class="field" style="margin-bottom:0;">
           <label style="font-weight:500;">Corporate gifting / B2B</label>
-          <input type="number" id="chB2B" value="10" min="0" max="100" step="1">
+          <input type="number" id="chB2B" value="0" min="0" max="100" step="1">
         </div>
       </div>
 
@@ -351,31 +351,31 @@
         <div class="row2">
           <div class="field">
             <label>Target AOV <span class="fhint">(₹/order)</span></label>
-            <input type="number" id="aov" value="350" min="1" step="10">
+            <input type="number" id="aov" value="599" min="1" step="10">
           </div>
           <div class="field">
-            <label>RTO / return rate <span class="fhint">(%, COD-heavy D2C avg)</span></label>
-            <input type="number" id="rtoPct" value="25" min="0" max="90" step="1">
+            <label>RTO / return rate <span class="fhint">(%, prepaid-only target)</span></label>
+            <input type="number" id="rtoPct" value="3" min="0" max="90" step="1">
           </div>
         </div>
         <div class="row2">
           <div class="field">
             <label>Website conversion rate <span class="fhint">(%)</span></label>
-            <input type="number" id="convRate" value="2.5" min="0.1" max="20" step="0.1">
+            <input type="number" id="convRate" value="2" min="0.1" max="20" step="0.1">
           </div>
           <div class="field">
             <label>Marketplace commission <span class="fhint">(%, grocery/food tier)</span></label>
-            <input type="number" id="mpCommission" value="10" min="0" max="50" step="1">
+            <input type="number" id="mpCommission" value="22" min="0" max="50" step="1">
           </div>
         </div>
         <div class="row2">
           <div class="field">
             <label>Quick commerce commission <span class="fhint">(%, bundled — commission + fulfilment)</span></label>
-            <input type="number" id="qcCommission" value="25" min="0" max="60" step="1">
+            <input type="number" id="qcCommission" value="30" min="0" max="60" step="1">
           </div>
           <div class="field">
             <label>Logistics cost/order <span class="fhint">(₹, fwd+RTO blended)</span></label>
-            <input type="number" id="logisticsCost" value="57" min="0" step="5">
+            <input type="number" id="logisticsCost" value="120" min="0" step="5">
           </div>
         </div>
         <div class="row2">
@@ -385,7 +385,7 @@
           </div>
           <div class="field">
             <label>Bulk packaging cost <span class="fhint">(₹/unit, informational)</span></label>
-            <input type="number" id="packagingCost" value="7" min="0" step="1">
+            <input type="number" id="packagingCost" value="12" min="0" step="1">
           </div>
         </div>
       </div>
@@ -1060,8 +1060,8 @@ function currentMonthStr(){
 function applyPreset(name, silent){
   const today = currentMonthStr();
   let start, end, hint;
-  if (name === 'dec26'){ start = '2026-09'; end = '2026-12'; hint = 'Sep 2026 → Dec 2026 — the confirmed interim milestone (₹1.14 Cr online-only). August is planning & prep, not counted in the ramp.'; }
-  else if (name === 'mar27'){ start = '2026-09'; end = '2027-03'; hint = 'Sep 2026 → Mar 2027 — the CEO’s original annual planning horizon; same target spread across more months unless you raise it. August is planning & prep, not counted in the ramp.'; }
+  if (name === 'dec26'){ start = '2026-09'; end = '2026-12'; hint = 'Sep 2026 → Dec 2026 — interim milestone (₹1.14 Cr online-only). AOV steps 599 → 749 across these months; calculator uses the Sep starting AOV unless you change it.'; }
+  else if (name === 'mar27'){ start = '2026-09'; end = '2027-03'; hint = 'Sep 2026 → Mar 2027 — ₹2 Cr / ~26,500 orders in the AOV plan (blend AOV ₹749). Raise the revenue target to ₹2,00,00,000 to match that tab.'; }
   else if (name === 'm3'){ start = today; end = addMonths(today, 2); hint = 'Rolling 3-month window starting this month.'; }
   else if (name === 'm6'){ start = today; end = addMonths(today, 5); hint = 'Rolling 6-month window starting this month.'; }
   else if (name === 'm12'){ start = today; end = addMonths(today, 11); hint = 'Rolling 12-month window starting this month.'; }
@@ -1132,7 +1132,7 @@ $('exportCsvBtn').addEventListener('click', exportCsv);
 // Autosave — browser storage keyed to this page. Reopen later in the
 // same browser and every input (targets, ramp, channels, costs) restores.
 // ---------------------------------------------------------------
-const STORAGE_KEY = 'krispino-planning-tool-progress-v1';
+const STORAGE_KEY = 'krispino-planning-tool-progress-v2';
 const saveStatusEl = $('saveStatus');
 function showSaveStatus(msg){ saveStatusEl.textContent = msg; }
 

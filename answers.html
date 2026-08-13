@@ -241,7 +241,7 @@
       <div class="ap-head">
         <div>
           <div class="ap-title">Live assumptions <span class="calc-badge">Drives tables below</span></div>
-          <div class="ap-hint">Matches the Krispino Planning Tool defaults. Edit any field and every indigo-highlighted table cell recalculates instantly.</div>
+          <div class="ap-hint">Matches the Krispino Planning Tool and the Business Plan sheet (Sep AOV ₹599). Edit any field and every indigo-highlighted table cell recalculates instantly.</div>
         </div>
         <button type="button" class="ap-reset" id="apResetBtn">Reset to defaults</button>
       </div>
@@ -249,11 +249,11 @@
         <div class="ap-field"><label>Target revenue (₹)</label><input type="number" id="ap_targetRevenue" value="11400000" step="10000"></div>
         <div class="ap-field"><label>Start month</label><input type="month" id="ap_startMonth" value="2026-09"></div>
         <div class="ap-field"><label>End month</label><input type="month" id="ap_endMonth" value="2026-12"></div>
-        <div class="ap-field"><label>AOV (₹)</label><input type="number" id="ap_aov" value="350" step="1"></div>
+        <div class="ap-field"><label>AOV (₹)</label><input type="number" id="ap_aov" value="599" step="1"></div>
         <div class="ap-field"><label>COGS (%)</label><input type="number" id="ap_cogsPct" value="41" step="0.5"></div>
-        <div class="ap-field"><label>Logistics cost/order (₹)</label><input type="number" id="ap_logisticsCost" value="57" step="1"></div>
-        <div class="ap-field"><label>Marketplace commission (%)</label><input type="number" id="ap_mpCommission" value="10" step="0.5"></div>
-        <div class="ap-field"><label>Quick commerce commission (%)</label><input type="number" id="ap_qcCommission" value="25" step="0.5"></div>
+        <div class="ap-field"><label>Logistics cost/order (₹)</label><input type="number" id="ap_logisticsCost" value="120" step="1"></div>
+        <div class="ap-field"><label>Marketplace commission (%)</label><input type="number" id="ap_mpCommission" value="22" step="0.5"></div>
+        <div class="ap-field"><label>Quick commerce commission (%)</label><input type="number" id="ap_qcCommission" value="30" step="0.5"></div>
         <div class="ap-field"><label>Marketing spend (% of revenue)</label><input type="number" id="ap_mktPct" value="18" step="0.5"></div>
       </div>
     </div>
@@ -275,48 +275,47 @@
 const SECTIONS = [
 {
   id: 'sec1', title: '1. Revenue Target & Sales Plan',
-  note: 'Figures pull from the Krispino Planning Tool at its Sep–Dec 2026 / ₹1.14 Cr / S-curve defaults — August is planning & prep and is not counted here. Re-run the calculator if the target, timeline, or ramp shape changes.',
+  note: 'Figures follow the Krispino Business Plan sheet (AOV Strategy + Revenue tabs). Sep–Dec is the ₹1.14 Cr interim window; the AOV tab also plans ₹2 Cr through Mar ’27. Live tables below use the assumptions panel (default AOV ₹599 = Sep starting AOV).',
   questions: [
-    { q: 'How much revenue should we target each month?', a: 'Avg ₹28.5 L/month across Sep–Dec 2026 (S-curve ramp: Sep ₹5.48L → Oct ₹22.97L → Nov ₹40.46L → Dec ₹45.1L). See the calculator\'s Monthly Targets table for the live breakdown.' },
-    { q: 'How much revenue should we target each week?', a: 'Month 1 (Sep \'26): ₹1.27 L/week flat. From Oct onward, blended average is ~₹6.55 L/week, rising sharply toward Dec as the ramp peaks — track monthly from Month 2, not weekly (see Section 14).' },
-    { q: 'How many orders are needed weekly?', a: '~2,496 orders/week blended across all channels (at ₹350 AOV, 25% Website RTO). Peaks well higher in Nov–Dec as the ramp climbs.' },
-    { q: 'What should be the minimum AOV?', a: '₹116 (Marketplace floor — the higher of the two channel breakevens; Website floor is ₹97). Current modeled AOV of ₹350 clears both comfortably.' },
+    { q: 'How much revenue should we target each month?', a: 'From the AOV Strategy tab: Sep ₹8.99 L (1,500 orders @ ₹599) → Oct ₹29.21 L (4,500 @ ₹649) → Nov ₹31.46 L (4,500 @ ₹699) → Dec ₹29.96 L (4,000 @ ₹749). Sep–Dec total ₹99.6 L. The ₹1.14 Cr / Mar ₹2 Cr tops are still in Notes — use the calculator if you hold a different ramp.' },
+    { q: 'How much revenue should we target each week?', a: 'Sep (AOV tab): ₹2.25 L/week average, front-loaded — Week 1 ₹4.49 L (50% of Sep orders) → Week 2 ₹2.70 L (30%) → Weeks 3–4 ₹0.90 L each (10% each). Later months: divide that month\'s revenue by its weeks.' },
+    { q: 'How many orders are needed weekly?', a: 'Sep: 1,500 orders/month, 500/week on the Revenue tab (AOV tab splits them 750 / 450 / 150 / 150). Then Oct–Nov 4,500/month (~1,125/week) and Dec 4,000/month (~1,000/week). 7-month plan: 26,500 orders, ~3,785/month, ~126/day.' },
+    { q: 'What should be the minimum AOV?', a: '₹599 commercial floor (Revenue tab + Sep AOV + 3-item combo). Pricing tab also notes a ₹380 contribution floor (shipping + ₹150 CAC). Weekly reporting AOV target is ₹699; 7-month blend is ₹749.' },
     { q: 'Which channel will contribute how much?', type: 'table', calc: 'channel',
-      headers: ['Channel', '% Split', 'Monthly Avg', 'Weekly Avg', 'No. of orders'],
+      headers: ['Channel', '% Split', 'Monthly Avg', 'Weekly Avg', 'No. of orders / month'],
       rows: [
-        ['Website', '30%', '₹8.55 L', '₹1.97 L', ''],
-        ['Marketplace', '30%', '₹8.55 L', '₹1.97 L', ''],
-        ['Quick Commerce', '15%', '₹4.28 L', '₹0.98 L', ''],
-        ['Community / WhatsApp', '15%', '₹4.28 L', '₹0.98 L', ''],
-        ['Corporate Gifting / B2B', '10%', '₹2.85 L', '₹0.66 L', ''],
+        ['Website', '50%', '', '', ''],
+        ['Marketplace', '10%', '', '', ''],
+        ['Quick Commerce', '0%', '', '', ''],
+        ['Community / WhatsApp', '40%', '', '', ''],
+        ['Corporate Gifting / B2B', '0%', '', '', ''],
       ]
     },
   ]
 },
 {
   id: 'sec2', title: '2. Product & SKU Strategy',
-  note: 'Hero-SKU picks and margins are from the real product catalog and Aug–Oct 2026 production plan reviewed earlier in this project.',
+  note: 'Hero SKUs, pack sizes, and monthly pack targets from the Product and SKU Strategy tab.',
   questions: [
     { q: 'Top 5–10 SKUs to focus on', type: 'bullets', items: [
-      'Tapioca Steamed Chips 350g — ₹365, 55.0% margin',
-      'Banana Chips (Coconut Oil) 350g — ₹615, 65.8% margin',
-      'Chilli Tapioca Sticks 350g — ₹312, 53.2% margin',
-      'Potato Chips Kanthari 175g — ₹290, 62.3% margin',
-      'Jackfruit Chips 180g — ₹272, 58.8% margin',
-      'Sharkkaravaratti 350g — ₹515, 61.3% margin',
-      'Baby Murukku 400g — ₹454, 61.6% margin',
-      'Round Murukku 400g — ₹454, 61.1% margin',
-      'Rice Murukku 400g — ₹378, 55.0% margin',
-      'Banana Chips (Coconut Oil) 180g — ₹315, 63.2% margin — pricing flagged, resolve before launch',
+      'Banana Chips – Coconut Oil (180g, ₹204) — 800 packs/month, 40–45% margin — D2C, Amazon/marketplaces, influencers, B2B',
+      'Jackfruit Chips (180g, ₹272) — 500 packs/month, 40–45% margin — D2C, influencers, gifting, marketplaces',
+      'Chilli Tapioca Chips (200g, ₹179) — 700 packs/month, 45–50% margin — D2C, influencers, marketplaces',
+      'Kanthari Murukku (140g, ₹132) — 500 packs/month, 45–50% margin — D2C, influencers, combos',
+      'Baby Murukku (140g, ₹159) — 700 packs/month, 45–50% margin — D2C, B2B, office snacks, marketplaces',
+      'Kozhikodan Mixture (180g, ₹162) — 500 packs/month, 45–50% margin — D2C, B2B, marketplaces, combos',
+      'Madhuraseva (140g, ₹135) — 500 packs/month, 45–50% margin — D2C, discovery boxes, gifting, influencers',
     ]},
-    { q: 'Expected monthly sales per SKU', a: 'From your own Aug–Oct production plan: ~500 units/month for most 200–350g lines (Tapioca Steamed Chips, Chilli Tapioca Sticks, Banana Chips 180g variants), ~200 units/month for the 350g premium sizes. Treat as a floor, not a ceiling — production capacity, not demand, set these.' },
-    { q: 'Expected weekly sales per SKU', a: '' },
-    { q: 'Product-wise margin estimate', a: 'See the Top 5–10 list above for hero-SKU margins (53–66%). Full 104-SKU catalog margins are in the source sheet\'s Product Cost tab.' },
-    { q: 'Product-wise reorder potential', a: 'Qualitative starting view: murukku and mixture lines (everyday snacking) likely have the highest repeat-purchase potential; Diwali gifting combos are seasonal/lower-repeat by nature; banana chips sit in between — trial-driven first, repeat if the coconut-oil positioning lands. Needs real repeat-purchase data to confirm.' },
+    { q: 'Expected monthly sales per SKU', a: 'Hero-SKU table: Banana Chips 800, Chilli Tapioca 700, Baby Murukku 700, Jackfruit / Kanthari / Kozhikodan / Madhuraseva 500 each — 4,200 packs/month total.' },
+    { q: 'Expected weekly sales per SKU', a: 'Banana Chips 175–200 · Jackfruit 120–130 · Chilli Tapioca 150–175 · Kanthari 100–125 · Baby Murukku 150–200 · Kozhikodan 100–125 · Madhuraseva 100–125 · ~1,100 packs/week total.' },
+    { q: 'Product-wise margin estimate', a: 'Target gross margin 40–45% on banana/jackfruit chips; 45–50% on murukku, mixture, tapioca, and Madhuraseva (Product tab).' },
+    { q: 'Product-wise reorder potential', a: 'Very high: Banana Chips, Chilli Tapioca, Baby Murukku, Kozhikodan Mixture. High: Jackfruit Chips, Kanthari Murukku. Medium–high: Madhuraseva (discovery/gifting).' },
     { q: 'Product-wise channel fit', type: 'flexbox', items: [
-      'Marketplace / first launch: Rice Murukku, Bombay Mixture, Butter Murukku — price-safe, recognizable, low shipping risk',
-      'Website / hero storytelling: Banana Chips (both sizes), Jackfruit Chips',
-      'Diwali gifting combo: Sharkkaravaratti + Banana Chips + Dry Fruits Mixture',
+      'D2C / website: all seven hero SKUs',
+      'Marketplace: Banana Chips, Chilli Tapioca, Baby Murukku, Kozhikodan Mixture, Jackfruit',
+      'Influencers: Banana, Jackfruit, Chilli Tapioca, Kanthari, Madhuraseva',
+      'B2B / office: Banana Chips, Baby Murukku, Kozhikodan Mixture',
+      'Gifting / combos: Jackfruit, Kanthari, Madhuraseva, Kozhikodan',
     ]},
   ]
 },
@@ -324,10 +323,10 @@ const SECTIONS = [
   id: 'sec3', title: '3. Pricing Strategy',
   note: '',
   questions: [
-    { q: 'MRP', a: '' },
-    { q: 'Selling price', a: 'See hero-SKU table in Section 2 for current selling prices. Full catalog pricing is in the source sheet.' },
-    { q: 'Discount limit', a: 'Suggested cap: 10–15% on first-order and repeat-purchase offers — keeps post-discount price above the ₹97–116 minimum profitable AOV floor. Anything deeper needs a matching COGS or logistics improvement first.' },
-    { q: 'Free-shipping threshold', a: '₹599 — confirmed.' },
+    { q: 'MRP', a: 'Rs.135 – Rs.680 (Pricing tab).' },
+    { q: 'Selling price', a: 'Rs.108 – Rs.544 on website (MRP × 0.80, 20% standard discount). Marketplace: MRP × 0.90 (Rs.122–612). Quick commerce: full MRP (Rs.135–680).' },
+    { q: 'Discount limit', a: '20% everyday / 30% max for promotions (Planned Discount % ceiling). ~65–67% is the absolute breakeven floor — never go there except genuine clearance.' },
+    { q: 'Free-shipping threshold', a: '₹699 (~15% above estimated AOV of ~₹597, rounded).' },
     { q: 'Contribution margin per order', type: 'table', calc: 'margin',
       calcNotes: { quickcommerce: 'bundled commission, no separate logistics' },
       headers: ['Channel', 'Margin / Order', 'Margin %'],
@@ -346,44 +345,64 @@ const SECTIONS = [
       ]
     },
     { q: 'Price difference across website, marketplace and quick commerce', type: 'flexbox', items: [
-      'Hold price parity between Website and Marketplace — a visible gap invites comparison-shopping one tab away',
-      'Price 5–8% higher on Quick Commerce to cover its heavier 25% bundled commission (exact per-SKU numbers left open)',
+      'Website: MRP × 0.80 (Rs.108–544) — best margin, no commission',
+      'Marketplace: MRP × 0.90 (Rs.122–612) — ~22% commission',
+      'Quick Commerce: full MRP (Rs.135–680), 0% customer discount, ~30% commission — similar per-pack profit to marketplace, sometimes slightly less',
     ]},
   ]
 },
 {
   id: 'sec4', title: '4. Average Order Value Strategy',
-  note: '',
+  note: 'From the Average Order Value Strategy tab. Default model AOV in the assumptions panel is Sep’s ₹599; raise it month by month as combos land.',
   questions: [
-    { q: 'Target AOV for each month', a: 'Suggested flat ₹350/order across all months as the baseline model AOV — combo strategy (below) is the lever to push this toward the ₹599 free-shipping threshold, not a month-by-month target change.' },
-    { q: 'Weekly AOV target', a: 'Same ₹350 baseline — no separate weekly AOV target is modeled; AOV is tracked as a rolling average, not a weekly-reset figure.' },
-    { q: 'Combo names', a: '' },
-    { q: 'Combo contents', a: 'One worked example: Diwali trio — Sharkkaravaratti + Banana Chips (Coconut Oil) + Dry Fruits Mixture. Highest-margin combination in the catalog, timed for the festive window.' },
-    { q: 'Combo price', a: 'Diwali trio: ₹867 standalone → ₹780 at a 10% combo discount — comfortably above the ₹599 free-shipping line and both channel profitability floors.' },
-    { q: 'Expected margin per combo', a: 'Rough estimate ~60%+ blended for the Diwali trio, based on its component SKU margins (61–66% individually) net of the 10% combo discount. Needs a precise per-combo COGS roll-up to confirm.' },
-    { q: 'Expected monthly and weekly combo sales', a: '' },
+    { q: 'Target AOV for each month', type: 'table',
+      headers: ['Month', 'AOV', 'Orders / month', 'Revenue'],
+      rows: [
+        ["Sep '26", '₹599', '1,500', '₹8,98,500'],
+        ["Oct '26", '₹649', '4,500', '₹29,20,500'],
+        ["Nov '26", '₹699', '4,500', '₹31,45,500'],
+        ["Dec '26", '₹749', '4,000', '₹29,96,000'],
+        ["Jan '27", '₹799', '5,000', '₹39,95,000'],
+        ["Feb '27", '₹849', '3,500', '₹29,71,500'],
+        ["Mar '27", '₹899', '3,500', '₹31,46,500'],
+        ['7-month total / blend', '₹749', '26,500', '₹2.01 Cr'],
+      ]
+    },
+    { q: 'Weekly AOV target', a: 'Sep weeks all at ₹599 AOV (Revenue tab weekly AOV reporting target is ₹699 as a later-month steer). Sep order mix: Week 1 50% (750) · Week 2 30% (450) · Weeks 3–4 10% each (150).' },
+    { q: 'Combo names', type: 'bullets', items: [
+      'Tapioca fusion — all tapioca flavours',
+      'Kerala Classics — Kerala heritage snacks',
+      'Tea time snacks — banana chips, mixture, murukku',
+      'Party time snacks — banana chips, mixture, murukku, peanut candy, sesame candy',
+      'Kerala Premium snacks — Nendran banana chips',
+      'Kanthari punch — for spicy lovers',
+    ]},
+    { q: 'Combo contents', a: 'See combo names above. Free-shipping combos on the Shipping tab: Murukku Trio ₹699 (3×400g); Kerala Snack Box ₹799 (5–6 pouches); Festival Hamper ₹999–1,299.' },
+    { q: 'Combo price', a: '₹599 (3 items) · ₹699 (5 items) · ₹799 (6 items) — all at or above the ₹699 free-shipping line except the 3-item ₹599 box (just at Sep AOV).' },
+    { q: 'Expected margin per combo', a: '25% at ₹599 · 35% at ₹699 · 25% at ₹799 (AOV tab).' },
+    { q: 'Expected monthly and weekly combo sales', a: 'Planning grid: 2,500 combos/month as 625 @ ₹599 + 1,250 @ ₹699 + 625 @ ₹799 ≈ ₹17.48 L/month, mix 25% / 50% / 25%. Same grid copied Sep–Mar on the tab (₹1.22 Cr if held flat — overlay, not a second revenue target).' },
   ]
 },
 {
   id: 'sec5', title: '5. Shipping & Logistics',
   note: '',
   questions: [
-    { q: 'Current shipping cost per order', a: '' },
-    { q: 'Target shipping cost per order', a: '₹57 modeled (forward + RTO blended) — this is a planning estimate, not a confirmed courier quote. Get a real quote to replace it.' },
-    { q: 'Shipping cost as % of AOV', a: '₹57 / ₹350 AOV ≈ 16.3%.' },
-    { q: 'Free-shipping threshold', a: '₹599 — confirmed.' },
-    { q: 'Delivery TAT by region', a: '' },
-    { q: 'Damaged order target', a: 'Suggested target: under 2% — a reasonable starting benchmark for a fragile snacks category (chips/murukku), pending your own courier data.' },
+    { q: 'Current shipping cost per order', a: '₹120 (actual, last month).' },
+    { q: 'Target shipping cost per order', a: '≤ ₹150 blended at national scale. Ladder on the Shipping tab: ₹120 now → ₹135 @ 50 orders → ₹145 @ 150 → ₹150 @ 500 → ₹170 @ ~3,815 orders/month.' },
+    { q: 'Shipping cost as % of AOV', a: 'Current 24% at last-month AOV. Targets: ≤19% at ₹800 AOV; ≤15% at ₹950. At Sep AOV ₹599 and ₹120 freight: ~20%.' },
+    { q: 'Free-shipping threshold', a: '₹699.' },
+    { q: 'Delivery TAT by region', a: 'Kerala 2–4 d · South 4–6 d · Rest of India 6–9 d · NE/J&K 10–14 d.' },
+    { q: 'Damaged order target', a: '<3% first 90 days → <1.5% steady state.' },
     { q: 'Return/RTO target', type: 'table',
       headers: ['Channel', 'RTO Target'],
       rows: [
-        ['Website', '25% (COD-heavy D2C India average)'],
-        ['Marketplace', '12% (platform-fulfilled)'],
-        ['Quick Commerce', '10% (prepaid-heavy, fast delivery)'],
+        ['Website', '<3% while prepaid-only; <8% if COD is introduced'],
+        ['Marketplace', 'Follow platform SLA; plan prepaid-first'],
+        ['Quick Commerce', 'Prepaid-heavy; no separate RTO line in the sheet'],
       ]
     },
-    { q: 'Monthly logistics cost estimate', a: '~10,857 orders/month (blended) × ₹57/order ≈ ₹6.19 L/month at the Realistic case. Scales with the ramp — recompute per month from the Monthly Targets table.' },
-    { q: 'Weekly logistics report format', a: 'Suggested minimal template: Orders placed | Orders delivered | RTO count & % | Total logistics cost | Avg cost/order | Damaged-order count. One row per week.' },
+    { q: 'Monthly logistics cost estimate', a: 'Today ~₹1,650 (10 orders). Scaling ladder: ₹8,900 @ 50 · ₹28,350 @ 150 · ₹1.15 L @ 500 · ₹10.87 L @ 3,815 orders (freight + pack + labour + COD/RTO).' },
+    { q: 'Weekly logistics report format', a: 'Orders shipped | AOV | Freight/order (≤₹150) | Freight as % of AOV (≤19%) | Packaging/order (≤₹30) | Total logistics/order (≤₹193) | On-time % | Damage % | RTO %.' },
   ]
 },
 {
@@ -391,89 +410,90 @@ const SECTIONS = [
   note: 'This is the workstream that should run during the August prep month, ahead of the September ramp start.',
   questions: [
     { q: 'Top 5 SKUs for immediate packaging redesign', type: 'bullets', items: [
-      'Sharkkaravaratti 350g',
-      'Banana Chips (Coconut Oil) 350g',
-      'Banana Chips (Coconut Oil) 180g',
-      'Dry Fruits Mixture 250g',
-      'Jackfruit Chips 180g',
+      'Banana chips',
+      'Jackfruit chips',
+      'Chilli Tapioca chips',
+      'Kanthari murukku',
+      'Baby murukku',
+      'Kozhikodan mixture',
+      'Madhuraseva',
     ]},
-    { q: 'Cost per new pack', a: '~₹7/unit in bulk — confirmed.' },
-    { q: 'MOQ impact', a: '' },
-    { q: 'Total packaging investment required', a: '' },
-    { q: 'Design completion timeline', a: 'Suggested: lock design during the August prep window, well before late October — Diwali (early Nov) is the single tightest constraint in this plan.' },
-    { q: 'Print timeline', a: 'Suggested: 2–3 weeks of print lead time, completed within August–early September, ahead of the September ramp start.' },
-    { q: 'Launch timeline', a: 'Suggested: new packaging ready by the September ramp start, well ahead of the Nov Diwali sales window.' },
-    { q: 'Expected impact on sales/conversion', a: 'Directional only: better packaging/photography typically lifts online conversion in the high single digits to low teens (%) for food/snacks D2C — not a Krispino-specific number, treat as a rule of thumb until you have your own before/after data.' },
+    { q: 'Cost per new pack', a: '₹10–15.' },
+    { q: 'MOQ impact', a: '₹1,00,000–1,50,000 — pilot 2,000 packs per SKU, 10,000 packs total. Sheet note: double the MOQ amount if you scale.' },
+    { q: 'Total packaging investment required', a: '₹3.25–4 L (strategy/design ₹1–1.5 L · prototypes ₹15–25k · 10,000 packs ~₹1.5 L · proofs ₹15–25k · contingency ₹20–30k).' },
+    { q: 'Design completion timeline', a: '2 weeks.' },
+    { q: 'Print timeline', a: '2–3 weeks.' },
+    { q: 'Launch timeline', a: '4–5 weeks.' },
+    { q: 'Expected impact on sales/conversion', a: 'Conservative +5–8% conversion · base +8–12% · strong upside +12–20%.' },
   ]
 },
 {
   id: 'sec7', title: '7. Website & Conversion',
   note: '',
   questions: [
-    { q: 'Current monthly traffic', a: '' },
-    { q: 'Target monthly traffic', a: '~1,30,286 visitors/month blended (reverse-engineered from Website channel orders ÷ 2.5% conversion). Rises with the ramp — recompute per month if needed.' },
-    { q: 'Target weekly traffic', a: '~29,950 visitors/week blended average.' },
-    { q: 'Target conversion rate', a: '2.5% — research-backed for Indian F&B D2C (benchmark range 2.5–6%), not the generic 1.5–2% e-commerce default.' },
-    { q: 'Target cart-to-checkout rate', a: 'Suggested starting benchmark: 60–70% (typical for mobile-heavy Indian D2C traffic) — confirm against your own funnel once live.' },
-    { q: 'Target checkout completion rate', a: 'Suggested starting benchmark: 80–85% if COD and UPI are both offered with minimal friction.' },
-    { q: 'Weekly website improvement plan', a: '' },
-    { q: 'Weekly website performance report', a: 'Suggested minimal template: Sessions | Conversion rate | AOV | Cart-to-checkout % | Checkout completion % | Top-selling SKU. One row per week.' },
+    { q: 'Current monthly traffic', a: '20 (Website tab — treat as current sessions, not 20,000).' },
+    { q: 'Target monthly traffic', a: '1,10,000 (Website tab; Notes also lists 1,10,000).' },
+    { q: 'Target weekly traffic', a: '27,500.' },
+    { q: 'Target conversion rate', a: 'Start at 2% and go to 3.5% in 6 months. Hero products 3.5–5%.' },
+    { q: 'Target cart-to-checkout rate', a: '40–50% of add-to-cart.' },
+    { q: 'Target checkout completion rate', a: '55–65% of cart-to-checkout.' },
+    { q: 'Weekly website improvement plan', a: 'Wednesday.' },
+    { q: 'Weekly website performance report', a: 'Monday / Tuesday. Template: Sessions | Conversion rate | AOV | Cart-to-checkout % | Checkout completion % | Top-selling SKU.' },
   ]
 },
 {
   id: 'sec8', title: '8. Social Media Campaign Plan',
   note: 'Content-calendar specifics need your creative/content team\'s input — the cadence numbers below are general D2C starting benchmarks, not Krispino-specific research. August is the month to stockpile this content before the September launch.',
   questions: [
-    { q: 'Number of reels per week', a: 'Suggested starting cadence: 3–4/week.' },
-    { q: 'Number of posts per week', a: 'Suggested starting cadence: 4–5/week (static + carousel combined).' },
-    { q: 'Number of stories per week', a: 'Suggested starting cadence: daily (5–7/week).' },
-    { q: 'Number of product videos per week', a: 'Suggested starting cadence: 2–3/week.' },
-    { q: 'Language-wise content split', a: '' },
+    { q: 'Number of reels per week', a: '4–5.' },
+    { q: 'Number of posts per week', a: '3 static posts.' },
+    { q: 'Number of stories per week', a: 'Daily.' },
+    { q: 'Number of product videos per week', a: '2, plus 1 educational/ingredient carousel.' },
+    { q: 'Language-wise content split', a: 'Malayalam 45% · English 40% · Hindi 15%.' },
     { q: 'Campaign theme for each month', type: 'table',
       headers: ['Month', 'Theme'],
       rows: [
-        ['Aug (prep)', 'Content stockpile — no public campaign yet'],
-        ['Sep', 'Brand introduction / awareness (ramp start)'],
-        ['Oct', 'Diwali gifting build-up'],
-        ['Nov', 'Diwali gifting push (the festive anchor)'],
-        ['Dec', 'Post-festive / repeat-purchase push'],
+        ['Sep', 'Dasara'],
+        ['Oct', 'Diwali'],
+        ['Nov', 'Diwali / New year build'],
+        ['Dec', 'New year / chillout'],
       ]
     },
-    { q: 'Weekly posting schedule', a: '' },
-    { q: 'Expected reach, engagement and sales impact', a: '' },
-    { q: 'Reporting format for content performance', a: 'Suggested minimal template: Post/reel | Platform | Reach | Engagement rate | Link clicks | Attributed orders (via coupon/UTM). One row per post.' },
+    { q: 'Weekly posting schedule', a: 'Instagram and Facebook. Timings to be A/B tested.' },
+    { q: 'Expected reach, engagement and sales impact', a: '6,00,000 reach (Social tab).' },
+    { q: 'Reporting format for content performance', a: 'Views to traffic (sheet). Plus: Post/reel | Platform | Reach | Engagement | Link clicks | Attributed orders.' },
   ]
 },
 {
   id: 'sec9', title: '9. Influencer Marketing Plan',
   note: '',
   questions: [
-    { q: 'Influencers to contact per week', a: 'Suggested starting cadence: 10–15/week.' },
-    { q: 'Influencers to close per week', a: 'Suggested: 2–3/week, assuming a ~15–20% close rate off the contact volume above.' },
-    { q: 'Sample boxes to send per week', a: 'Suggested: matched to influencers contacted, ~10–15/week.' },
-    { q: 'Videos expected live per week', a: 'Suggested: 2–3/week once the pipeline is running.' },
+    { q: 'Influencers to contact per week', a: '40–50. Focus hyper-local nano — product + commission only.' },
+    { q: 'Influencers to close per week', a: 'Sheet has a date in this cell (12 Oct 2026) — treat as a pipeline milestone, not a weekly close count. Re-fill a number when you set one.' },
+    { q: 'Sample boxes to send per week', a: '5.' },
+    { q: 'Videos expected live per week', a: '2 (Hema to upload content live — Weekly tab).' },
     { q: 'Cost per influencer category', type: 'table',
       headers: ['Tier', 'Cost Range (per post/video)'],
       rows: [
-        ['Nano', '₹2,000 – 5,000, or barter (product + modest fee)'],
-        ['Micro', '₹5,000 – 15,000'],
-        ['Macro', '₹15,000+'],
+        ['Nano', 'Product cost / barter (₹5k–30k audience)'],
+        ['Micro', '₹2,000–3,000 + product (or ₹2,000–5,000 + product for 30k–150k)'],
+        ['Macro', 'Not the starting bet — nano/micro first'],
       ]
     },
-    { q: 'Expected views per campaign', a: '' },
-    { q: 'Expected orders per influencer', a: '' },
-    { q: 'Coupon-code-wise sales tracking', a: 'Suggested method: one unique tracked coupon code per creator, capped at 15% off (ties to the Section 3 discount limit), funded from the Influencer/UGC line of the marketing budget.' },
-    { q: 'Target CAC from influencers', a: 'Suggested ceiling: ₹16.2/unit — the blended CAC ceiling computed from the total marketing budget ÷ total units needed. Use as the cap until real influencer-attributed order data narrows it further.' },
+    { q: 'Expected views per campaign', a: '4,00,000.' },
+    { q: 'Expected orders per influencer', a: '2% conversion on views (Influencer tab).' },
+    { q: 'Coupon-code-wise sales tracking', a: 'Shopflo — unique code per creator.' },
+    { q: 'Target CAC from influencers', a: '₹239.6 (Influencer tab). Hard cap vs blended max CAC ₹112/order (Marketing tab) — influencer CAC is above the blended ceiling, so keep this line small until codes prove out.' },
   ]
 },
 {
   id: 'sec10', title: '10. Marketplace & Quick Commerce',
   note: '',
   questions: [
-    { q: 'Platform-wise target launch date', a: '' },
-    { q: 'Weekly follow-up plan', a: '' },
-    { q: 'SKUs to list first', a: 'Rice Murukku, Bombay Mixture, Butter Murukku — price-safe, nationally recognized, low shipping risk. Same picks as the Section 2 marketplace channel-fit list.' },
-    { q: 'Platform-wise pricing', a: '' },
+    { q: 'Platform-wise target launch date', a: 'Flipkart 22 Sep 2026 · Amazon Seller Central 6 Oct · Zepto 3 Nov (Kochi first) · Blinkit 17 Nov (Kerala, 3–4 SKUs) · Swiggy Instamart 17 Nov · Amazon Now: monitor, not scheduled for 2026.' },
+    { q: 'Weekly follow-up plan', a: 'Every Monday, 15–20 min, Founder + Growth. Stage-gate per platform. Escalate to Founder the same day if blocked >3 working days. Owners: V + Giri marketplace; V, Bhavana, Giri quick commerce.' },
+    { q: 'SKUs to list first', a: 'Hero set: Banana Chips, Jackfruit, Chilli Tapioca, Kanthari / Baby Murukku, Kozhikodan Mixture. Blinkit: 3–4 SKUs in Kerala only, not the full catalog.' },
+    { q: 'Platform-wise pricing', a: 'Marketplace ~MRP × 0.90; Flipkart 0% commission on items <₹1,000 (all current SKUs qualify). Quick commerce: full MRP, ~30% commission.' },
     { q: 'Platform-wise margin', type: 'table', calc: 'platform-margin',
       calcNotes: { marketplace: 'after marketplace commission + logistics', quickcommerce: 'bundled commission, no separate logistics' },
       headers: ['Platform', 'Margin / Order', 'Margin %'],
@@ -491,48 +511,48 @@ const SECTIONS = [
     },
     { q: 'Expected weekly sales', a: 'See table above — same figures, weekly column.' },
     { q: 'Listing cost / commission / logistics impact', type: 'flexbox', items: [
-      'Marketplace: 10% commission + ₹57 logistics/order',
-      'Quick Commerce: 25% commission, bundled — covers fulfilment, no separate logistics line',
+      'Marketplace: ~22% commission + ₹120 logistics/order (Flipkart 0% below ₹1,000 is the exception — priority platform)',
+      'Quick Commerce: ~30% commission, bundled fulfilment, no separate logistics line. Blinkit: reported ~₹25,000/SKU/state ad-wallet + ₹2–3 L/month min ads — launch thin',
     ]},
-    { q: 'Owner for each platform', a: '' },
+    { q: 'Owner for each platform', a: 'Flipkart & Amazon: Growth/Marketing. Zepto / Blinkit / Instamart: Founder + Growth. Amazon Now: Founder (monitor). Weekly close: V and Giri (marketplace); V, Bhavana, Giri (quick commerce).' },
   ]
 },
 {
   id: 'sec11', title: '11. Community & WhatsApp Sales',
   note: '',
   questions: [
-    { q: 'Communities to contact per week', a: 'Suggested starting cadence: 5–10/week.' },
-    { q: 'Offices to contact per week', a: 'Suggested starting cadence: 5/week.' },
-    { q: 'WhatsApp groups to target', a: '' },
-    { q: 'Sampling plan', a: '' },
-    { q: 'Weekly sales target', a: '~₹98.3K/week (15% channel split, blended average).' },
-    { q: 'Monthly sales target', a: '₹4.28 L/month (15% of the Realistic-case target).' },
-    { q: 'Repeat-order plan', a: 'Suggested lever: the existing NE offline customer base is a near-zero-CAC starting point for a WhatsApp community — these are already-paying, trust-established customers. Tracked separately from the offline P&L per your earlier instruction not to touch offline.' },
-    { q: 'Customer feedback process', a: '' },
-    { q: 'Referral tracking method', a: 'Suggested: unique referral codes per customer, tracked the same way as influencer coupon codes (Section 9).' },
+    { q: 'Communities to contact per week', a: '2 now; ramp 3 (Sep) → 4 (Oct) → 5 (Nov–Dec).' },
+    { q: 'Offices to contact per week', a: '2 now; ramp 3 (Sep) → 6 (Oct) → 7 (Nov–Dec).' },
+    { q: 'WhatsApp groups to target', a: '30. Apartment/RWA first via the secretary; office groups post-tasting only. Build 25–35 owned announcement-only groups, 1,200–2,000 contacts by December. Never post uninvited.' },
+    { q: 'Sampling plan', a: 'Manned tasting tables, not individual samples. ₹850/activation, 40–120 people, 12–18% conversion, 4–9× return. Offices at 4–5 PM.' },
+    { q: 'Weekly sales target', a: '₹5,100 (Sep) → ₹12,300 (Oct) → ₹25,800 (Nov) → ₹33,300 (Dec).' },
+    { q: 'Monthly sales target', a: '₹22,000 (Sep) → ₹53,000 (Oct) → ₹1,11,000 (Nov) → ₹1,43,000 (Dec). Approx. orders/month 44 → 106 → 190 → 230.' },
+    { q: 'Repeat-order plan', a: 'Retargeting with numbers received + WhatsApp automation. A ₹500 order of 4–5 pouches is consumed in 2–4 weeks; monthly reorder (e.g. first Saturday = Krispino Day) is the natural cycle.' },
+    { q: 'Customer feedback process', a: 'Scan on packaging + WhatsApp forms. Individual WhatsApp at 72 hours, two questions, photo request. 45–60% response target. Damage replaced within 24 hours.' },
+    { q: 'Referral tracking method', a: 'Community champion codes (KRISP-[COMMUNITY], 10% product credit), give-₹75-get-₹75, source tag on every order. Google Sheet + Shopflo.' },
   ]
 },
 {
   id: 'sec12', title: '12. Corporate Gifting & B2B',
   note: '',
   questions: [
-    { q: 'Number of corporate leads to contact weekly', a: 'Suggested starting cadence: 5–10/week.' },
-    { q: 'Number of samples to send weekly', a: 'Suggested starting cadence: 3–5/week.' },
-    { q: 'Expected conversion rate', a: 'Suggested starting benchmark: 10–20%, typical for warm B2B gifting outreach — confirm against your own pipeline once contacts start converting.' },
-    { q: 'Gift box price points', a: 'Suggested starting point from the Diwali trio combo: ₹780–870 per box; consider a second, lower tier (~₹400–500) using single hero SKUs for smaller corporate budgets.' },
-    { q: 'Minimum order quantity', a: '' },
-    { q: 'Margin per gift box', a: 'Rough estimate ~60%+ blended, based on the same high-margin hero SKUs used in the Diwali trio (Section 4). Needs a precise per-box COGS roll-up to confirm.' },
-    { q: 'Monthly corporate sales target', a: '₹2.85 L/month (10% channel split, Realistic case).' },
-    { q: 'Weekly corporate sales target', a: '~₹65.5K/week (blended average).' },
+    { q: 'Number of corporate leads to contact weekly', a: '20–25.' },
+    { q: 'Number of samples to send weekly', a: 'Sheet cell looks like a date (7 May 2026) — not a count. Re-fill a weekly sample number when you set one.' },
+    { q: 'Expected conversion rate', a: '20% of samples sent.' },
+    { q: 'Gift box price points', a: '₹399–499 Standard · ₹699–899 Premium · ₹1,299–1,499 Deluxe.' },
+    { q: 'Minimum order quantity', a: '25.' },
+    { q: 'Margin per gift box', a: '25%.' },
+    { q: 'Monthly corporate sales target', a: 'Not filled on the Corporate tab. Community tab parks gifting as ₹30k (Nov) / ₹45k (Dec) inside the WhatsApp monthly total — treat as a starter, not the B2B plan.' },
+    { q: 'Weekly corporate sales target', a: 'Not filled on the Corporate tab.' },
   ]
 },
 {
   id: 'sec13', title: '13. Marketing Budget Plan',
   note: '',
   questions: [
-    { q: 'Total budget required', a: '₹20.52 L (18% of the ₹1.14 Cr target, Realistic case).' },
-    { q: 'Budget by month', a: 'Avg ₹5.13 L/month blended across Sep–Dec. Phased: Early phase (Sep–Oct, 2 months, 18% of budget) ≈ ₹1.85 L/month; Scale phase (Nov–Dec, 2 months, 82% of budget) ≈ ₹8.41 L/month.' },
-    { q: 'Budget by week', a: '~₹117.9 K/week blended average across the full Sep–Dec period.' },
+    { q: 'Total budget required', a: '₹20.52 L at 18% of the ₹1.14 Cr Dec window (unchanged %). Marketing tab does not restate a 7-month ₹2 Cr budget.' },
+    { q: 'Budget by month', a: '₹5.13 L/month (Marketing tab).' },
+    { q: 'Budget by week', a: '₹1.18 L/week (₹1,17,900 on the tab).' },
     { q: 'Budget by channel', type: 'table', calc: 'stream',
       headers: ['Stream', '%', 'Amount'],
       rows: [
@@ -543,11 +563,11 @@ const SECTIONS = [
         ['Contingency', '5%', '₹1.03 L'],
       ]
     },
-    { q: 'Expected revenue from each spend area', a: '' },
-    { q: 'Expected CAC', a: '' },
+    { q: 'Expected revenue from each spend area', a: 'Marketplace ads ₹30.8 L · Paid social ₹21.6 L · Influencer/UGC ₹9.2 L · D2C site ₹32.8 L · Community/WhatsApp ₹19.6 L (Marketing tab).' },
+    { q: 'Expected CAC', a: '₹89.8/order.' },
     { q: 'Expected ROAS', a: '' },
-    { q: 'Maximum acceptable CAC', a: '₹16.2/unit — the blended CAC ceiling (total marketing budget ÷ total units needed at target). Use as the hard cap for any channel-level spend decision.' },
-    { q: 'Stop-loss rules for campaigns', a: 'Suggested rule: pause or re-scope any channel/campaign whose trailing-7-day CAC exceeds the ₹16.2/unit ceiling for 2 consecutive weeks, and reallocate that budget to whichever channel is converting (see Section 17 feasibility note in the GTM plan).' },
+    { q: 'Maximum acceptable CAC', a: '₹112/order (Marketing tab).' },
+    { q: 'Stop-loss rules for campaigns', a: 'Pause or re-scope any channel whose trailing-7-day CAC exceeds ₹112/order for 2 consecutive weeks, and move budget to whatever is converting.' },
   ]
 },
 ];
@@ -558,20 +578,20 @@ const SECTION14 = {
   note: 'The brief lists these as items the weekly execution structure must cover, without a separate "Need clear answers" block — treated the same way here: fill in a weekly target/owner for each. Applies from the September ramp start (August runs on the prep checklist in Section 6/10 instead).',
   questions: [
     { q: 'Revenue target', a: 'Follows the Monthly Targets table, split evenly across the month\'s weeks (Month 1 = Sep has its own explicit weekly breakdown in the calculator).' },
-    { q: 'Orders target', a: '~2,496 orders/week blended (see Section 1).' },
-    { q: 'AOV target', a: '₹350 (see Section 4).' },
-    { q: 'Website traffic target', a: '~29,950 visitors/week blended (see Section 7).' },
-    { q: 'Conversion target', a: '2.5% (see Section 7).' },
-    { q: 'Content calendar', a: '' },
+    { q: 'Orders target', a: 'Sep 1,500/month (see Section 1 / 4). Weekly reporting AOV tab: 500/week in Sep on the Revenue tab.' },
+    { q: 'AOV target', a: '₹699 on the Weekly Planning tab (Sep modeled AOV is still ₹599 — see Section 4).' },
+    { q: 'Website traffic target', a: '27,500/week (see Section 7).' },
+    { q: 'Conversion target', a: '2% starting, 3.5% in 6 months (see Section 7).' },
+    { q: 'Content calendar', a: 'Reels 4–5 · Static 3 · Stories daily · Product/UGC videos 2 · Carousel 1.' },
     { q: 'Influencer outreach', a: '' },
-    { q: 'Influencer posts going live', a: '' },
-    { q: 'Paid ads', a: '' },
+    { q: 'Influencer posts going live', a: 'Hema to upload content live.' },
+    { q: 'Paid ads', a: 'V.' },
     { q: 'Community sales', a: '' },
     { q: 'Corporate/B2B outreach', a: '' },
-    { q: 'Marketplace follow-ups', a: '' },
-    { q: 'Quick commerce follow-ups', a: '' },
-    { q: 'Packaging progress', a: '' },
-    { q: 'Website changes', a: '' },
+    { q: 'Marketplace follow-ups', a: 'V and Giri reaching out and closing.' },
+    { q: 'Quick commerce follow-ups', a: 'V, Bhavana and Giri reaching out and closing.' },
+    { q: 'Packaging progress', a: 'Designing to be started; vendor to be closed.' },
+    { q: 'Website changes', a: 'To be discussed.' },
     { q: 'Customer reviews and feedback', a: '' },
   ]
 };
@@ -580,11 +600,11 @@ const SECTION15 = {
   id: 'sec15', title: '15. Monthly Planning & Reporting',
   note: '',
   questions: [
-    { q: 'Monthly review date', a: 'Suggested: 1st business day of each month, reviewing the prior month against the Monthly Targets table.' },
-    { q: 'Monthly dashboard format', a: 'Suggested minimal template: Revenue (target vs. actual) | Orders | AOV | Channel-wise breakdown | Marketing spend vs. revenue | Blended CAC vs. ceiling.' },
+    { q: 'Monthly review date', a: '25th of each month.' },
+    { q: 'Monthly dashboard format', a: 'Revenue (target vs. actual) | Orders | AOV | Channel-wise breakdown | Marketing spend vs. revenue | Blended CAC vs. ₹112 ceiling.' },
     { q: 'Data sources', a: '' },
     { q: 'Owner for each metric', a: 'See Section 16 owner table.' },
-    { q: 'Decision-making process when targets are missed', a: 'Suggested rule: if actuals fall more than 15% below target for 2 consecutive months, reallocate the marketing budget toward whichever channel is actually converting rather than holding the 30/30/15/15/10 channel split rigid.' },
+    { q: 'Decision-making process when targets are missed', a: 'If actuals fall more than 15% below target for 2 consecutive months, reallocate marketing toward whichever channel is converting rather than holding the 50/10/0/40/0 (Website / Marketplace / QC / Community-WA / B2B) split rigid.' },
   ]
 };
 
@@ -874,7 +894,7 @@ document.addEventListener('click', (e) => {
 // ---------------------------------------------------------------
 const AP_DEFAULTS = {
   targetRevenue: 11400000, startMonth: '2026-09', endMonth: '2026-12',
-  aov: 350, cogsPct: 41, logisticsCost: 57, mpCommission: 10, qcCommission: 25, mktPct: 18,
+  aov: 599, cogsPct: 41, logisticsCost: 120, mpCommission: 22, qcCommission: 30, mktPct: 18,
 };
 function getAssumptions() {
   const num = (id, fallback) => {
@@ -918,8 +938,9 @@ function recalcTables() {
     const outOrders = tr.querySelector('input[data-calc-out="orders"]');
     if (outMonthly) outMonthly.value = fmtINR(A.targetRevenue * pct / 100 / n);
     if (outWeekly) outWeekly.value = fmtINR(A.targetRevenue * pct / 100 / totalWeeks);
-    const totalUnits = A.aov > 0 ? A.targetRevenue / A.aov : 0;
-    if (outOrders) outOrders.value = fmtNum(totalUnits * pct / 100);
+    // Monthly orders = (channel share of monthly revenue) ÷ AOV
+    const monthlyUnits = A.aov > 0 ? (A.targetRevenue / n) / A.aov : 0;
+    if (outOrders) outOrders.value = fmtNum(monthlyUnits * pct / 100);
   });
 
   // ---- Contribution margin per order (Sec 3) — also feeds Platform-wise margin (Sec 10) ----
@@ -1029,7 +1050,7 @@ document.getElementById('printBtn').addEventListener('click', () => window.print
 // file), no separate download. Reopen this same HTML file later in the
 // same browser and your edits are restored automatically.
 // ---------------------------------------------------------------
-const STORAGE_KEY = 'krispino-answers-worksheet-progress-v1';
+const STORAGE_KEY = 'krispino-answers-worksheet-progress-v2';
 const saveStatusEl = document.getElementById('saveStatus');
 function showSaveStatus(msg) { saveStatusEl.textContent = msg; }
 
