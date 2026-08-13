@@ -9,17 +9,10 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   :root{
-    --bg:#16110C;
-    --bg-2:#221910;
-    --cream:#F6EFE4;
-    --muted:#C9B8A4;
-    --gold:#E0B15B;
-    --chilli:#C45C26;
-    --leaf:#3D6B4F;
-    --indigo:#6D7CFF;
+    --bg:#16110C; --cream:#F6EFE4; --muted:#C9B8A4; --gold:#E0B15B;
+    --chilli:#C45C26; --leaf:#3D6B4F; --indigo:#6D7CFF;
     --line:rgba(246,239,228,.12);
-    --heading:'Fraunces',Georgia,serif;
-    --body:'Outfit',system-ui,sans-serif;
+    --heading:'Fraunces',Georgia,serif; --body:'Outfit',system-ui,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html,body{height:100%;background:#0E0B08;color:var(--cream);font-family:var(--body);overflow:hidden;}
@@ -38,79 +31,77 @@
   }
   .site-nav a:hover{color:var(--cream);background:rgba(255,255,255,.06);}
   .site-nav a.active{color:#16110C;background:var(--gold);}
-  .progress-bar{
-    position:fixed;top:0;left:0;height:3px;background:var(--gold);z-index:30;width:0;transition:width .3s;
-  }
-  .slide-deck{
-    position:relative;width:100vw;height:100vh;overflow:hidden;
-  }
+  .progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--gold);z-index:30;width:0;transition:width .3s;}
+  .slide-deck{position:relative;width:100vw;height:100vh;overflow:hidden;}
   @media (min-width:769px){
     .slide-deck{
-      max-width:calc(100vh * 16 / 9);
-      max-height:calc(100vw * 9 / 16);
+      max-width:calc(100vh * 16 / 9); max-height:calc(100vw * 9 / 16);
       margin:auto;position:absolute;inset:0;
     }
   }
   .slide{
     position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    padding:64px 56px 72px;
-    opacity:0;visibility:hidden;transition:opacity .35s;
+    padding:58px 48px 68px; opacity:0; visibility:hidden; transition:opacity .3s;
     background:
       radial-gradient(900px 420px at 12% -10%, rgba(224,177,91,.16), transparent 55%),
       radial-gradient(700px 380px at 100% 110%, rgba(196,92,38,.18), transparent 50%),
       var(--bg);
   }
   .slide.active{opacity:1;visibility:visible;}
-  .slide-content{width:100%;max-height:100%;display:flex;flex-direction:column;gap:18px;}
-  .kicker{
-    font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);
-  }
+  .slide-content{width:100%;max-height:100%;display:flex;flex-direction:column;gap:12px;}
+  .kicker{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);}
   h1,h2{font-family:var(--heading);font-weight:600;letter-spacing:-.03em;line-height:1.08;}
-  h1{font-size:clamp(36px,5.4vw,68px);}
-  h2{font-size:clamp(26px,3.4vw,42px);}
-  .lede{font-size:clamp(16px,1.7vw,20px);color:var(--muted);max-width:720px;line-height:1.45;}
+  h1{font-size:clamp(32px,5vw,64px);}
+  h2{font-size:clamp(22px,2.8vw,36px);}
+  .lede{font-size:15px;color:var(--muted);max-width:780px;line-height:1.45;}
   .gold{color:var(--gold);}
-  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
   .metric{
-    background:rgba(246,239,228,.04);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;
+    background:rgba(246,239,228,.04);border:1px solid var(--line);border-radius:12px;padding:12px 14px;
   }
-  .metric b{display:block;font-family:var(--heading);font-size:clamp(22px,2.6vw,34px);color:var(--gold);line-height:1.1;}
-  .metric span{display:block;margin-top:6px;font-size:12px;color:var(--muted);font-weight:500;}
-  .grid-2{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;}
-  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
-  .grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+  .metric b{display:block;font-family:var(--heading);font-size:clamp(18px,2.2vw,28px);color:var(--gold);line-height:1.1;}
+  .metric span{display:block;margin-top:4px;font-size:11px;color:var(--muted);font-weight:500;}
+  .grid-2{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:start;}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
   .card{
-    background:rgba(246,239,228,.04);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;
+    background:rgba(246,239,228,.04);border:1px solid var(--line);border-radius:12px;padding:12px 14px;
   }
-  .card h3{font-size:15px;font-weight:700;margin:0 0 6px;}
-  .card p,.card li{font-size:13px;color:var(--muted);line-height:1.45;}
+  .card h3{font-size:14px;font-weight:700;margin:0 0 4px;}
+  .card p,.card li{font-size:12.5px;color:var(--muted);line-height:1.4;}
   .card ul{padding-left:16px;}
-  .chart-box{height:min(38vh,320px);position:relative;}
-  table.own{width:100%;border-collapse:collapse;font-size:13px;}
-  table.own th,table.own td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);}
-  table.own th{color:var(--gold);font-size:11px;letter-spacing:.08em;text-transform:uppercase;}
-  table.own td:first-child{color:var(--cream);font-weight:600;}
-  .pill{display:inline-block;background:rgba(224,177,91,.15);color:var(--gold);border-radius:999px;padding:3px 9px;font-size:11px;font-weight:700;}
-  .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-  .timeline .card{min-height:140px;}
+  .chart-box{height:min(34vh,280px);position:relative;}
+  table.data, table.own{width:100%;border-collapse:collapse;font-size:12px;}
+  table.data th, table.data td, table.own th, table.own td{
+    text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top;
+  }
+  table.data th, table.own th{color:var(--gold);font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;}
+  table.data td:first-child, table.own td:first-child{color:var(--cream);font-weight:600;}
+  table.tight td, table.tight th{padding:4px 7px;font-size:11.5px;}
+  .pill{display:inline-block;background:rgba(224,177,91,.15);color:var(--gold);border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700;}
+  .timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .agenda{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px 18px;font-size:13px;color:var(--muted);}
+  .agenda b{color:var(--cream);}
   .nav-controls{
-    position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
-    display:flex;align-items:center;gap:14px;z-index:20;
+    position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+    display:flex;align-items:center;gap:12px;z-index:20;
   }
   .nav-btn{
-    width:40px;height:40px;border-radius:50%;border:1px solid var(--line);
+    width:38px;height:38px;border-radius:50%;border:1px solid var(--line);
     background:rgba(246,239,228,.08);color:var(--cream);cursor:pointer;font-size:16px;
   }
   .nav-btn:hover{background:rgba(246,239,228,.16);}
-  .slide-counter{font-size:12px;color:var(--muted);min-width:64px;text-align:center;}
+  .slide-counter{font-size:12px;color:var(--muted);min-width:72px;text-align:center;}
   .hint{font-size:11px;color:rgba(201,184,164,.7);}
+  .checks{display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;font-size:13px;}
+  .checks .ok{color:var(--gold);}
+  .checks .open{color:var(--muted);}
   @media (max-width:900px){
-    .slide{padding:56px 22px 80px;}
-    .metrics,.grid-2,.grid-3,.grid-5,.timeline{grid-template-columns:1fr 1fr;}
+    .slide{padding:52px 18px 76px;}
+    .metrics,.grid-2,.grid-3,.timeline,.agenda,.checks{grid-template-columns:1fr 1fr;}
   }
   @media (max-width:560px){
-    .metrics,.grid-2,.grid-3,.grid-5,.timeline{grid-template-columns:1fr;}
-    table.own{font-size:11px;}
+    .metrics,.grid-2,.grid-3,.timeline,.agenda,.checks{grid-template-columns:1fr;}
+    table.data, table.own{font-size:10.5px;}
   }
 </style>
 </head>
@@ -130,184 +121,142 @@
 
   <div class="slide active">
     <div class="slide-content" style="align-items:flex-start;">
-      <p class="kicker">Internal GTM · Sep–Dec 2026</p>
-      <h1>₹1 crore of new<br>online demand.<br><span class="gold">Four months. Five channels.</span></h1>
-      <p class="lede">Heritage snacks, sold to rest of India — Bengaluru and Hyderabad first. This deck is the Answers Worksheet, presented for the room.</p>
-      <p class="hint">Arrow keys or the buttons below · sourced from the Answers Worksheet</p>
+      <p class="kicker">Internal GTM · from the Answers Worksheet</p>
+      <h1>₹1 crore online<br>in four months.<span class="gold"> Every number in the sheet, in the room.</span></h1>
+      <p class="lede">Sep–Dec 2026 · rest of India · Bengaluru and Hyderabad first. August is prep, not revenue.</p>
+      <p class="hint">Arrow keys · 36 slides covering all 17 worksheet sections · ₹1 Cr, AOV ₹599, mix 45 / 15 / 8 / 28 / 4</p>
     </div>
   </div>
 
   <div class="slide">
     <div class="slide-content">
-      <p class="kicker">The window</p>
-      <h2>What we are signing up for</h2>
-      <div class="metrics animate-stagger">
-        <div class="metric"><b>₹1 Cr</b><span>Sep–Dec online-only target</span></div>
-        <div class="metric"><b>14,500</b><span>Orders in the window</span></div>
-        <div class="metric"><b>₹599</b><span>Sep AOV · ₹749 by Dec</span></div>
-        <div class="metric"><b>18%</b><span>Marketing spend · ₹18 L</span></div>
+      <p class="kicker">Agenda</p>
+      <h2>Seventeen sections. One plan.</h2>
+      <div class="agenda">
+        <div><b>1.</b> Revenue &amp; channel mix</div>
+        <div><b>2.</b> Product &amp; SKUs</div>
+        <div><b>3.</b> Pricing</div>
+        <div><b>4.</b> AOV &amp; combos</div>
+        <div><b>5.</b> Shipping</div>
+        <div><b>6.</b> Packaging</div>
+        <div><b>7.</b> Website conversion</div>
+        <div><b>8.</b> Social content</div>
+        <div><b>9.</b> Influencers</div>
+        <div><b>10.</b> Marketplace &amp; QC</div>
+        <div><b>11.</b> Community / WhatsApp</div>
+        <div><b>12.</b> Corporate / B2B</div>
+        <div><b>13.</b> Marketing budget</div>
+        <div><b>14.</b> Weekly rhythm</div>
+        <div><b>15.</b> Monthly review</div>
+        <div><b>16–17.</b> Owners &amp; checklist</div>
       </div>
-      <p class="lede">Offline North-East revenue stays out of this number. Online geo is rest of India — not a single-state launch.</p>
     </div>
   </div>
 
   <div class="slide">
     <div class="slide-content">
-      <p class="kicker">Revenue ramp</p>
+      <p class="kicker">1 · Revenue target</p>
+      <h2>The window we are signing</h2>
+      <div class="metrics">
+        <div class="metric"><b>₹1 Cr</b><span>Sep–Dec online-only (~₹99.6 L modeled)</span></div>
+        <div class="metric"><b>14,500</b><span>Orders Sep–Dec</span></div>
+        <div class="metric"><b>₹2.01 Cr</b><span>7-month plan through Mar ’27 · 26,500 orders</span></div>
+        <div class="metric"><b>₹3 Cr/yr</b><span>Offline NE — excluded from this GTM</span></div>
+      </div>
+      <p class="lede">Live tables in the worksheet use Sep AOV ₹599. Raise AOV month by month as combos land. Channel % in Section 1 drives platform, community, B2B, traffic, and spend-linked revenue.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">1 · Month-wise plan</p>
       <h2>Sep is a start. Oct is the step-change.</h2>
       <div class="grid-2">
         <div class="chart-box"><canvas id="rampChart"></canvas></div>
-        <div>
-          <div class="card" style="margin-bottom:10px;"><h3>Sep · ₹8.99 L</h3><p>1,500 orders · AOV ₹599 · 50% of month in week 1</p></div>
-          <div class="card" style="margin-bottom:10px;"><h3>Oct · ₹29.21 L</h3><p>4,500 orders · AOV ₹649 · Flipkart + Amazon live</p></div>
-          <div class="card" style="margin-bottom:10px;"><h3>Nov · ₹31.46 L</h3><p>QC Bengaluru opens · AOV ₹699</p></div>
-          <div class="card"><h3>Dec · ₹29.96 L</h3><p>4,000 orders · festive AOV ₹749</p></div>
-        </div>
+        <table class="data tight">
+          <thead><tr><th>Month</th><th>Revenue</th><th>Orders</th><th>AOV</th></tr></thead>
+          <tbody>
+            <tr><td>Sep ’26</td><td>₹8.99 L</td><td>1,500</td><td>₹599</td></tr>
+            <tr><td>Oct ’26</td><td>₹29.21 L</td><td>4,500</td><td>₹649</td></tr>
+            <tr><td>Nov ’26</td><td>₹31.46 L</td><td>4,500</td><td>₹699</td></tr>
+            <tr><td>Dec ’26</td><td>₹29.96 L</td><td>4,000</td><td>₹749</td></tr>
+            <tr><td>Sep–Dec</td><td>~₹99.6 L</td><td>14,500</td><td>blend</td></tr>
+            <tr><td>Jan ’27</td><td>₹39.95 L</td><td>5,000</td><td>₹799</td></tr>
+            <tr><td>Feb ’27</td><td>₹29.72 L</td><td>3,500</td><td>₹849</td></tr>
+            <tr><td>Mar ’27</td><td>₹31.47 L</td><td>3,500</td><td>₹899</td></tr>
+            <tr><td>7-month</td><td>₹2.01 Cr</td><td>26,500</td><td>₹749 blend</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 
   <div class="slide">
     <div class="slide-content">
-      <p class="kicker">Channel mix · Section 1</p>
-      <h2>Where the crore comes from</h2>
+      <p class="kicker">1 · Week-wise · Sep</p>
+      <h2>Half of September lands in week 1.</h2>
+      <div class="grid-2">
+        <table class="data">
+          <thead><tr><th>Sep week</th><th>Share</th><th>Orders</th><th>Revenue</th></tr></thead>
+          <tbody>
+            <tr><td>Week 1</td><td>50%</td><td>750</td><td>₹4.49 L</td></tr>
+            <tr><td>Week 2</td><td>30%</td><td>450</td><td>₹2.70 L</td></tr>
+            <tr><td>Week 3</td><td>10%</td><td>150</td><td>₹0.90 L</td></tr>
+            <tr><td>Week 4</td><td>10%</td><td>150</td><td>₹0.90 L</td></tr>
+            <tr><td>Sep total</td><td>100%</td><td>1,500</td><td>₹8.99 L</td></tr>
+          </tbody>
+        </table>
+        <table class="data">
+          <thead><tr><th>Month</th><th>Orders / month</th><th>Orders / week</th></tr></thead>
+          <tbody>
+            <tr><td>Sep</td><td>1,500</td><td>750 / 450 / 150 / 150</td></tr>
+            <tr><td>Oct</td><td>4,500</td><td>~1,125</td></tr>
+            <tr><td>Nov</td><td>4,500</td><td>~1,125</td></tr>
+            <tr><td>Dec</td><td>4,000</td><td>~1,000</td></tr>
+            <tr><td>7-month</td><td>~3,785 / month</td><td>~126 / day</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="lede">Later months split evenly across weeks. Sep is front-loaded on purpose.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">1 · Channel mix</p>
+      <h2>Which channel contributes how much</h2>
       <div class="grid-2">
         <div class="chart-box"><canvas id="channelChart"></canvas></div>
-        <div class="grid-3" style="grid-template-columns:1fr 1fr;">
-          <div class="card"><h3>Website 45%</h3><p>Primary D2C engine. Combos, CRM, influencer landing.</p></div>
-          <div class="card"><h3>WhatsApp 28%</h3><p>Bengaluru + Hyderabad communities. Highest-intent local demand.</p></div>
-          <div class="card"><h3>Marketplace 15%</h3><p>Flipkart first (0% comm under ₹1,000), Amazon from Oct.</p></div>
-          <div class="card"><h3>Quick commerce 8%</h3><p>Nov–Dec burst in Bengaluru, then Hyderabad. AOV ₹280.</p></div>
-          <div class="card" style="grid-column:1/-1;"><h3>Corporate / B2B 4%</h3><p>Diwali boxes. MOQ 25. Hema + Bhavana + V.</p></div>
-        </div>
+        <table class="data">
+          <thead><tr><th>Channel</th><th>%</th><th>Monthly avg</th><th>Weekly avg</th><th>Orders / mo</th></tr></thead>
+          <tbody>
+            <tr><td>Website</td><td>45%</td><td>₹11.25 L</td><td>₹2.59 L</td><td>1,878</td></tr>
+            <tr><td>Marketplace</td><td>15%</td><td>₹3.75 L</td><td>₹86 K</td><td>626</td></tr>
+            <tr><td>Quick Commerce</td><td>8%</td><td>₹2.00 L</td><td>₹46 K</td><td>334</td></tr>
+            <tr><td>Community / WhatsApp</td><td>28%</td><td>₹7.00 L</td><td>₹1.61 L</td><td>1,169</td></tr>
+            <tr><td>Corporate / B2B</td><td>4%</td><td>₹1.00 L</td><td>₹23 K</td><td>167</td></tr>
+          </tbody>
+        </table>
       </div>
+      <p class="lede">AOV floors: combo ₹599 · contribution ₹380 · weekly reporting ₹699 · 7-month blend ₹749. QC AOV ₹280; marketplace ₹450; website ₹599.</p>
     </div>
   </div>
 
   <div class="slide">
     <div class="slide-content">
-      <p class="kicker">Product · Section 2</p>
-      <h2>Seven heroes. One job: get in the cart.</h2>
-      <div class="grid-3">
-        <div class="card"><h3>Banana Chips 180g</h3><p>₹204 · 800 packs / month · D2C, Amazon, influencers</p></div>
-        <div class="card"><h3>Chilli Tapioca 200g</h3><p>₹179 · 700 packs · discovery + marketplace</p></div>
-        <div class="card"><h3>Baby Murukku 140g</h3><p>₹159 · 700 packs · office + B2B</p></div>
-        <div class="card"><h3>Jackfruit Chips 180g</h3><p>₹272 · 500 packs · gifting, influencers</p></div>
-        <div class="card"><h3>Kanthari Murukku 140g</h3><p>₹132 · 500 packs · combos</p></div>
-        <div class="card"><h3>Kozhikodan Mixture</h3><p>₹162 · 500 packs · D2C + marketplace</p></div>
-      </div>
-      <p class="lede">Floor AOV ₹599 via a 3-item combo. Free ship at ₹699. QC lists 3–4 SKUs only.</p>
-    </div>
-  </div>
-
-  <div class="slide">
-    <div class="slide-content">
-      <p class="kicker">AOV & shipping · Sections 4–5</p>
-      <h2>Raise the basket, not the SKU count.</h2>
-      <div class="metrics">
-        <div class="metric"><b>₹599</b><span>Commercial floor / Sep AOV</span></div>
-        <div class="metric"><b>₹699</b><span>Free-ship bar + weekly reporting AOV</span></div>
-        <div class="metric"><b>₹120</b><span>Logistics per D2C / marketplace order</span></div>
-        <div class="metric"><b>3%</b><span>RTO ceiling</span></div>
-      </div>
-      <div class="grid-2" style="margin-top:8px;">
-        <div class="card"><h3>Website</h3><p>COD + UPI. Free-ship bar on cart. Hero PDP above the fold in week 1.</p></div>
-        <div class="card"><h3>QC exception</h3><p>Full MRP, ~30% bundled commission, AOV ₹280, no separate freight line.</p></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="slide">
-    <div class="slide-content">
-      <p class="kicker">Website · Section 7</p>
-      <h2>The site has to convert like a store, not a brochure.</h2>
-      <div class="grid-2">
-        <div>
-          <div class="card" style="margin-bottom:10px;"><h3>Sep launch week</h3><p>CVR 2.0% · AOV ₹599 · cart→checkout 40% · checkout complete 55%</p></div>
-          <div class="card" style="margin-bottom:10px;"><h3>Dec peak week</h3><p>CVR 3.0% · AOV ₹749 · cart→checkout 50% · checkout complete 65%</p></div>
-          <div class="card"><h3>Today</h3><p>Traffic is ~20 sessions — not 20,000. August is for the PDP, checkout, and content stockpile. Sessions scale with Website % of the mix.</p></div>
-        </div>
-        <div class="card">
-          <h3>Four Wednesday sprints</h3>
-          <ul>
-            <li>W1 — Hero PDP + ₹699 combo</li>
-            <li>W2 — COD + UPI, fewer checkout fields</li>
-            <li>W3 — Free-ship bar on cart</li>
-            <li>W4 — Reviews + UGC on Banana Chips</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="slide">
-    <div class="slide-content">
-      <p class="kicker">Marketplace & QC · Section 10</p>
-      <h2>Stage-gate the platforms. Do not launch everywhere.</h2>
-      <div class="timeline">
-        <div class="card"><p class="pill">22 Sep</p><h3>Flipkart</h3><p>Priority. 0% commission under ₹1,000. Five hero SKUs.</p></div>
-        <div class="card"><p class="pill">6 Oct</p><h3>Amazon</h3><p>Seller Central. Grocery gated. Use the existing relationship.</p></div>
-        <div class="card"><p class="pill">3 Nov</p><h3>Zepto · BLR</h3><p>Four SKUs. No ads until week 2 live. Hyderabad next.</p></div>
-        <div class="card"><p class="pill">17 Nov</p><h3>Blinkit + Instamart</h3><p>Bengaluru, 3–4 SKUs. Pick a winner in 8 weeks.</p></div>
-      </div>
-      <p class="lede">Amazon Now already lives in Bengaluru / NCR / Mumbai — monitor, don’t wait. QC is 8% of the crore as a Nov–Dec burst, not a Sep run-rate.</p>
-    </div>
-  </div>
-
-  <div class="slide">
-    <div class="slide-content">
-      <p class="kicker">Community + B2B · Sections 11–12</p>
-      <h2>28% WhatsApp. 4% gifting. Both are city-staged.</h2>
-      <div class="grid-2">
-        <div class="card">
-          <h3>Communities · Bengaluru then Hyderabad</h3>
-          <p>2 groups/week now → 5 by Nov. 30 groups targeted. 25–35 owned announcement groups by Dec. Sampling, then office groups — never uninvited posts. Community AOV ~₹500; reorder cycle 2–4 weeks.</p>
-        </div>
-        <div class="card">
-          <h3>Corporate · Diwali close</h3>
-          <p>20–25 leads / week · 8 samples · 20% of samples convert. Boxes ₹399–1,499. MOQ 25. Sep test ₹20k → Nov–Dec ₹1.5 L / month.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="slide">
-    <div class="slide-content">
-      <p class="kicker">Marketing · Sections 8–9 & 13</p>
-      <h2>₹18 L to buy the crore. Stop at ₹112 CAC.</h2>
-      <div class="grid-2">
-        <div class="chart-box"><canvas id="spendChart"></canvas></div>
-        <div>
-          <div class="metrics" style="grid-template-columns:1fr 1fr;">
-            <div class="metric"><b>5.6×</b><span>Blended ROAS</span></div>
-            <div class="metric"><b>₹90</b><span>Expected CAC / order</span></div>
-            <div class="metric"><b>₹4.5 L</b><span>Monthly marketing</span></div>
-            <div class="metric"><b>2.0×</b><span>Kill line — reallocate</span></div>
-          </div>
-          <p class="lede" style="margin-top:12px;">Influencer: nano/micro first, 4L views modeled. Moderate case = 120 orders. Unique Shopflo codes. Language mix: English 40% · Malayalam 25% · Hindi 20% · Tamil 8% · Telugu 7%.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="slide">
-    <div class="slide-content">
-      <p class="kicker">Team · Section 16</p>
-      <h2>Who owns the workstream</h2>
-      <table class="own">
-        <thead><tr><th>Responsibility</th><th>Owner</th><th>Co-owner</th><th>Support</th></tr></thead>
+      <p class="kicker">2 · Product &amp; SKU</p>
+      <h2>Seven heroes · 4,200 packs / month</h2>
+      <table class="data tight">
+        <thead><tr><th>Hero SKU</th><th>Pack / price</th><th>Month</th><th>Week</th><th>Margin</th><th>Channel fit</th></tr></thead>
         <tbody>
-          <tr><td>Revenue planning</td><td>Giri</td><td>V</td><td></td></tr>
-          <tr><td>Packaging</td><td>Bhavana</td><td>V</td><td></td></tr>
-          <tr><td>Pricing</td><td>Giri</td><td>Hema</td><td></td></tr>
-          <tr><td>Website and analytics</td><td>Hema</td><td>V</td><td>Bhavana</td></tr>
-          <tr><td>Content calendar</td><td>Bhavana</td><td>V</td><td>Hema</td></tr>
-          <tr><td>Influencer onboarding</td><td>Giri</td><td>V</td><td>Bhavana</td></tr>
-          <tr><td>Community sales</td><td>Bhavana</td><td>V</td><td>Ravi</td></tr>
-          <tr><td>Marketplace follow-ups</td><td>V</td><td>Giri</td><td></td></tr>
-          <tr><td>Quick-commerce follow-ups</td><td>V</td><td>Giri</td><td>Bhavana</td></tr>
-          <tr><td>Corporate gifting</td><td>Hema</td><td>Bhavana</td><td>V</td></tr>
-          <tr><td>Weekly / monthly reporting</td><td>V</td><td>Bhavana</td><td>Giri</td></tr>
+          <tr><td>Banana Chips – Coconut Oil</td><td>180g · ₹204</td><td>800</td><td>175–200</td><td>40–45%</td><td>D2C, Amazon, influencers, B2B</td></tr>
+          <tr><td>Chilli Tapioca Chips</td><td>200g · ₹179</td><td>700</td><td>150–175</td><td>45–50%</td><td>D2C, influencers, marketplaces</td></tr>
+          <tr><td>Baby Murukku</td><td>140g · ₹159</td><td>700</td><td>150–200</td><td>45–50%</td><td>D2C, B2B, office, marketplaces</td></tr>
+          <tr><td>Jackfruit Chips</td><td>180g · ₹272</td><td>500</td><td>120–130</td><td>40–45%</td><td>D2C, gifting, influencers, MP</td></tr>
+          <tr><td>Kanthari Murukku</td><td>140g · ₹132</td><td>500</td><td>100–125</td><td>45–50%</td><td>D2C, influencers, combos</td></tr>
+          <tr><td>Kozhikodan Mixture</td><td>180g · ₹162</td><td>500</td><td>100–125</td><td>45–50%</td><td>D2C, B2B, MP, combos</td></tr>
+          <tr><td>Madhuraseva</td><td>140g · ₹135</td><td>500</td><td>100–125</td><td>45–50%</td><td>Discovery boxes, gifting, influencers</td></tr>
+          <tr><td>TOTAL</td><td></td><td>4,200</td><td>~1,100</td><td></td><td></td></tr>
         </tbody>
       </table>
     </div>
@@ -315,22 +264,657 @@
 
   <div class="slide">
     <div class="slide-content">
-      <p class="kicker">Operating rhythm · Sections 14–15</p>
-      <h2>Monday 15 minutes. 25th of the month.</h2>
-      <div class="grid-3">
-        <div class="card"><h3>Every Monday</h3><p>Platform stage-gate. Escalate same day if blocked &gt; 3 working days. Marketplace: V + Giri. QC: V, Bhavana, Giri.</p></div>
-        <div class="card"><h3>Weekly dashboard</h3><p>Revenue, orders, AOV, site CVR, paid vs organic, community ₹, B2B pipeline, RTO.</p></div>
-        <div class="card"><h3>Monthly review · 25th</h3><p>Channel mix vs 45/15/8/28/4. Spend vs 18%. CAC vs ₹112 ceiling.</p></div>
+      <p class="kicker">2 · Fit &amp; reorder</p>
+      <h2>Put the right SKU on the right channel</h2>
+      <div class="grid-2">
+        <table class="data">
+          <thead><tr><th>Channel</th><th>Hero SKUs</th></tr></thead>
+          <tbody>
+            <tr><td>D2C / website</td><td>All seven</td></tr>
+            <tr><td>Marketplace</td><td>Banana, Chilli Tapioca, Baby Murukku, Kozhikodan, Jackfruit</td></tr>
+            <tr><td>Influencers</td><td>Banana, Jackfruit, Chilli Tapioca, Kanthari, Madhuraseva</td></tr>
+            <tr><td>B2B / office</td><td>Banana, Baby Murukku, Kozhikodan</td></tr>
+            <tr><td>Gifting / combos</td><td>Jackfruit, Kanthari, Madhuraseva, Kozhikodan</td></tr>
+          </tbody>
+        </table>
+        <table class="data">
+          <thead><tr><th>SKU</th><th>Reorder</th></tr></thead>
+          <tbody>
+            <tr><td>Banana / Chilli Tapioca / Baby Murukku / Kozhikodan</td><td>Very high</td></tr>
+            <tr><td>Jackfruit / Kanthari</td><td>High</td></tr>
+            <tr><td>Madhuraseva</td><td>Medium–high (discovery / gifting)</td></tr>
+          </tbody>
+        </table>
       </div>
-      <p class="lede">August is prep only — packaging lock, listings, content stockpile. It is not in the revenue ramp.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">3 · Pricing</p>
+      <h2>Three prices. One MRP range ₹135–680.</h2>
+      <table class="data">
+        <thead><tr><th>Channel</th><th>Customer price</th><th>Range</th><th>Commission / note</th></tr></thead>
+        <tbody>
+          <tr><td>Website</td><td>MRP × 0.80 (20% everyday)</td><td>₹108 – ₹544</td><td>Best margin, no commission</td></tr>
+          <tr><td>Marketplace</td><td>MRP × 0.90</td><td>₹122 – ₹612</td><td>~22% commission</td></tr>
+          <tr><td>Quick commerce</td><td>Full MRP, 0% customer discount</td><td>₹135 – ₹680</td><td>~30% bundled; similar per-pack profit to MP</td></tr>
+        </tbody>
+      </table>
+      <div class="metrics" style="margin-top:8px;">
+        <div class="metric"><b>20%</b><span>Everyday discount</span></div>
+        <div class="metric"><b>30%</b><span>Promotion max</span></div>
+        <div class="metric"><b>₹699</b><span>Free-ship · ~15% above ₹597 estimated AOV</span></div>
+        <div class="metric"><b>~66%</b><span>Never discount to breakeven except clearance</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">3 · Contribution</p>
+      <h2>Margin per order at ₹599 AOV</h2>
+      <div class="grid-2">
+        <table class="data">
+          <thead><tr><th>Channel</th><th>Margin / order</th><th>Margin %</th><th>Min profitable AOV</th></tr></thead>
+          <tbody>
+            <tr><td>Website</td><td>₹233</td><td>38.9%</td><td>₹203</td></tr>
+            <tr><td>Marketplace</td><td>₹102</td><td>17.0%</td><td>₹324</td></tr>
+            <tr><td>Quick Commerce</td><td>₹174</td><td>29.0%</td><td>No fixed floor — % of AOV</td></tr>
+          </tbody>
+        </table>
+        <div class="card">
+          <h3>How it is calculated</h3>
+          <p>COGS 41% · logistics ₹120 on site/MP · MP commission 22% · QC commission 30% (no separate freight). Worksheet indigo cells recalc when assumptions change. Static sheet snapshots showed Website ₹150 / 42.7% at a different AOV — live math at ₹599 is the table on the left.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">4 · AOV strategy</p>
+      <h2>₹599 in Sep. ₹749 in Dec. ₹899 by Mar.</h2>
+      <div class="grid-2">
+        <div class="chart-box"><canvas id="aovChart"></canvas></div>
+        <table class="data tight">
+          <thead><tr><th>Sep week</th><th>AOV</th><th>Share</th><th>Orders</th></tr></thead>
+          <tbody>
+            <tr><td>Week 1</td><td>₹599</td><td>50%</td><td>750</td></tr>
+            <tr><td>Week 2</td><td>₹599</td><td>30%</td><td>450</td></tr>
+            <tr><td>Week 3–4</td><td>₹599</td><td>10% each</td><td>150 each</td></tr>
+            <tr><td>Weekly reporting steer</td><td>₹699</td><td>later months</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">4 · Combos</p>
+      <h2>Names, prices, mix — overlay, not a second target</h2>
+      <div class="grid-2">
+        <table class="data tight">
+          <thead><tr><th>Combo</th><th>Contents / price</th></tr></thead>
+          <tbody>
+            <tr><td>Tapioca fusion</td><td>All tapioca flavours</td></tr>
+            <tr><td>Kerala Classics</td><td>Heritage snacks (product name)</td></tr>
+            <tr><td>Tea time snacks</td><td>Banana chips, mixture, murukku</td></tr>
+            <tr><td>Party time snacks</td><td>+ peanut candy, sesame candy</td></tr>
+            <tr><td>Kerala Premium snacks</td><td>Nendran banana chips</td></tr>
+            <tr><td>Kanthari punch</td><td>Spicy lovers</td></tr>
+            <tr><td>Murukku Trio</td><td>₹699 · 3 × 400g</td></tr>
+            <tr><td>Kerala Snack Box</td><td>₹799 · 5–6 pouches</td></tr>
+            <tr><td>Festival Hamper</td><td>₹999–1,299 · gift-boxed</td></tr>
+          </tbody>
+        </table>
+        <table class="data">
+          <thead><tr><th>Price</th><th>Items</th><th>Margin</th><th>Combos / mo</th><th>Mix</th></tr></thead>
+          <tbody>
+            <tr><td>₹599</td><td>3 · just below free-ship</td><td>25%</td><td>625</td><td>25%</td></tr>
+            <tr><td>₹699</td><td>5 · at free-ship</td><td>35%</td><td>1,250</td><td>50%</td></tr>
+            <tr><td>₹799</td><td>6 · above free-ship</td><td>25%</td><td>625</td><td>25%</td></tr>
+            <tr><td>Total</td><td></td><td></td><td>2,500</td><td>₹17.48 L / mo</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="lede">If held Sep–Mar: ~₹1.22 Cr overlay — not a second revenue target.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">5 · Shipping &amp; logistics</p>
+      <h2>₹120 freight today. Free ship at ₹699.</h2>
+      <div class="grid-2">
+        <table class="data tight">
+          <thead><tr><th>Volume</th><th>Freight / order</th></tr></thead>
+          <tbody>
+            <tr><td>Now (~10)</td><td>₹120 (actual, last month)</td></tr>
+            <tr><td>50 orders</td><td>₹135</td></tr>
+            <tr><td>150</td><td>₹145</td></tr>
+            <tr><td>500</td><td>₹150</td></tr>
+            <tr><td>~3,815 / month</td><td>₹170</td></tr>
+            <tr><td>National-scale target</td><td>≤ ₹150 blended</td></tr>
+          </tbody>
+        </table>
+        <div>
+          <table class="data tight">
+            <thead><tr><th>Region</th><th>TAT</th></tr></thead>
+            <tbody>
+              <tr><td>Bengaluru / Hyderabad hubs</td><td>2–4 days</td></tr>
+              <tr><td>Other metros</td><td>4–6 days</td></tr>
+              <tr><td>Rest of India</td><td>6–9 days</td></tr>
+              <tr><td>NE / J&amp;K (not a target)</td><td>10–14 days — fulfil if ordered</td></tr>
+            </tbody>
+          </table>
+          <p class="lede" style="margin-top:10px;">Freight is 24% of last-month AOV · ~20% at Sep ₹599. Target ≤19% at ₹800 AOV, ≤15% at ₹950. Damage &lt;3% first 90 days, &lt;1.5% steady. Site RTO &lt;3% prepaid; &lt;8% if COD.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">5 · Full logistics stack</p>
+      <h2>Freight + pack + labour + COD/RTO</h2>
+      <table class="data tight">
+        <thead><tr><th>Volume</th><th>Freight</th><th>Pack</th><th>Labour</th><th>COD+RTO</th><th>Total / order</th><th>Monthly</th></tr></thead>
+        <tbody>
+          <tr><td>Now (10)</td><td>₹120</td><td>₹30</td><td>₹15</td><td>₹0</td><td>₹165</td><td>₹1,650</td></tr>
+          <tr><td>50</td><td>₹135</td><td>₹28</td><td>₹15</td><td>₹0</td><td>₹178</td><td>₹8,900</td></tr>
+          <tr><td>150</td><td>₹145</td><td>₹26</td><td>₹18</td><td>₹0</td><td>₹189</td><td>₹28,350</td></tr>
+          <tr><td>500</td><td>₹150</td><td>₹24</td><td>₹20</td><td>₹35</td><td>₹229</td><td>₹1,14,500</td></tr>
+          <tr><td>3,815</td><td>₹170</td><td>₹20</td><td>₹25</td><td>₹70</td><td>₹285</td><td>₹10,87,275</td></tr>
+        </tbody>
+      </table>
+      <p class="lede">Weekly logistics report: freight / order ≤ ₹150 · freight % AOV ≤ 19% · pack ≤ ₹30 · total logistics / order ≤ ₹193 · plus on-time, damage, RTO.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">6 · Packaging · August workstream</p>
+      <h2>₹3.25–4 L to lock packs before Sep.</h2>
+      <div class="grid-2">
+        <table class="data">
+          <thead><tr><th>Component</th><th>Budget</th></tr></thead>
+          <tbody>
+            <tr><td>Strategy + design system</td><td>₹1–1.5 L</td></tr>
+            <tr><td>5 SKU adaptations</td><td>Included</td></tr>
+            <tr><td>Prototypes</td><td>₹15–25 k</td></tr>
+            <tr><td>10,000 packs (2,000 × 5 SKUs)</td><td>~₹1.5 L</td></tr>
+            <tr><td>Proofs / revisions</td><td>₹15–25 k</td></tr>
+            <tr><td>Contingency</td><td>₹20–30 k</td></tr>
+            <tr><td>Total</td><td>₹3.25–4 L</td></tr>
+          </tbody>
+        </table>
+        <div>
+          <div class="card" style="margin-bottom:8px;"><h3>All seven heroes</h3><p>Banana, Jackfruit, Chilli Tapioca, Kanthari, Baby Murukku, Kozhikodan, Madhuraseva. Cost ₹10–15 / new pack. Pilot MOQ cash ₹1–1.5 L.</p></div>
+          <div class="card" style="margin-bottom:8px;"><h3>Timeline</h3><p>Design 2 weeks · print 2–3 · launch 4–5. Vendor still to close.</p></div>
+          <div class="card"><h3>Conversion lift</h3><p>Conservative +5–8% · base +8–12% · upside +12–20%.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">7 · Website &amp; conversion</p>
+      <h2>Today: 20 sessions. Not 20,000.</h2>
+      <div class="metrics">
+        <div class="metric"><b>2.0%</b><span>Start CVR · 3.5% in 6 months · heroes 3.5–5%</span></div>
+        <div class="metric"><b>40–50%</b><span>Cart → checkout of ATC</span></div>
+        <div class="metric"><b>55–65%</b><span>Checkout completion</span></div>
+        <div class="metric"><b>~21,700</b><span>Sep weekly sessions at Website 45% / 2% CVR</span></div>
+      </div>
+      <table class="data" style="margin-top:6px;">
+        <thead><tr><th>Week</th><th>Change</th><th>Success</th></tr></thead>
+        <tbody>
+          <tr><td>Wed 1</td><td>Hero PDP above fold + ₹699 combo</td><td>CVR ≥ 2.0%</td></tr>
+          <tr><td>Wed 2</td><td>COD + UPI visible; fewer checkout fields</td><td>Checkout ≥ 55%</td></tr>
+          <tr><td>Wed 3</td><td>Free-ship bar at ₹699 on cart</td><td>AOV ≥ ₹599</td></tr>
+          <tr><td>Wed 4</td><td>Reviews + UGC on Banana Chips PDP</td><td>ATC +10%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">7 · Weekly website report</p>
+      <h2>Sep launch week vs Dec peak — scales with Website %</h2>
+      <table class="data tight">
+        <thead><tr><th>Metric</th><th>How calculated</th><th>Sep</th><th>Dec</th></tr></thead>
+        <tbody>
+          <tr><td>Sessions / week</td><td>Website orders ÷ CVR</td><td>21,687</td><td>24,940</td></tr>
+          <tr><td>Conversion rate</td><td>Paid orders ÷ sessions</td><td>2.0%</td><td>3.0%</td></tr>
+          <tr><td>Orders / week</td><td>Sessions × CVR</td><td>434</td><td>748</td></tr>
+          <tr><td>AOV</td><td>Revenue ÷ orders</td><td>₹599</td><td>₹749</td></tr>
+          <tr><td>Revenue / week</td><td>Orders × AOV</td><td>₹2.60 L</td><td>₹5.60 L</td></tr>
+          <tr><td>Add-to-cart</td><td>% of sessions</td><td>7%</td><td>9%</td></tr>
+          <tr><td>Cart-to-checkout</td><td>ATC → checkout</td><td>40%</td><td>50%</td></tr>
+          <tr><td>Checkout completion</td><td>Start → paid</td><td>55%</td><td>65%</td></tr>
+          <tr><td>RTO %</td><td>Prepaid + COD</td><td>3%</td><td>3%</td></tr>
+          <tr><td>Paid vs organic</td><td>Meta/Google vs SEO/direct/WA</td><td>55 / 45</td><td>45 / 55</td></tr>
+          <tr><td>Top SKU</td><td>Merchandising</td><td>Banana Chips 180g</td><td>Festive combo ₹699</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">8 · Social</p>
+      <h2>Cadence, languages, monthly themes</h2>
+      <div class="grid-2">
+        <table class="data">
+          <thead><tr><th>Format</th><th>Per week</th></tr></thead>
+          <tbody>
+            <tr><td>Reels</td><td>4–5</td></tr>
+            <tr><td>Static posts</td><td>3</td></tr>
+            <tr><td>Stories</td><td>Daily</td></tr>
+            <tr><td>Product / UGC videos</td><td>2</td></tr>
+            <tr><td>Carousel</td><td>1</td></tr>
+          </tbody>
+        </table>
+        <div>
+          <div class="chart-box" style="height:180px;"><canvas id="langChart"></canvas></div>
+          <p class="lede">English 40% · Malayalam 25% (brand origin, not a geo) · Hindi 20% · Tamil 8% · Telugu 7%. IG 70% / FB 30%. Timings A/B tested.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">8 · Campaigns &amp; reporting</p>
+      <h2>Dasara → Diwali → New year. 6 L reach modeled.</h2>
+      <div class="grid-2">
+        <table class="data">
+          <thead><tr><th>Month</th><th>Theme</th></tr></thead>
+          <tbody>
+            <tr><td>Sep</td><td>Dasara</td></tr>
+            <tr><td>Oct</td><td>Diwali</td></tr>
+            <tr><td>Nov</td><td>Diwali / New year build</td></tr>
+            <tr><td>Dec</td><td>New year / chillout</td></tr>
+          </tbody>
+        </table>
+        <table class="data">
+          <thead><tr><th>Metric</th><th>Sep target</th></tr></thead>
+          <tbody>
+            <tr><td>Post / reel</td><td>4–5 reels + 3 static</td></tr>
+            <tr><td>Reach / views</td><td>1,50,000 / week</td></tr>
+            <tr><td>Engagement</td><td>3.5% ER</td></tr>
+            <tr><td>Link clicks</td><td>2,250 (1.5% CTR)</td></tr>
+            <tr><td>Attributed orders</td><td>45 (2% CVR on clicks)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">9 · Influencers</p>
+      <h2>Nano in Bengaluru &amp; Hyderabad. Codes on Shopflo.</h2>
+      <div class="metrics">
+        <div class="metric"><b>40–50</b><span>Contact / week · hyper-local nano, product + commission</span></div>
+        <div class="metric"><b>8</b><span>Closes / week at 18% · 2 go live · 6 in pipeline</span></div>
+        <div class="metric"><b>5</b><span>Sample boxes / week</span></div>
+        <div class="metric"><b>2</b><span>Videos live / week — Hema uploads</span></div>
+      </div>
+      <table class="data" style="margin-top:8px;">
+        <thead><tr><th>Tier</th><th>Cost</th></tr></thead>
+        <tbody>
+          <tr><td>Nano (5k–30k)</td><td>Product / barter</td></tr>
+          <tr><td>Micro (30k–150k)</td><td>₹2,000–5,000 + product</td></tr>
+          <tr><td>Macro</td><td>Not the starting bet</td></tr>
+          <tr><td>Influencer CAC</td><td>₹239.6 — above ₹112 blended ceiling; keep the line small until codes prove</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">9 · Funnel at 4,00,000 views</p>
+      <h2>2% on views is not site CVR. Use click → convert.</h2>
+      <table class="data">
+        <thead><tr><th>Scenario</th><th>CTR</th><th>Visits</th><th>CVR</th><th>Orders</th><th>Revenue @ ₹599</th></tr></thead>
+        <tbody>
+          <tr><td>Conservative — passive</td><td>0.5%</td><td>2,000</td><td>1.2%</td><td>24</td><td>₹14,376</td></tr>
+          <tr><td>Moderate — standard CTA</td><td>1.5%</td><td>6,000</td><td>2.0%</td><td>120</td><td>₹71,880</td></tr>
+          <tr><td>Aggressive — discount</td><td>3.0%</td><td>12,000</td><td>3.5%</td><td>420</td><td>₹2,51,580</td></tr>
+        </tbody>
+      </table>
+      <p class="lede">Unique code per creator. Applying 2% to views would falsely imply 8,000 orders per campaign.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">10 · Marketplace &amp; QC dates</p>
+      <h2>Stage-gate. Do not launch everywhere at once.</h2>
+      <table class="data">
+        <thead><tr><th>Platform</th><th>Launch</th><th>Notes</th><th>Owner</th></tr></thead>
+        <tbody>
+          <tr><td>Flipkart</td><td>22 Sep 2026</td><td>Priority · 0% comm under ₹1,000</td><td>V + Giri</td></tr>
+          <tr><td>Amazon Seller Central</td><td>6 Oct 2026</td><td>Grocery gated</td><td>V + Giri</td></tr>
+          <tr><td>Zepto</td><td>3 Nov 2026</td><td>Bengaluru first, then Hyderabad</td><td>V, Bhavana, Giri</td></tr>
+          <tr><td>Blinkit</td><td>17 Nov 2026</td><td>Bengaluru, 3–4 SKUs only</td><td>V, Bhavana, Giri</td></tr>
+          <tr><td>Swiggy Instamart</td><td>17 Nov 2026</td><td>Parallel; pick a winner in 8 weeks</td><td>V, Bhavana, Giri</td></tr>
+          <tr><td>Amazon Now</td><td>Monitor Q4</td><td>Already live BLR / NCR / Mumbai</td><td>Founder</td></tr>
+        </tbody>
+      </table>
+      <p class="lede">Monday 15–20 min stage-gate. Escalate same day if blocked &gt; 3 working days.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">10 · First SKUs, price, margin</p>
+      <h2>Five on Flipkart/Amazon. Three–four on QC.</h2>
+      <table class="data tight">
+        <thead><tr><th>Platform</th><th>First SKUs</th><th>Price / comm</th></tr></thead>
+        <tbody>
+          <tr><td>Flipkart / Amazon</td><td>Banana 180g, Chilli Tapioca, Baby Murukku, Kozhikodan, Jackfruit</td><td>MRP × 0.90 · ~22% · Flipkart &lt;₹1,000 = 0%</td></tr>
+          <tr><td>Zepto Bengaluru</td><td>Banana, Chilli Tapioca, Baby Murukku, Kozhikodan</td><td>Full MRP · ~30% bundled · AOV ₹280</td></tr>
+          <tr><td>Blinkit / Instamart</td><td>Same 3–4 only — no full catalog</td><td>₹25k / SKU / state wallet; ₹2–3 L/mo min ads — wait for 50 orders/week</td></tr>
+        </tbody>
+      </table>
+      <div class="metrics" style="margin-top:10px;">
+        <div class="metric"><b>₹115</b><span>MP margin / order snapshot · 32.7% at sheet AOV</span></div>
+        <div class="metric"><b>₹119</b><span>QC margin / order snapshot · 34%</span></div>
+        <div class="metric"><b>₹120</b><span>MP freight / order</span></div>
+        <div class="metric"><b>₹450</b><span>Marketplace AOV used in phasing</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">10 · Expected monthly sales · 15% MP + 8% QC of ₹1 Cr</p>
+      <h2>QC is a Nov–Dec burst. Sep QC is zero.</h2>
+      <table class="data tight">
+        <thead><tr><th>Platform</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Dec</th><th>Total</th><th>AOV</th><th>Dec orders</th></tr></thead>
+        <tbody>
+          <tr><td>Flipkart</td><td>₹0.80 L</td><td>₹2.40 L</td><td>₹2.50 L</td><td>₹2.30 L</td><td>₹8.00 L</td><td>₹450</td><td>511</td></tr>
+          <tr><td>Amazon</td><td>—</td><td>₹1.60 L</td><td>₹2.70 L</td><td>₹2.70 L</td><td>₹7.00 L</td><td>₹450</td><td>600</td></tr>
+          <tr><td>Zepto Bengaluru</td><td>—</td><td>—</td><td>₹1.80 L</td><td>₹2.20 L</td><td>₹4.00 L</td><td>₹280</td><td>786</td></tr>
+          <tr><td>Blinkit Bengaluru</td><td>—</td><td>—</td><td>₹0.90 L</td><td>₹1.60 L</td><td>₹2.50 L</td><td>₹280</td><td>571</td></tr>
+          <tr><td>Instamart Bengaluru</td><td>—</td><td>—</td><td>₹0.50 L</td><td>₹1.00 L</td><td>₹1.50 L</td><td>₹280</td><td>357</td></tr>
+          <tr><td>Amazon Now</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>Marketplace total</td><td>₹0.80 L</td><td>₹4.00 L</td><td>₹5.20 L</td><td>₹5.00 L</td><td>₹15.00 L</td><td>₹450</td><td>1,111</td></tr>
+          <tr><td>Quick commerce total</td><td>—</td><td>—</td><td>₹3.20 L</td><td>₹4.80 L</td><td>₹8.00 L</td><td>₹280</td><td>1,714</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">10 · Weekly platform sales</p>
+      <h2>Same phasing, divided by weeks in month</h2>
+      <table class="data">
+        <thead><tr><th>Platform</th><th>Sep / wk</th><th>Oct / wk</th><th>Nov / wk</th><th>Dec / wk</th></tr></thead>
+        <tbody>
+          <tr><td>Flipkart</td><td>₹0.19 L</td><td>₹0.55 L</td><td>₹0.58 L</td><td>₹0.52 L</td></tr>
+          <tr><td>Amazon</td><td>—</td><td>₹0.36 L</td><td>₹0.63 L</td><td>₹0.61 L</td></tr>
+          <tr><td>Zepto Bengaluru</td><td>—</td><td>—</td><td>₹0.42 L</td><td>₹0.50 L</td></tr>
+          <tr><td>Blinkit Bengaluru</td><td>—</td><td>—</td><td>₹0.21 L</td><td>₹0.36 L</td></tr>
+          <tr><td>Instamart Bengaluru</td><td>—</td><td>—</td><td>₹0.12 L</td><td>₹0.23 L</td></tr>
+          <tr><td>Marketplace total</td><td>₹0.19 L</td><td>₹0.91 L</td><td>₹1.21 L</td><td>₹1.14 L</td></tr>
+          <tr><td>Quick commerce total</td><td>—</td><td>—</td><td>₹0.74 L</td><td>₹1.09 L</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">11 · Community &amp; WhatsApp · 28% of the crore</p>
+      <h2>Bengaluru and Hyderabad. Stock staged in those cities.</h2>
+      <div class="grid-2">
+        <table class="data">
+          <thead><tr><th></th><th>Now</th><th>Sep</th><th>Oct</th><th>Nov–Dec</th></tr></thead>
+          <tbody>
+            <tr><td>Communities / week</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+            <tr><td>Offices / week</td><td>2</td><td>3</td><td>6</td><td>7</td></tr>
+          </tbody>
+        </table>
+        <div class="card">
+          <h3>Groups &amp; sampling</h3>
+          <p>30 groups to target · 25–35 owned by Dec · 1,200–2,000 contacts. Manned tasting tables, not individual samples. ₹850 / activation · 40–120 people · 12–18% conversion · 4–9× return. Offices 4–5 PM. Never post uninvited.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">11 · Community ₹ and retention</p>
+      <h2>28% of ₹1 Cr, ramped Sep → Dec</h2>
+      <div class="grid-2">
+        <table class="data">
+          <thead><tr><th>Month</th><th>Monthly</th><th>Orders @ ₹500</th><th>Weekly</th></tr></thead>
+          <tbody>
+            <tr><td>Sep</td><td>₹1.88 L</td><td>375</td><td>₹43.6 K</td></tr>
+            <tr><td>Oct</td><td>₹4.51 L</td><td>902</td><td>₹1.02 L</td></tr>
+            <tr><td>Nov</td><td>₹9.44 L</td><td>1,887</td><td>₹2.19 L</td></tr>
+            <tr><td>Dec</td><td>₹12.18 L</td><td>2,436</td><td>₹2.77 L</td></tr>
+            <tr><td>Sep–Dec</td><td>₹28.00 L</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div>
+          <div class="card" style="margin-bottom:8px;"><h3>Repeat</h3><p>₹500 order of 4–5 pouches lasts 2–4 weeks. First Saturday = Krispino Day. Retargeting + WhatsApp automation.</p></div>
+          <div class="card" style="margin-bottom:8px;"><h3>Feedback</h3><p>Scan + WA forms. 72-hour follow-up, two questions, photo. 45–60% response. Damage replace in 24 hours.</p></div>
+          <div class="card"><h3>Referral</h3><p>Champion KRISP-[COMMUNITY], 10% credit. Individual give ₹75 / get ₹75. Source tag on every order. Sheet + Shopflo.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">12 · Corporate gifting · 4%</p>
+      <h2>20–25 leads / week. MOQ 25. 25% box margin.</h2>
+      <div class="metrics">
+        <div class="metric"><b>8</b><span>Samples / week · ~35% of leads</span></div>
+        <div class="metric"><b>20%</b><span>Sample → account · 1.6 conversions / week</span></div>
+        <div class="metric"><b>₹28 k</b><span>Per converted account at 25 × ₹699</span></div>
+        <div class="metric"><b>₹4 L</b><span>Sep–Dec total · matches 4% mix</span></div>
+      </div>
+      <div class="grid-2" style="margin-top:8px;">
+        <table class="data">
+          <thead><tr><th>Tier</th><th>Price</th></tr></thead>
+          <tbody>
+            <tr><td>Standard</td><td>₹399–499</td></tr>
+            <tr><td>Premium</td><td>₹699–899</td></tr>
+            <tr><td>Deluxe</td><td>₹1,299–1,499</td></tr>
+          </tbody>
+        </table>
+        <table class="data">
+          <thead><tr><th>Month</th><th>Revenue</th><th>Accounts</th><th>Weekly</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td>Sep</td><td>₹20 k</td><td>1</td><td>₹4.7 k</td><td>First box + repeat test</td></tr>
+            <tr><td>Oct</td><td>₹80 k</td><td>5</td><td>₹18.2 k</td><td>Diwali pitch</td></tr>
+            <tr><td>Nov</td><td>₹1.50 L</td><td>9</td><td>₹34.9 k</td><td>Diwali close</td></tr>
+            <tr><td>Dec</td><td>₹1.50 L</td><td>9</td><td>₹34.1 k</td><td>New-year / Q4 leftover</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">13 · Marketing budget</p>
+      <h2>18% of ₹1 Cr = ₹18 L · ₹4.5 L / month · ~₹1.04 L / week</h2>
+      <div class="grid-2">
+        <div class="chart-box"><canvas id="spendChart"></canvas></div>
+        <table class="data">
+          <thead><tr><th>Stream</th><th>%</th><th>Period</th><th>Monthly</th></tr></thead>
+          <tbody>
+            <tr><td>Marketplace ads</td><td>30%</td><td>₹5.40 L</td><td>₹1.35 L</td></tr>
+            <tr><td>Paid social</td><td>30%</td><td>₹5.40 L</td><td>₹1.35 L</td></tr>
+            <tr><td>D2C site &amp; CRM</td><td>20%</td><td>₹3.60 L</td><td>₹0.90 L</td></tr>
+            <tr><td>Influencer / UGC</td><td>15%</td><td>₹2.70 L</td><td>₹0.68 L</td></tr>
+            <tr><td>Contingency</td><td>5%</td><td>₹0.90 L</td><td>₹0.23 L</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="lede">Spend-linked expected revenue (overlaps): MP ads ₹15 L · paid social ₹21.6 L · influencer ₹9 L · D2C ₹45 L · community ₹28 L. Old marketing-tab monthly ₹5.13 L is a different window — ignore for this crore.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">13 · CAC &amp; ROAS</p>
+      <h2>Expected CAC ₹89.8. Ceiling ₹112. Kill below 2×.</h2>
+      <table class="data">
+        <thead><tr><th>Channel</th><th>Target ROAS</th><th>Implied CAC @ ₹599</th></tr></thead>
+        <tbody>
+          <tr><td>Blended (18% mkt spend)</td><td>5.6×</td><td>₹107</td></tr>
+          <tr><td>Marketplace ads</td><td>5.0×</td><td>₹120</td></tr>
+          <tr><td>Paid social</td><td>3.5×</td><td>₹171</td></tr>
+          <tr><td>D2C site / CRM</td><td>4.5×</td><td>₹133</td></tr>
+          <tr><td>Influencer / UGC</td><td>2.5×</td><td>₹240</td></tr>
+          <tr><td>Quick commerce ads</td><td>2.8×</td><td>₹214 (₹100 on ₹280 QC AOV)</td></tr>
+          <tr><td>Stop / reallocate</td><td>2.0×</td><td>₹300</td></tr>
+        </tbody>
+      </table>
+      <p class="lede">Pause any channel whose trailing-7-day CAC exceeds ₹112 / order for 2 consecutive weeks. Move budget to whatever is converting.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">14 · Weekly operating system</p>
+      <h2>From September. August stays on the prep checklist.</h2>
+      <table class="data tight">
+        <thead><tr><th>Item</th><th>Weekly target</th></tr></thead>
+        <tbody>
+          <tr><td>Revenue / orders / AOV</td><td>Follow monthly table; Sep weeks 750/450/150/150 · reporting AOV ₹699</td></tr>
+          <tr><td>Website traffic / CVR</td><td>~21.7k sessions/week at 2% · 3.5% in 6 months</td></tr>
+          <tr><td>Content</td><td>4–5 reels, 3 static, daily stories, 2 UGC, 1 carousel</td></tr>
+          <tr><td>Influencers</td><td>Contact 40–50 · close 8 · live 2 (Hema)</td></tr>
+          <tr><td>Paid ads (Sep)</td><td>MP ₹1.15 L · social ₹1.15 L · QC ₹0 until Nov then ₹0.40 L · owner V</td></tr>
+          <tr><td>B2B outreach</td><td>20–25 leads · 8 samples · Sep ₹4.6 k / Nov–Dec ₹34.6 k week</td></tr>
+          <tr><td>Reviews</td><td>72h WA 45–60% · 8 reviews/100 site · 12 Amazon · damage 24h</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">14 · Weekly follow-ups</p>
+      <h2>Monday platform gate. Same-day escalate.</h2>
+      <table class="data">
+        <thead><tr><th>Platform</th><th>Weekly action</th><th>Owner</th></tr></thead>
+        <tbody>
+          <tr><td>Flipkart</td><td>Listing QA, Buy Box, 0% comm SKUs live</td><td>V + Giri</td></tr>
+          <tr><td>Amazon</td><td>Category approval + 5 hero ASINs</td><td>V + Giri</td></tr>
+          <tr><td>Zepto</td><td>Bengaluru NPI + 4 SKUs; no ads until week 2 live; Hyderabad next</td><td>V, Bhavana, Giri</td></tr>
+          <tr><td>Blinkit</td><td>Bengaluru 3 SKUs; no ₹2–3 L ads until 50 orders/week</td><td>V, Bhavana, Giri</td></tr>
+          <tr><td>Instamart</td><td>Parallel with Blinkit; pick winner in 8 weeks, then Hyderabad</td><td>V, Bhavana, Giri</td></tr>
+          <tr><td>Website</td><td>₹699 bar + combo PDP W1 · COD/UPI W2 · Shopflo W2</td><td>Hema, V, Bhavana</td></tr>
+          <tr><td>Packaging</td><td>Design start; vendor close; lock 2 wks, print 2–3, launch 4–5</td><td>Bhavana, V</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">15 · Monthly review · 25th</p>
+      <h2>Dashboard and sources. Reallocate if −15% for two months.</h2>
+      <div class="grid-2">
+        <table class="data tight">
+          <thead><tr><th>Metric</th><th>Sep</th><th>Dec</th></tr></thead>
+          <tbody>
+            <tr><td>Revenue</td><td>₹8.99 L</td><td>₹29.96 L</td></tr>
+            <tr><td>Orders</td><td>1,500</td><td>4,000</td></tr>
+            <tr><td>AOV</td><td>₹599</td><td>₹749</td></tr>
+            <tr><td>Channel mix</td><td>45 / 15 / 0 / 28 / 4</td><td>45 / 15 / 8 / 28 / 4</td></tr>
+            <tr><td>Mkt spend vs rev</td><td>18% · ₹1.62 L</td><td>18% · ₹5.39 L</td></tr>
+            <tr><td>Blended CAC</td><td>₹90 vs ₹112</td><td>₹90 vs ₹112</td></tr>
+          </tbody>
+        </table>
+        <table class="data tight">
+          <thead><tr><th>Metric</th><th>Source</th></tr></thead>
+          <tbody>
+            <tr><td>Site revenue / AOV / CVR</td><td>Shopify + GA4</td></tr>
+            <tr><td>Influencer / coupons</td><td>Shopflo</td></tr>
+            <tr><td>Amazon / Flipkart</td><td>Seller Central / Seller Hub</td></tr>
+            <tr><td>Zepto / Blinkit / Instamart</td><td>Brand portals + weekly settlement</td></tr>
+            <tr><td>Paid social</td><td>Meta Ads Manager</td></tr>
+            <tr><td>WhatsApp / community</td><td>Shopflo tags + Google Sheet</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">16 · Team roles</p>
+      <h2>Who owns each workstream</h2>
+      <table class="own tight">
+        <thead><tr><th>Responsibility</th><th>Owner</th><th>Co-owner</th><th>Support</th></tr></thead>
+        <tbody>
+          <tr><td>Who owns revenue planning</td><td>Giri</td><td>V</td><td></td></tr>
+          <tr><td>Who owns packaging</td><td>Bhavana</td><td>V</td><td></td></tr>
+          <tr><td>Who owns pricing</td><td>Giri</td><td>Hema</td><td></td></tr>
+          <tr><td>Who owns website and analytics</td><td>Hema</td><td>V</td><td>Bhavana</td></tr>
+          <tr><td>Who owns content calendar</td><td>Bhavana</td><td>V</td><td>Hema</td></tr>
+          <tr><td>Who owns influencer onboarding</td><td>Giri</td><td>V</td><td>Bhavana</td></tr>
+          <tr><td>Who owns community sales</td><td>Bhavana</td><td>V</td><td>Ravi</td></tr>
+          <tr><td>Who owns marketplace follow-ups</td><td>V</td><td>Giri</td><td></td></tr>
+          <tr><td>Who owns quick-commerce follow-ups</td><td>V</td><td>Giri</td><td>Bhavana</td></tr>
+          <tr><td>Who owns corporate gifting</td><td>Hema</td><td>Bhavana</td><td>V</td></tr>
+          <tr><td>Who owns weekly reporting</td><td>V</td><td>Bhavana</td><td>Giri</td></tr>
+          <tr><td>Who owns monthly reporting</td><td>V</td><td>Bhavana</td><td>Giri</td></tr>
+        </tbody>
+      </table>
+      <p class="lede">Giri, Vaitahavya (V), Hema, Bhavana own workstreams. Ravi chairs. Per-person KPI tables stay in the worksheet.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">17 · Checklist</p>
+      <h2>What the worksheet has already answered</h2>
+      <div class="checks">
+        <div class="ok">✓ Revenue till 31-Dec-2026</div>
+        <div class="ok">✓ Month / week / channel plan</div>
+        <div class="ok">✓ Product &amp; SKU strategy</div>
+        <div class="ok">✓ Pricing strategy</div>
+        <div class="ok">✓ Shipping strategy</div>
+        <div class="ok">✓ Marketing budget</div>
+        <div class="ok">✓ Team roles</div>
+        <div class="open">○ AOV improvement execution</div>
+        <div class="open">○ Packaging redesign (August)</div>
+        <div class="open">○ Website conversion build</div>
+        <div class="open">○ Social calendar (creative)</div>
+        <div class="open">○ Influencer machine live</div>
+        <div class="open">○ Marketplace &amp; QC listings</div>
+        <div class="open">○ Community / WhatsApp run-rate</div>
+        <div class="open">○ Corporate gifting pipeline</div>
+        <div class="open">○ Weekly / monthly reporting habit</div>
+        <div class="open">○ KPI dashboard</div>
+        <div class="open">○ Risks &amp; mitigation plan</div>
+      </div>
     </div>
   </div>
 
   <div class="slide">
     <div class="slide-content" style="align-items:flex-start;">
       <p class="kicker">Close</p>
-      <h1>Lock the mix.<br>Ship the heroes.<br><span class="gold">Open Bengaluru.</span></h1>
-      <p class="lede">If the channel % in the worksheet moves, the live tables move with it. This room’s job is to own the Wednesdays — not to debate the crore.</p>
+      <h1>Lock the mix.<br>Ship the seven heroes.<br><span class="gold">Open Bengaluru, then Hyderabad.</span></h1>
+      <p class="lede">If Section 1 channel % moves in the worksheet, the live tables move with it. This room owns the Mondays and the Wednesdays — not a second crore.</p>
     </div>
   </div>
 
@@ -343,30 +927,28 @@
 </div>
 
 <script>
-const gold = '#E0B15B';
-const chilli = '#C45C26';
-const cream = '#F6EFE4';
-const muted = '#C9B8A4';
+const gold = '#E0B15B', chilli = '#C45C26', cream = '#F6EFE4', muted = '#C9B8A4';
 Chart.defaults.color = muted;
 Chart.defaults.font.family = "'Outfit', system-ui, sans-serif";
 Chart.defaults.borderColor = 'rgba(246,239,228,0.08)';
 
-let rampChart, channelChart, spendChart;
+let chartsReady = false;
 function makeCharts() {
-  if (rampChart) return;
-  rampChart = new Chart(document.getElementById('rampChart'), {
+  if (chartsReady) return;
+  chartsReady = true;
+  const common = { responsive: true, maintainAspectRatio: false };
+  new Chart(document.getElementById('rampChart'), {
     type: 'bar',
     data: {
-      labels: ['Sep', 'Oct', 'Nov', 'Dec'],
+      labels: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
       datasets: [{
-        data: [8.99, 29.21, 31.46, 29.96],
-        backgroundColor: [gold, chilli, '#3D6B4F', '#6D7CFF'],
-        borderRadius: 8,
-        barPercentage: 0.62,
+        data: [8.99, 29.21, 31.46, 29.96, 39.95, 29.72, 31.47],
+        backgroundColor: [gold, chilli, '#3D6B4F', '#6D7CFF', gold, chilli, '#3D6B4F'],
+        borderRadius: 6, barPercentage: 0.7
       }]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
+      ...common,
       plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => '₹' + c.raw + ' L' } } },
       scales: {
         y: { ticks: { callback: v => v + ' L' }, grid: { color: 'rgba(246,239,228,0.06)' } },
@@ -374,35 +956,47 @@ function makeCharts() {
       }
     }
   });
-  channelChart = new Chart(document.getElementById('channelChart'), {
+  new Chart(document.getElementById('channelChart'), {
     type: 'doughnut',
     data: {
       labels: ['Website 45%', 'WhatsApp 28%', 'Marketplace 15%', 'QC 8%', 'B2B 4%'],
+      datasets: [{ data: [45, 28, 15, 8, 4], backgroundColor: [gold, chilli, '#6D7CFF', '#3D6B4F', '#A67C52'], borderWidth: 0 }]
+    },
+    options: { ...common, cutout: '58%', plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 8, color: cream, font: { size: 11 } } } } }
+  });
+  new Chart(document.getElementById('aovChart'), {
+    type: 'line',
+    data: {
+      labels: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
       datasets: [{
-        data: [45, 28, 15, 8, 4],
-        backgroundColor: [gold, chilli, '#6D7CFF', '#3D6B4F', '#A67C52'],
-        borderWidth: 0
+        data: [599, 649, 699, 749, 799, 849, 899],
+        borderColor: gold, backgroundColor: 'rgba(224,177,91,0.12)', fill: true, tension: 0.35, borderWidth: 3, pointRadius: 4
       }]
     },
     options: {
-      responsive: true, maintainAspectRatio: false, cutout: '58%',
-      plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10, color: cream } } }
+      ...common,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { min: 500, ticks: { callback: v => '₹' + v }, grid: { color: 'rgba(246,239,228,0.06)' } },
+        x: { grid: { display: false } }
+      }
     }
   });
-  spendChart = new Chart(document.getElementById('spendChart'), {
+  new Chart(document.getElementById('langChart'), {
     type: 'doughnut',
     data: {
-      labels: ['MP ads 30%', 'Paid social 30%', 'D2C / CRM 20%', 'Influencer 15%', 'Contingency 5%'],
-      datasets: [{
-        data: [30, 30, 20, 15, 5],
-        backgroundColor: ['#6D7CFF', chilli, gold, '#3D6B4F', '#A67C52'],
-        borderWidth: 0
-      }]
+      labels: ['EN 40%', 'ML 25%', 'HI 20%', 'TA 8%', 'TE 7%'],
+      datasets: [{ data: [40, 25, 20, 8, 7], backgroundColor: [gold, chilli, '#6D7CFF', '#3D6B4F', '#A67C52'], borderWidth: 0 }]
     },
-    options: {
-      responsive: true, maintainAspectRatio: false, cutout: '58%',
-      plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 8, color: cream, font: { size: 11 } } } }
-    }
+    options: { ...common, cutout: '55%', plugins: { legend: { position: 'right', labels: { boxWidth: 8, padding: 6, color: cream, font: { size: 11 } } } } }
+  });
+  new Chart(document.getElementById('spendChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['MP ads 30%', 'Paid social 30%', 'D2C 20%', 'Influencer 15%', 'Contingency 5%'],
+      datasets: [{ data: [30, 30, 20, 15, 5], backgroundColor: ['#6D7CFF', chilli, gold, '#3D6B4F', '#A67C52'], borderWidth: 0 }]
+    },
+    options: { ...common, cutout: '58%', plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 8, color: cream, font: { size: 11 } } } } }
   });
 }
 
@@ -410,7 +1004,6 @@ let current = 1;
 const slides = document.querySelectorAll('.slide');
 const total = slides.length;
 document.getElementById('total').textContent = total;
-
 function showSlide(n) {
   if (n < 1) n = 1;
   if (n > total) n = total;
@@ -422,7 +1015,6 @@ function showSlide(n) {
 }
 function nextSlide() { showSlide(current + 1); }
 function prevSlide() { showSlide(current - 1); }
-
 document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
   if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
