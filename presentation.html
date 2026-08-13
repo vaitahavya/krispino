@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krispino GTM · Presentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#16110C;
+    --bg-2:#221910;
+    --cream:#F6EFE4;
+    --muted:#C9B8A4;
+    --gold:#E0B15B;
+    --chilli:#C45C26;
+    --leaf:#3D6B4F;
+    --indigo:#6D7CFF;
+    --line:rgba(246,239,228,.12);
+    --heading:'Fraunces',Georgia,serif;
+    --body:'Outfit',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;background:#0E0B08;color:var(--cream);font-family:var(--body);overflow:hidden;}
+  .chrome{
+    position:fixed;top:0;left:0;right:0;z-index:20;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:10px 18px;
+    background:linear-gradient(180deg,rgba(14,11,8,.92),rgba(14,11,8,0));
+  }
+  .brand{font-family:var(--heading);font-weight:700;font-size:14px;letter-spacing:-.02em;}
+  .brand span{color:var(--gold);}
+  .site-nav{display:flex;gap:4px;flex-wrap:wrap;}
+  .site-nav a{
+    color:var(--muted);text-decoration:none;font-size:11.5px;font-weight:600;
+    padding:6px 10px;border-radius:7px;
+  }
+  .site-nav a:hover{color:var(--cream);background:rgba(255,255,255,.06);}
+  .site-nav a.active{color:#16110C;background:var(--gold);}
+  .progress-bar{
+    position:fixed;top:0;left:0;height:3px;background:var(--gold);z-index:30;width:0;transition:width .3s;
+  }
+  .slide-deck{
+    position:relative;width:100vw;height:100vh;overflow:hidden;
+  }
+  @media (min-width:769px){
+    .slide-deck{
+      max-width:calc(100vh * 16 / 9);
+      max-height:calc(100vw * 9 / 16);
+      margin:auto;position:absolute;inset:0;
+    }
+  }
+  .slide{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    padding:64px 56px 72px;
+    opacity:0;visibility:hidden;transition:opacity .35s;
+    background:
+      radial-gradient(900px 420px at 12% -10%, rgba(224,177,91,.16), transparent 55%),
+      radial-gradient(700px 380px at 100% 110%, rgba(196,92,38,.18), transparent 50%),
+      var(--bg);
+  }
+  .slide.active{opacity:1;visibility:visible;}
+  .slide-content{width:100%;max-height:100%;display:flex;flex-direction:column;gap:18px;}
+  .kicker{
+    font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);
+  }
+  h1,h2{font-family:var(--heading);font-weight:600;letter-spacing:-.03em;line-height:1.08;}
+  h1{font-size:clamp(36px,5.4vw,68px);}
+  h2{font-size:clamp(26px,3.4vw,42px);}
+  .lede{font-size:clamp(16px,1.7vw,20px);color:var(--muted);max-width:720px;line-height:1.45;}
+  .gold{color:var(--gold);}
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .metric{
+    background:rgba(246,239,228,.04);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;
+  }
+  .metric b{display:block;font-family:var(--heading);font-size:clamp(22px,2.6vw,34px);color:var(--gold);line-height:1.1;}
+  .metric span{display:block;margin-top:6px;font-size:12px;color:var(--muted);font-weight:500;}
+  .grid-2{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+  .card{
+    background:rgba(246,239,228,.04);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;
+  }
+  .card h3{font-size:15px;font-weight:700;margin:0 0 6px;}
+  .card p,.card li{font-size:13px;color:var(--muted);line-height:1.45;}
+  .card ul{padding-left:16px;}
+  .chart-box{height:min(38vh,320px);position:relative;}
+  table.own{width:100%;border-collapse:collapse;font-size:13px;}
+  table.own th,table.own td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);}
+  table.own th{color:var(--gold);font-size:11px;letter-spacing:.08em;text-transform:uppercase;}
+  table.own td:first-child{color:var(--cream);font-weight:600;}
+  .pill{display:inline-block;background:rgba(224,177,91,.15);color:var(--gold);border-radius:999px;padding:3px 9px;font-size:11px;font-weight:700;}
+  .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .timeline .card{min-height:140px;}
+  .nav-controls{
+    position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+    display:flex;align-items:center;gap:14px;z-index:20;
+  }
+  .nav-btn{
+    width:40px;height:40px;border-radius:50%;border:1px solid var(--line);
+    background:rgba(246,239,228,.08);color:var(--cream);cursor:pointer;font-size:16px;
+  }
+  .nav-btn:hover{background:rgba(246,239,228,.16);}
+  .slide-counter{font-size:12px;color:var(--muted);min-width:64px;text-align:center;}
+  .hint{font-size:11px;color:rgba(201,184,164,.7);}
+  @media (max-width:900px){
+    .slide{padding:56px 22px 80px;}
+    .metrics,.grid-2,.grid-3,.grid-5,.timeline{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:560px){
+    .metrics,.grid-2,.grid-3,.grid-5,.timeline{grid-template-columns:1fr;}
+    table.own{font-size:11px;}
+  }
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="chrome">
+  <div class="brand">Krispino <span>GTM</span></div>
+  <nav class="site-nav" aria-label="Site">
+    <a href="index.html">Home</a>
+    <a href="planning.html">Planning Tool</a>
+    <a href="answers.html">Answers Worksheet</a>
+    <a href="presentation.html" class="active">Presentation</a>
+  </nav>
+</div>
+
+<div class="slide-deck">
+
+  <div class="slide active">
+    <div class="slide-content" style="align-items:flex-start;">
+      <p class="kicker">Internal GTM · Sep–Dec 2026</p>
+      <h1>₹1 crore of new<br>online demand.<br><span class="gold">Four months. Five channels.</span></h1>
+      <p class="lede">Heritage snacks, sold to rest of India — Bengaluru and Hyderabad first. This deck is the Answers Worksheet, presented for the room.</p>
+      <p class="hint">Arrow keys or the buttons below · sourced from the Answers Worksheet</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">The window</p>
+      <h2>What we are signing up for</h2>
+      <div class="metrics animate-stagger">
+        <div class="metric"><b>₹1 Cr</b><span>Sep–Dec online-only target</span></div>
+        <div class="metric"><b>14,500</b><span>Orders in the window</span></div>
+        <div class="metric"><b>₹599</b><span>Sep AOV · ₹749 by Dec</span></div>
+        <div class="metric"><b>18%</b><span>Marketing spend · ₹18 L</span></div>
+      </div>
+      <p class="lede">Offline North-East revenue stays out of this number. Online geo is rest of India — not a single-state launch.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">Revenue ramp</p>
+      <h2>Sep is a start. Oct is the step-change.</h2>
+      <div class="grid-2">
+        <div class="chart-box"><canvas id="rampChart"></canvas></div>
+        <div>
+          <div class="card" style="margin-bottom:10px;"><h3>Sep · ₹8.99 L</h3><p>1,500 orders · AOV ₹599 · 50% of month in week 1</p></div>
+          <div class="card" style="margin-bottom:10px;"><h3>Oct · ₹29.21 L</h3><p>4,500 orders · AOV ₹649 · Flipkart + Amazon live</p></div>
+          <div class="card" style="margin-bottom:10px;"><h3>Nov · ₹31.46 L</h3><p>QC Bengaluru opens · AOV ₹699</p></div>
+          <div class="card"><h3>Dec · ₹29.96 L</h3><p>4,000 orders · festive AOV ₹749</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">Channel mix · Section 1</p>
+      <h2>Where the crore comes from</h2>
+      <div class="grid-2">
+        <div class="chart-box"><canvas id="channelChart"></canvas></div>
+        <div class="grid-3" style="grid-template-columns:1fr 1fr;">
+          <div class="card"><h3>Website 45%</h3><p>Primary D2C engine. Combos, CRM, influencer landing.</p></div>
+          <div class="card"><h3>WhatsApp 28%</h3><p>Bengaluru + Hyderabad communities. Highest-intent local demand.</p></div>
+          <div class="card"><h3>Marketplace 15%</h3><p>Flipkart first (0% comm under ₹1,000), Amazon from Oct.</p></div>
+          <div class="card"><h3>Quick commerce 8%</h3><p>Nov–Dec burst in Bengaluru, then Hyderabad. AOV ₹280.</p></div>
+          <div class="card" style="grid-column:1/-1;"><h3>Corporate / B2B 4%</h3><p>Diwali boxes. MOQ 25. Hema + Bhavana + V.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">Product · Section 2</p>
+      <h2>Seven heroes. One job: get in the cart.</h2>
+      <div class="grid-3">
+        <div class="card"><h3>Banana Chips 180g</h3><p>₹204 · 800 packs / month · D2C, Amazon, influencers</p></div>
+        <div class="card"><h3>Chilli Tapioca 200g</h3><p>₹179 · 700 packs · discovery + marketplace</p></div>
+        <div class="card"><h3>Baby Murukku 140g</h3><p>₹159 · 700 packs · office + B2B</p></div>
+        <div class="card"><h3>Jackfruit Chips 180g</h3><p>₹272 · 500 packs · gifting, influencers</p></div>
+        <div class="card"><h3>Kanthari Murukku 140g</h3><p>₹132 · 500 packs · combos</p></div>
+        <div class="card"><h3>Kozhikodan Mixture</h3><p>₹162 · 500 packs · D2C + marketplace</p></div>
+      </div>
+      <p class="lede">Floor AOV ₹599 via a 3-item combo. Free ship at ₹699. QC lists 3–4 SKUs only.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">AOV & shipping · Sections 4–5</p>
+      <h2>Raise the basket, not the SKU count.</h2>
+      <div class="metrics">
+        <div class="metric"><b>₹599</b><span>Commercial floor / Sep AOV</span></div>
+        <div class="metric"><b>₹699</b><span>Free-ship bar + weekly reporting AOV</span></div>
+        <div class="metric"><b>₹120</b><span>Logistics per D2C / marketplace order</span></div>
+        <div class="metric"><b>3%</b><span>RTO ceiling</span></div>
+      </div>
+      <div class="grid-2" style="margin-top:8px;">
+        <div class="card"><h3>Website</h3><p>COD + UPI. Free-ship bar on cart. Hero PDP above the fold in week 1.</p></div>
+        <div class="card"><h3>QC exception</h3><p>Full MRP, ~30% bundled commission, AOV ₹280, no separate freight line.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">Website · Section 7</p>
+      <h2>The site has to convert like a store, not a brochure.</h2>
+      <div class="grid-2">
+        <div>
+          <div class="card" style="margin-bottom:10px;"><h3>Sep launch week</h3><p>CVR 2.0% · AOV ₹599 · cart→checkout 40% · checkout complete 55%</p></div>
+          <div class="card" style="margin-bottom:10px;"><h3>Dec peak week</h3><p>CVR 3.0% · AOV ₹749 · cart→checkout 50% · checkout complete 65%</p></div>
+          <div class="card"><h3>Today</h3><p>Traffic is ~20 sessions — not 20,000. August is for the PDP, checkout, and content stockpile. Sessions scale with Website % of the mix.</p></div>
+        </div>
+        <div class="card">
+          <h3>Four Wednesday sprints</h3>
+          <ul>
+            <li>W1 — Hero PDP + ₹699 combo</li>
+            <li>W2 — COD + UPI, fewer checkout fields</li>
+            <li>W3 — Free-ship bar on cart</li>
+            <li>W4 — Reviews + UGC on Banana Chips</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">Marketplace & QC · Section 10</p>
+      <h2>Stage-gate the platforms. Do not launch everywhere.</h2>
+      <div class="timeline">
+        <div class="card"><p class="pill">22 Sep</p><h3>Flipkart</h3><p>Priority. 0% commission under ₹1,000. Five hero SKUs.</p></div>
+        <div class="card"><p class="pill">6 Oct</p><h3>Amazon</h3><p>Seller Central. Grocery gated. Use the existing relationship.</p></div>
+        <div class="card"><p class="pill">3 Nov</p><h3>Zepto · BLR</h3><p>Four SKUs. No ads until week 2 live. Hyderabad next.</p></div>
+        <div class="card"><p class="pill">17 Nov</p><h3>Blinkit + Instamart</h3><p>Bengaluru, 3–4 SKUs. Pick a winner in 8 weeks.</p></div>
+      </div>
+      <p class="lede">Amazon Now already lives in Bengaluru / NCR / Mumbai — monitor, don’t wait. QC is 8% of the crore as a Nov–Dec burst, not a Sep run-rate.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">Community + B2B · Sections 11–12</p>
+      <h2>28% WhatsApp. 4% gifting. Both are city-staged.</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Communities · Bengaluru then Hyderabad</h3>
+          <p>2 groups/week now → 5 by Nov. 30 groups targeted. 25–35 owned announcement groups by Dec. Sampling, then office groups — never uninvited posts. Community AOV ~₹500; reorder cycle 2–4 weeks.</p>
+        </div>
+        <div class="card">
+          <h3>Corporate · Diwali close</h3>
+          <p>20–25 leads / week · 8 samples · 20% of samples convert. Boxes ₹399–1,499. MOQ 25. Sep test ₹20k → Nov–Dec ₹1.5 L / month.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">Marketing · Sections 8–9 & 13</p>
+      <h2>₹18 L to buy the crore. Stop at ₹112 CAC.</h2>
+      <div class="grid-2">
+        <div class="chart-box"><canvas id="spendChart"></canvas></div>
+        <div>
+          <div class="metrics" style="grid-template-columns:1fr 1fr;">
+            <div class="metric"><b>5.6×</b><span>Blended ROAS</span></div>
+            <div class="metric"><b>₹90</b><span>Expected CAC / order</span></div>
+            <div class="metric"><b>₹4.5 L</b><span>Monthly marketing</span></div>
+            <div class="metric"><b>2.0×</b><span>Kill line — reallocate</span></div>
+          </div>
+          <p class="lede" style="margin-top:12px;">Influencer: nano/micro first, 4L views modeled. Moderate case = 120 orders. Unique Shopflo codes. Language mix: English 40% · Malayalam 25% · Hindi 20% · Tamil 8% · Telugu 7%.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">Team · Section 16</p>
+      <h2>Who owns the workstream</h2>
+      <table class="own">
+        <thead><tr><th>Responsibility</th><th>Owner</th><th>Co-owner</th><th>Support</th></tr></thead>
+        <tbody>
+          <tr><td>Revenue planning</td><td>Giri</td><td>V</td><td></td></tr>
+          <tr><td>Packaging</td><td>Bhavana</td><td>V</td><td></td></tr>
+          <tr><td>Pricing</td><td>Giri</td><td>Hema</td><td></td></tr>
+          <tr><td>Website and analytics</td><td>Hema</td><td>V</td><td>Bhavana</td></tr>
+          <tr><td>Content calendar</td><td>Bhavana</td><td>V</td><td>Hema</td></tr>
+          <tr><td>Influencer onboarding</td><td>Giri</td><td>V</td><td>Bhavana</td></tr>
+          <tr><td>Community sales</td><td>Bhavana</td><td>V</td><td>Ravi</td></tr>
+          <tr><td>Marketplace follow-ups</td><td>V</td><td>Giri</td><td></td></tr>
+          <tr><td>Quick-commerce follow-ups</td><td>V</td><td>Giri</td><td>Bhavana</td></tr>
+          <tr><td>Corporate gifting</td><td>Hema</td><td>Bhavana</td><td>V</td></tr>
+          <tr><td>Weekly / monthly reporting</td><td>V</td><td>Bhavana</td><td>Giri</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content">
+      <p class="kicker">Operating rhythm · Sections 14–15</p>
+      <h2>Monday 15 minutes. 25th of the month.</h2>
+      <div class="grid-3">
+        <div class="card"><h3>Every Monday</h3><p>Platform stage-gate. Escalate same day if blocked &gt; 3 working days. Marketplace: V + Giri. QC: V, Bhavana, Giri.</p></div>
+        <div class="card"><h3>Weekly dashboard</h3><p>Revenue, orders, AOV, site CVR, paid vs organic, community ₹, B2B pipeline, RTO.</p></div>
+        <div class="card"><h3>Monthly review · 25th</h3><p>Channel mix vs 45/15/8/28/4. Spend vs 18%. CAC vs ₹112 ceiling.</p></div>
+      </div>
+      <p class="lede">August is prep only — packaging lock, listings, content stockpile. It is not in the revenue ramp.</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-content" style="align-items:flex-start;">
+      <p class="kicker">Close</p>
+      <h1>Lock the mix.<br>Ship the heroes.<br><span class="gold">Open Bengaluru.</span></h1>
+      <p class="lede">If the channel % in the worksheet moves, the live tables move with it. This room’s job is to own the Wednesdays — not to debate the crore.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav-controls">
+  <button class="nav-btn" type="button" onclick="prevSlide()" aria-label="Previous">←</button>
+  <span class="slide-counter"><span id="current">1</span> / <span id="total">0</span></span>
+  <button class="nav-btn" type="button" onclick="nextSlide()" aria-label="Next">→</button>
+</div>
+
+<script>
+const gold = '#E0B15B';
+const chilli = '#C45C26';
+const cream = '#F6EFE4';
+const muted = '#C9B8A4';
+Chart.defaults.color = muted;
+Chart.defaults.font.family = "'Outfit', system-ui, sans-serif";
+Chart.defaults.borderColor = 'rgba(246,239,228,0.08)';
+
+let rampChart, channelChart, spendChart;
+function makeCharts() {
+  if (rampChart) return;
+  rampChart = new Chart(document.getElementById('rampChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Sep', 'Oct', 'Nov', 'Dec'],
+      datasets: [{
+        data: [8.99, 29.21, 31.46, 29.96],
+        backgroundColor: [gold, chilli, '#3D6B4F', '#6D7CFF'],
+        borderRadius: 8,
+        barPercentage: 0.62,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => '₹' + c.raw + ' L' } } },
+      scales: {
+        y: { ticks: { callback: v => v + ' L' }, grid: { color: 'rgba(246,239,228,0.06)' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+  channelChart = new Chart(document.getElementById('channelChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Website 45%', 'WhatsApp 28%', 'Marketplace 15%', 'QC 8%', 'B2B 4%'],
+      datasets: [{
+        data: [45, 28, 15, 8, 4],
+        backgroundColor: [gold, chilli, '#6D7CFF', '#3D6B4F', '#A67C52'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '58%',
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10, color: cream } } }
+    }
+  });
+  spendChart = new Chart(document.getElementById('spendChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['MP ads 30%', 'Paid social 30%', 'D2C / CRM 20%', 'Influencer 15%', 'Contingency 5%'],
+      datasets: [{
+        data: [30, 30, 20, 15, 5],
+        backgroundColor: ['#6D7CFF', chilli, gold, '#3D6B4F', '#A67C52'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '58%',
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 8, color: cream, font: { size: 11 } } } }
+    }
+  });
+}
+
+let current = 1;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function showSlide(n) {
+  if (n < 1) n = 1;
+  if (n > total) n = total;
+  current = n;
+  slides.forEach((s, i) => s.classList.toggle('active', i === n - 1));
+  document.getElementById('current').textContent = n;
+  document.getElementById('progressBar').style.width = (n / total * 100) + '%';
+  makeCharts();
+}
+function nextSlide() { showSlide(current + 1); }
+function prevSlide() { showSlide(current - 1); }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+});
+showSlide(1);
+</script>
+</body>
+</html>
