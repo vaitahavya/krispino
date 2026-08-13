@@ -56,6 +56,8 @@
     color:var(--indigo); background:#EEF0FD; border:1px solid #DCE0FA;
     padding:5px 10px; border-radius:20px; white-space:nowrap;
   }
+  .badge.ghost{background:#fff; color:var(--ink); border-color:var(--line);}
+  .save-status{font-size:11px; color:var(--good); font-weight:600; max-width:200px; text-align:right; line-height:1.3;}
 
   /* Layout */
   .grid{
@@ -218,7 +220,9 @@
         <div class="sub">Set the revenue target once — get monthly, weekly, and unit-level goals automatically.</div>
       </div>
     </div>
-    <div style="display:flex; align-items:center; gap:10px;">
+    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+      <span class="save-status" id="saveStatus"></span>
+      <button type="button" id="clearSaveBtn" class="badge ghost" style="cursor:pointer;">Clear saved data</button>
       <div class="badge">Krispino · Planning Tool</div>
       <button type="button" id="exportCsvBtn" class="badge" style="cursor:pointer; background:var(--indigo); color:#fff; border-color:var(--indigo);">Export CSV</button>
     </div>
@@ -232,6 +236,7 @@
       Shelf life is <b>60 days</b> — a 5–7 day pan-India transit window is not a constraint. Bulk packaging cost is <b>~₹7/unit</b>. GTIN &amp; GST are already live.
       <b>August 2026 is reserved for planning &amp; prep</b> (packaging sign-off, marketplace listings, content stockpile) — the revenue ramp itself starts <b>September 2026</b>.
       All fields below are editable — these are just the confirmed starting point.
+      Everything you change is <b>autosaved in this browser</b> as you go — close the tab and reopen this page later and your numbers are still there. Use <b>Export CSV</b> for a shareable copy, and <b>Clear saved data</b> to wipe the autosave.
     </div>
   </div>
 
@@ -1123,7 +1128,111 @@ function exportCsv(){
 }
 $('exportCsvBtn').addEventListener('click', exportCsv);
 
-applyPreset('dec26', true);
+// ---------------------------------------------------------------
+// Autosave — browser storage keyed to this page. Reopen later in the
+// same browser and every input (targets, ramp, channels, costs) restores.
+// ---------------------------------------------------------------
+const STORAGE_KEY = 'krispino-planning-tool-progress-v1';
+const saveStatusEl = $('saveStatus');
+function showSaveStatus(msg){ saveStatusEl.textContent = msg; }
+
+function storageAvailable(){
+  try {
+    const t = '__krispino_plan_test__';
+    localStorage.setItem(t, '1');
+    localStorage.removeItem(t);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+const STORAGE_OK = storageAvailable();
+let isRestoringSave = false;
+let autosaveTimer = null;
+
+function collectSaveData(){
+  const values = {};
+  fields.forEach(id => { values[id] = $(id).value; });
+  const rampEl = document.querySelector('input[name="ramp"]:checked');
+  const presetEl = document.querySelector('.preset-pill.active');
+  return {
+    tool: 'krispino-planning-tool',
+    savedAt: new Date().toISOString(),
+    values,
+    ramp: rampEl ? rampEl.value : 'scurve',
+    preset: presetEl ? presetEl.dataset.preset : 'custom',
+  };
+}
+
+function applySaveData(data){
+  if (!data || typeof data !== 'object') return;
+  isRestoringSave = true;
+  if (data.values) {
+    fields.forEach(id => {
+      const el = $(id);
+      const v = data.values[id];
+      if (el && v !== undefined && v !== null && v !== '') el.value = v;
+    });
+  }
+  if (data.ramp) {
+    document.querySelectorAll('input[name="ramp"]').forEach(r => {
+      r.checked = r.value === data.ramp;
+      r.closest('.ramp-opt').classList.toggle('active', r.checked);
+    });
+  }
+  const presetName = data.preset || 'custom';
+  document.querySelectorAll('.preset-pill').forEach(b => b.classList.toggle('active', b.dataset.preset === presetName));
+  applyPreset(presetName === 'custom' ? 'custom' : presetName, true);
+  if (data.values) {
+    if (data.values.startMonth) $('startMonth').value = data.values.startMonth;
+    if (data.values.endMonth) $('endMonth').value = data.values.endMonth;
+  }
+  isRestoringSave = false;
+}
+
+function persistNow(){
+  if (!STORAGE_OK) {
+    showSaveStatus('Autosave unavailable in this view');
+    return;
+  }
+  try {
+    const data = collectSaveData();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    showSaveStatus('Saved ' + new Date(data.savedAt).toLocaleTimeString());
+  } catch (e) {
+    showSaveStatus('Could not autosave (storage full or blocked)');
+  }
+}
+
+function scheduleAutosave(){
+  if (isRestoringSave) return;
+  showSaveStatus('Saving…');
+  clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(persistNow, 500);
+}
+
+document.addEventListener('input', scheduleAutosave);
+document.addEventListener('change', scheduleAutosave);
+document.querySelectorAll('.preset-pill').forEach(b => b.addEventListener('click', scheduleAutosave));
+
+$('clearSaveBtn').addEventListener('click', () => {
+  if (STORAGE_OK) localStorage.removeItem(STORAGE_KEY);
+  showSaveStatus('Saved data cleared');
+});
+
+(function restoreAutosave(){
+  if (!STORAGE_OK) { showSaveStatus('Autosave unavailable in this view'); return false; }
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return false;
+  try {
+    const data = JSON.parse(raw);
+    applySaveData(data);
+    showSaveStatus('Restored from ' + (data.savedAt ? new Date(data.savedAt).toLocaleString() : 'autosave'));
+    return true;
+  } catch (e) {
+    return false;
+  }
+})() || applyPreset('dec26', true);
 recalc();
 </script>
 </body>
