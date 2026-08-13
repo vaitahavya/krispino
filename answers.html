@@ -282,13 +282,13 @@ const SECTIONS = [
     { q: 'How many orders are needed weekly?', a: '~2,496 orders/week blended across all channels (at ₹350 AOV, 25% Website RTO). Peaks well higher in Nov–Dec as the ramp climbs.' },
     { q: 'What should be the minimum AOV?', a: '₹116 (Marketplace floor — the higher of the two channel breakevens; Website floor is ₹97). Current modeled AOV of ₹350 clears both comfortably.' },
     { q: 'Which channel will contribute how much?', type: 'table', calc: 'channel',
-      headers: ['Channel', '% Split', 'Monthly Avg', 'Weekly Avg'],
+      headers: ['Channel', '% Split', 'Monthly Avg', 'Weekly Avg', 'No. of orders'],
       rows: [
-        ['Website', '30%', '₹8.55 L', '₹1.97 L'],
-        ['Marketplace', '30%', '₹8.55 L', '₹1.97 L'],
-        ['Quick Commerce', '15%', '₹4.28 L', '₹0.98 L'],
-        ['Community / WhatsApp', '15%', '₹4.28 L', '₹0.98 L'],
-        ['Corporate Gifting / B2B', '10%', '₹2.85 L', '₹0.66 L'],
+        ['Website', '30%', '₹8.55 L', '₹1.97 L', ''],
+        ['Marketplace', '30%', '₹8.55 L', '₹1.97 L', ''],
+        ['Quick Commerce', '15%', '₹4.28 L', '₹0.98 L', ''],
+        ['Community / WhatsApp', '15%', '₹4.28 L', '₹0.98 L', ''],
+        ['Corporate Gifting / B2B', '10%', '₹2.85 L', '₹0.66 L', ''],
       ]
     },
   ]
@@ -640,6 +640,15 @@ function fmtINR(n, opts) {
   return (neg?'-':'') + '₹' + str + suffix;
 }
 function fmtRupee(n) { return isNaN(n) ? '₹0' : '₹' + Math.round(n); }
+function fmtNum(n) {
+  n = Math.round(n);
+  if (isNaN(n)) return '0';
+  const s = String(Math.abs(n));
+  let last3 = s.substring(s.length - 3);
+  let other = s.substring(0, s.length - 3);
+  if (other !== '') last3 = ',' + last3;
+  return (n < 0 ? '-' : '') + other.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + last3;
+}
 function fmtPct(n) { return isNaN(n) ? '0%' : n.toFixed(1) + '%'; }
 function monthsBetween(startStr, endStr) {
   const [sy, sm] = startStr.split('-').map(Number);
@@ -663,7 +672,7 @@ function slugKey(s) { return String(s).toLowerCase().replace(/[^a-z0-9]/g, ''); 
 // Which columns of each calc-tagged table are editable sources vs. computed outputs.
 // Index 0 is always the row label (handled separately); indexes below match header order.
 const CALC_COLS = {
-  channel:            ['label', 'src:pct', 'out:monthly', 'out:weekly'],
+  channel:            ['label', 'src:pct', 'out:monthly', 'out:weekly', 'out:orders'],
   margin:              ['label', 'out:margin', 'out:marginPct'],
   minaov:              ['label', 'out:minaov'],
   'platform-margin':   ['label', 'out:margin', 'out:marginPct'],
@@ -906,8 +915,11 @@ function recalcTables() {
     channelPct[key] = pct;
     const outMonthly = tr.querySelector('input[data-calc-out="monthly"]');
     const outWeekly = tr.querySelector('input[data-calc-out="weekly"]');
+    const outOrders = tr.querySelector('input[data-calc-out="orders"]');
     if (outMonthly) outMonthly.value = fmtINR(A.targetRevenue * pct / 100 / n);
     if (outWeekly) outWeekly.value = fmtINR(A.targetRevenue * pct / 100 / totalWeeks);
+    const totalUnits = A.aov > 0 ? A.targetRevenue / A.aov : 0;
+    if (outOrders) outOrders.value = fmtNum(totalUnits * pct / 100);
   });
 
   // ---- Contribution margin per order (Sec 3) — also feeds Platform-wise margin (Sec 10) ----
