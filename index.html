@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krispino GTM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#4F46E5; --cyan:#06B6D4; --ink:#111827; --slate:#0F172A;
+    --bg:#F6F7FB; --card:#FFFFFF; --line:#E5E7EB; --muted:#6B7280;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--ink);}
+  .site-bar{background:var(--slate); color:#fff; padding:12px 20px;}
+  .site-bar-inner{
+    max-width:980px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  }
+  .brand{font-family:'Poppins',sans-serif; font-weight:800; font-size:14px; letter-spacing:-.01em;}
+  .site-nav{display:flex; gap:6px;}
+  .site-nav a{
+    display:inline-block; padding:7px 12px; border-radius:7px; color:#CBD5E1; text-decoration:none;
+    font-size:12.5px; font-weight:600;
+  }
+  .site-nav a:hover{background:rgba(255,255,255,0.08); color:#fff;}
+  .site-nav a.active{background:var(--indigo); color:#fff;}
+  .wrap{max-width:980px; margin:0 auto; padding:40px 20px 80px;}
+  h1{font-family:'Poppins',sans-serif; font-size:28px; font-weight:800; color:var(--slate); margin:0 0 6px; letter-spacing:-.02em;}
+  .sub{color:var(--muted); font-size:14px; margin:0 0 28px; line-height:1.5;}
+  .cards{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:720px){ .cards{grid-template-columns:1fr;} }
+  a.card{
+    display:block; background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:22px 22px 20px; text-decoration:none; color:inherit;
+  }
+  a.card:hover{border-color:#C7D2FE; box-shadow:0 8px 24px rgba(79,70,229,.08);}
+  a.card h2{font-family:'Poppins',sans-serif; font-size:16px; font-weight:700; color:var(--slate); margin:0 0 6px;}
+  a.card p{margin:0; font-size:13px; color:var(--muted); line-height:1.55;}
+  .tag{display:inline-block; font-size:11px; font-weight:700; color:var(--indigo); background:#EEF0FD; border:1px solid #DCE0FA; padding:3px 8px; border-radius:20px; margin-bottom:10px;}
+</style>
+</head>
+<body>
+<div class="site-bar">
+  <div class="site-bar-inner">
+    <div class="brand">Krispino GTM</div>
+    <nav class="site-nav" aria-label="Site">
+      <a href="index.html" class="active">Home</a>
+      <a href="planning.html">Planning Tool</a>
+      <a href="answers.html">Answers Worksheet</a>
+    </nav>
+  </div>
+</div>
+<div class="wrap">
+  <h1>Krispino GTM</h1>
+  <p class="sub">Two planning pages — pick a tool from the menu, or open a card below.</p>
+  <div class="cards">
+    <a class="card" href="planning.html">
+      <span class="tag">Menu · Planning Tool</span>
+      <h2>Top-Down Goal Calculator</h2>
+      <p>Set the revenue target once and get monthly, weekly, and unit-level goals automatically.</p>
+    </a>
+    <a class="card" href="answers.html">
+      <span class="tag">Menu · Answers Worksheet</span>
+      <h2>Answers Worksheet</h2>
+      <p>Every “Need clear answers” question from the brief, in one editable place.</p>
+    </a>
+  </div>
+</div>
+</body>
+</html>

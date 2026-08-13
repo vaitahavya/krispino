@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krispino GTM — Answers Worksheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#4F46E5; --cyan:#06B6D4; --ink:#111827; --slate:#0F172A;
+    --bg:#F6F7FB; --card:#FFFFFF; --line:#E5E7EB; --muted:#6B7280;
+    --good:#059669; --warn:#D97706; --sugg-bg:#EEF0FD; --sugg-border:#DCE0FA; --open-bg:#FFF7ED; --open-border:#FDE3C0;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--ink);}
+  .app{display:flex; min-height:100vh;}
+
+  /* Sidebar */
+  .sidebar{
+    width:260px; flex-shrink:0; background:var(--slate); color:#fff; padding:20px 14px;
+    position:sticky; top:0; height:100vh; overflow-y:auto;
+  }
+  .sidebar h1{font-family:'Poppins',sans-serif; font-size:15px; font-weight:800; margin:0 0 2px; letter-spacing:-.01em;}
+  .sidebar .sub{font-size:11px; color:#9CA3AF; margin-bottom:16px; line-height:1.5;}
+  .sidebar nav a{
+    display:block; padding:7px 10px; border-radius:7px; color:#CBD5E1; text-decoration:none;
+    font-size:12.5px; font-weight:500; margin-bottom:2px; line-height:1.35;
+  }
+  .sidebar nav a:hover{background:rgba(255,255,255,0.08); color:#fff;}
+  .sidebar nav a.active{background:var(--indigo); color:#fff;}
+  .sidebar .legend{margin-top:18px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.12); font-size:10.5px; color:#9CA3AF; line-height:1.7;}
+  .dot{display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; vertical-align:middle;}
+  .dot.sugg{background:var(--indigo);}
+  .dot.open{background:var(--warn);}
+
+  /* Main */
+  .main{flex:1; padding:24px 32px 100px; max-width:1000px;}
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:22px;
+    position:sticky; top:0; background:var(--bg); padding:10px 0; z-index:5; flex-wrap:wrap; gap:10px;
+  }
+  .topbar .title{font-family:'Poppins',sans-serif; font-size:20px; font-weight:800; color:var(--slate);}
+  .topbar .title .sub{display:block; font-family:'Inter',sans-serif; font-size:12.5px; font-weight:400; color:var(--muted); margin-top:2px;}
+  .actions{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .save-status{font-size:11px; color:var(--good); font-weight:600; margin-right:2px; max-width:180px; text-align:right; line-height:1.3;}
+  button.act{
+    font-family:'Inter',sans-serif; font-size:12.5px; font-weight:600; padding:9px 15px; border-radius:8px;
+    border:1px solid var(--line); background:#fff; color:var(--ink); cursor:pointer;
+  }
+  button.act.primary{background:var(--indigo); border-color:var(--indigo); color:#fff;}
+  button.act:hover{filter:brightness(0.97);}
+
+  .note-banner{
+    background:#F2FBF6; border:1px solid #CFEFDD; border-radius:12px; padding:14px 16px; margin-bottom:14px;
+    font-size:12.5px; color:var(--ink); line-height:1.6;
+  }
+  .note-banner b{color:var(--good);}
+  .prep-banner{
+    background:#FFF7ED; border:1px solid #FDE3C0; border-radius:12px; padding:14px 16px; margin-bottom:22px;
+    font-size:12.5px; color:var(--ink); line-height:1.6;
+  }
+  .prep-banner b{color:var(--warn);}
+
+  /* Assumptions panel — drives the live-calculated tables */
+  .assump-panel{
+    background:var(--card); border:1px solid var(--sugg-border); border-radius:12px; padding:16px 18px; margin-bottom:22px;
+  }
+  .assump-panel .ap-head{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:4px; flex-wrap:wrap;}
+  .assump-panel .ap-title{font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:700; color:var(--slate);}
+  .assump-panel .ap-hint{font-size:11.5px; color:var(--muted);}
+  .assump-panel .ap-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(130px,1fr)); gap:10px 12px; margin-top:12px;
+  }
+  .assump-panel .ap-field label{display:block; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; color:var(--muted); margin-bottom:4px;}
+  .assump-panel .ap-field input{
+    width:100%; font-family:'Inter',sans-serif; font-size:13px; color:var(--ink); font-weight:600;
+    border:1px solid var(--line); border-radius:7px; padding:7px 9px; background:#FBFBFE;
+  }
+  .assump-panel .ap-field input:focus{outline:none; border-color:var(--indigo); box-shadow:0 0 0 3px rgba(79,70,229,0.12);}
+  .assump-panel .ap-reset{
+    font-family:'Inter',sans-serif; font-size:11.5px; font-weight:600; padding:6px 12px; border-radius:7px;
+    border:1px solid var(--line); background:#fff; color:var(--muted); cursor:pointer; flex-shrink:0;
+  }
+  .assump-panel .ap-reset:hover{color:var(--indigo); border-color:var(--sugg-border);}
+
+  /* Live/computed table cells */
+  .calc-badge{
+    display:inline-block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;
+    color:var(--indigo); background:var(--sugg-bg); border:1px solid var(--sugg-border); border-radius:8px;
+    padding:1px 7px; margin-left:8px; vertical-align:middle;
+  }
+  table.ans-table td input[data-calc-out]{background:var(--sugg-bg); font-weight:700; color:var(--indigo); cursor:default;}
+  table.ans-table td input[data-calc-out]:focus{outline:1px solid var(--sugg-border);}
+  table.ans-table td input[data-calc-src]{background:#FFFDF5; font-weight:700;}
+  .calc-note{display:block; font-size:10px; color:var(--muted); padding:2px 6px 0; line-height:1.3;}
+
+  section.qsec{margin-bottom:34px; scroll-margin-top:70px;}
+  section.qsec h2{
+    font-family:'Poppins',sans-serif; font-size:16px; font-weight:700; color:var(--slate);
+    margin:0 0 4px; padding-bottom:10px; border-bottom:2px solid var(--indigo);
+  }
+  section.qsec .research-note{font-size:12px; color:var(--muted); margin:8px 0 14px; line-height:1.6;}
+
+  .qcard{
+    background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:10px;
+  }
+  .qcard .qtext{font-size:13px; font-weight:600; color:var(--ink); margin-bottom:8px; display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+  .qcard .tag{
+    font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; padding:2px 8px; border-radius:10px;
+    white-space:nowrap; flex-shrink:0; margin-top:1px;
+  }
+  .qcard .tag.sugg{background:var(--sugg-bg); color:var(--indigo); border:1px solid var(--sugg-border);}
+  .qcard .tag.open{background:var(--open-bg); color:var(--warn); border:1px solid var(--open-border);}
+  .qcard textarea, .qcard input[type="text"]{
+    width:100%; font-family:'Inter',sans-serif; font-size:13px; color:var(--ink);
+    border:1px solid var(--line); border-radius:8px; padding:9px 11px; background:#FBFBFE;
+    resize:vertical; transition:border-color .15s, box-shadow .15s;
+  }
+  .qcard textarea:focus, .qcard input:focus{outline:none; border-color:var(--indigo); box-shadow:0 0 0 3px rgba(79,70,229,0.12);}
+
+  /* Bullet-list answer type */
+  .bullet-list{display:flex; flex-direction:column; gap:6px;}
+  .bullet-row{display:flex; align-items:center; gap:8px;}
+  .bullet-row .bmark{color:var(--indigo); font-weight:800; font-size:14px; flex-shrink:0; width:14px; text-align:center;}
+  .bullet-row input{flex:1;}
+
+  /* Flexbox answer type — wrapping, extendable boxes */
+  .flex-list{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px;}
+  .flex-item{
+    display:flex; align-items:center; gap:6px; flex:1 1 220px; min-width:180px;
+    background:#FBFBFE; border:1px solid var(--line); border-radius:8px; padding:2px 4px 2px 11px;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .flex-item:focus-within{border-color:var(--indigo); box-shadow:0 0 0 3px rgba(79,70,229,0.12);}
+  .flex-item input{flex:1; border:none; background:transparent; padding:7px 2px; min-width:60px;}
+  .flex-item input:focus{outline:none; box-shadow:none;}
+  .flex-item .rm{
+    flex-shrink:0; width:20px; height:20px; display:flex; align-items:center; justify-content:center;
+    border-radius:50%; color:var(--muted); font-size:15px; font-weight:700; cursor:pointer; line-height:1;
+  }
+  .flex-item .rm:hover{background:var(--open-bg); color:var(--warn);}
+  .flex-add-btn{
+    font-family:'Inter',sans-serif; font-size:12px; font-weight:600; color:var(--indigo); background:var(--sugg-bg);
+    border:1px dashed var(--sugg-border); border-radius:8px; padding:7px 13px; cursor:pointer;
+  }
+  .flex-add-btn:hover{background:var(--sugg-border);}
+
+  /* Table answer type */
+  table.ans-table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  table.ans-table th{
+    text-align:left; font-family:'Poppins',sans-serif; font-size:10px; font-weight:700; color:var(--muted);
+    background:#F3F4F8; padding:7px 9px; text-transform:uppercase; letter-spacing:.03em; border:1px solid var(--line);
+  }
+  table.ans-table td{padding:5px; border:1px solid var(--line); vertical-align:middle;}
+  table.ans-table td.label-cell{font-weight:700; background:#FAFAFE; white-space:nowrap;}
+  table.ans-table td input{width:100%; border:none; background:transparent; font:inherit; padding:5px 6px;}
+  table.ans-table td input:focus{outline:1px solid var(--indigo); border-radius:4px;}
+
+  table.owner-table{width:100%; border-collapse:collapse; font-size:12.5px; margin-bottom:16px;}
+  table.owner-table th{
+    text-align:left; font-family:'Poppins',sans-serif; font-size:10.5px; font-weight:700; color:#fff;
+    background:var(--slate); padding:8px 9px; text-transform:uppercase; letter-spacing:.03em;
+  }
+  table.owner-table td{padding:6px; border:1px solid var(--line); vertical-align:top;}
+  table.owner-table td input{width:100%; border:none; background:transparent; font:inherit; padding:4px;}
+  table.owner-table td input:focus{outline:1px solid var(--indigo); border-radius:4px;}
+  table.owner-table td.name-cell{font-weight:700; background:#FAFAFE; width:110px;}
+
+  .checklist{list-style:none; margin:0; padding:0;}
+  .checklist li{
+    display:flex; align-items:center; gap:10px; padding:9px 12px; border:1px solid var(--line);
+    border-radius:9px; background:#fff; margin-bottom:6px; font-size:13px;
+  }
+  .checklist li input[type="checkbox"]{width:17px; height:17px; accent-color:var(--indigo); cursor:pointer;}
+  .checklist li.checked{background:#F2FBF6; border-color:#CFEFDD;}
+  .checklist li label{flex:1; cursor:pointer;}
+
+  footer{text-align:center; color:var(--muted); font-size:11px; margin-top:30px; padding-bottom:20px;}
+
+  @media print{
+    .sidebar, .topbar .actions, .note-banner, .prep-banner{display:none !important;}
+    .app{display:block;}
+    .main{max-width:100%; padding:0;}
+    .qcard{break-inside:avoid; border:1px solid #ccc;}
+    section.qsec{break-inside:avoid-page;}
+  }
+  @media (max-width:900px){
+    .app{flex-direction:column;}
+    .sidebar{width:100%; height:auto; position:relative;}
+    .main{padding:20px;}
+  }
+
+  .site-nav{
+    display:flex; gap:6px; margin:0 0 16px; padding-bottom:14px;
+    border-bottom:1px solid rgba(255,255,255,0.12);
+  }
+  .site-nav a{
+    flex:1; text-align:center; padding:8px 8px !important; margin:0 !important;
+    font-size:11.5px !important; font-weight:700 !important;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <h1>Krispino GTM</h1>
+    <div class="sub">Answers Worksheet — one page per brief section. Fill or edit any field.</div>
+    <nav class="site-nav" aria-label="Site">
+      <a href="index.html">Home</a>
+      <a href="planning.html">Planning Tool</a>
+      <a href="answers.html" class="active">Answers Worksheet</a>
+    </nav>
+    <nav id="sideNav"></nav>
+    <div class="legend">
+      <div><span class="dot sugg"></span>Suggested — grounded in the calculator / confirmed data. Edit freely.</div>
+      <div style="margin-top:6px;"><span class="dot open"></span>Open — genuinely needs your input, left blank.</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="title">Answers Worksheet<span class="sub">Every "Need clear answers" question from the brief, in one editable place.</span></div>
+      <div class="actions">
+        <span class="save-status" id="saveStatus"></span>
+        <button class="act" id="clearSaveBtn">Clear saved data</button>
+        <button class="act" id="printBtn">Print / Save PDF</button>
+        <button class="act primary" id="exportBtn">Export CSV</button>
+      </div>
+    </div>
+
+    <div class="note-banner">
+      <b>How this works:</b> every field below is editable — a text box, a bulleted list, a flex box, or a table cell, depending on the shape of the answer. Type over any suggested value, or fill in what's left blank. Everything you type is <b>autosaved right in this page</b> as you go (no download, no extra file) — close the tab and reopen this same file later and your edits are still there. Use <b>Export CSV</b> or <b>Print</b> if you want a separate copy to read or share, and <b>Clear saved data</b> to wipe the autosave and start over.
+    </div>
+    <div class="prep-banner">
+      <b>Timeline:</b> August 2026 is reserved for planning &amp; prep (packaging sign-off, marketplace listings, content stockpile) — it is not counted in the revenue ramp. All figures below run <b>September–December 2026</b> (4 months) against the ₹1.14 Cr online-only target. Change the assumptions below and the live tables recalculate automatically — everything else on this page is still a static suggestion.
+    </div>
+
+    <div class="assump-panel">
+      <div class="ap-head">
+        <div>
+          <div class="ap-title">Live assumptions <span class="calc-badge">Drives tables below</span></div>
+          <div class="ap-hint">Matches the Krispino Planning Tool defaults. Edit any field and every indigo-highlighted table cell recalculates instantly.</div>
+        </div>
+        <button type="button" class="ap-reset" id="apResetBtn">Reset to defaults</button>
+      </div>
+      <div class="ap-grid">
+        <div class="ap-field"><label>Target revenue (₹)</label><input type="number" id="ap_targetRevenue" value="11400000" step="10000"></div>
+        <div class="ap-field"><label>Start month</label><input type="month" id="ap_startMonth" value="2026-09"></div>
+        <div class="ap-field"><label>End month</label><input type="month" id="ap_endMonth" value="2026-12"></div>
+        <div class="ap-field"><label>AOV (₹)</label><input type="number" id="ap_aov" value="350" step="1"></div>
+        <div class="ap-field"><label>COGS (%)</label><input type="number" id="ap_cogsPct" value="41" step="0.5"></div>
+        <div class="ap-field"><label>Logistics cost/order (₹)</label><input type="number" id="ap_logisticsCost" value="57" step="1"></div>
+        <div class="ap-field"><label>Marketplace commission (%)</label><input type="number" id="ap_mpCommission" value="10" step="0.5"></div>
+        <div class="ap-field"><label>Quick commerce commission (%)</label><input type="number" id="ap_qcCommission" value="25" step="0.5"></div>
+        <div class="ap-field"><label>Marketing spend (% of revenue)</label><input type="number" id="ap_mktPct" value="18" step="0.5"></div>
+      </div>
+    </div>
+
+    <div id="sectionsRoot"></div>
+
+    <footer>Krispino · GTM Answers Worksheet — reconstructed planning aid. Export or print to keep a copy of what you fill in.</footer>
+  </main>
+</div>
+
+<script>
+// ---------------------------------------------------------------
+// Data: one entry per numbered brief section.
+// Question shapes:
+//   { q, a }                          -> plain text box (a='' marks it Open)
+//   { q, type:'bullets', items:[...] }-> one editable line per item (items=[] marks it Open)
+//   { q, type:'table', headers:[...], rows:[[label, val, val...], ...] } -> mini table (rows=[] marks it Open)
+// ---------------------------------------------------------------
+const SECTIONS = [
+{
+  id: 'sec1', title: '1. Revenue Target & Sales Plan',
+  note: 'Figures pull from the Krispino Planning Tool at its Sep–Dec 2026 / ₹1.14 Cr / S-curve defaults — August is planning & prep and is not counted here. Re-run the calculator if the target, timeline, or ramp shape changes.',
+  questions: [
+    { q: 'How much revenue should we target each month?', a: 'Avg ₹28.5 L/month across Sep–Dec 2026 (S-curve ramp: Sep ₹5.48L → Oct ₹22.97L → Nov ₹40.46L → Dec ₹45.1L). See the calculator\'s Monthly Targets table for the live breakdown.' },
+    { q: 'How much revenue should we target each week?', a: 'Month 1 (Sep \'26): ₹1.27 L/week flat. From Oct onward, blended average is ~₹6.55 L/week, rising sharply toward Dec as the ramp peaks — track monthly from Month 2, not weekly (see Section 14).' },
+    { q: 'How many orders are needed weekly?', a: '~2,496 orders/week blended across all channels (at ₹350 AOV, 25% Website RTO). Peaks well higher in Nov–Dec as the ramp climbs.' },
+    { q: 'What should be the minimum AOV?', a: '₹116 (Marketplace floor — the higher of the two channel breakevens; Website floor is ₹97). Current modeled AOV of ₹350 clears both comfortably.' },
+    { q: 'Which channel will contribute how much?', type: 'table', calc: 'channel',
+      headers: ['Channel', '% Split', 'Monthly Avg', 'Weekly Avg'],
+      rows: [
+        ['Website', '30%', '₹8.55 L', '₹1.97 L'],
+        ['Marketplace', '30%', '₹8.55 L', '₹1.97 L'],
+        ['Quick Commerce', '15%', '₹4.28 L', '₹0.98 L'],
+        ['Community / WhatsApp', '15%', '₹4.28 L', '₹0.98 L'],
+        ['Corporate Gifting / B2B', '10%', '₹2.85 L', '₹0.66 L'],
+      ]
+    },
+  ]
+},
+{
+  id: 'sec2', title: '2. Product & SKU Strategy',
+  note: 'Hero-SKU picks and margins are from the real product catalog and Aug–Oct 2026 production plan reviewed earlier in this project.',
+  questions: [
+    { q: 'Top 5–10 SKUs to focus on', type: 'bullets', items: [
+      'Tapioca Steamed Chips 350g — ₹365, 55.0% margin',
+      'Banana Chips (Coconut Oil) 350g — ₹615, 65.8% margin',
+      'Chilli Tapioca Sticks 350g — ₹312, 53.2% margin',
+      'Potato Chips Kanthari 175g — ₹290, 62.3% margin',
+      'Jackfruit Chips 180g — ₹272, 58.8% margin',
+      'Sharkkaravaratti 350g — ₹515, 61.3% margin',
+      'Baby Murukku 400g — ₹454, 61.6% margin',
+      'Round Murukku 400g — ₹454, 61.1% margin',
+      'Rice Murukku 400g — ₹378, 55.0% margin',
+      'Banana Chips (Coconut Oil) 180g — ₹315, 63.2% margin — pricing flagged, resolve before launch',
+    ]},
+    { q: 'Expected monthly sales per SKU', a: 'From your own Aug–Oct production plan: ~500 units/month for most 200–350g lines (Tapioca Steamed Chips, Chilli Tapioca Sticks, Banana Chips 180g variants), ~200 units/month for the 350g premium sizes. Treat as a floor, not a ceiling — production capacity, not demand, set these.' },
+    { q: 'Expected weekly sales per SKU', a: '' },
+    { q: 'Product-wise margin estimate', a: 'See the Top 5–10 list above for hero-SKU margins (53–66%). Full 104-SKU catalog margins are in the source sheet\'s Product Cost tab.' },
+    { q: 'Product-wise reorder potential', a: 'Qualitative starting view: murukku and mixture lines (everyday snacking) likely have the highest repeat-purchase potential; Diwali gifting combos are seasonal/lower-repeat by nature; banana chips sit in between — trial-driven first, repeat if the coconut-oil positioning lands. Needs real repeat-purchase data to confirm.' },
+    { q: 'Product-wise channel fit', type: 'flexbox', items: [
+      'Marketplace / first launch: Rice Murukku, Bombay Mixture, Butter Murukku — price-safe, recognizable, low shipping risk',
+      'Website / hero storytelling: Banana Chips (both sizes), Jackfruit Chips',
+      'Diwali gifting combo: Sharkkaravaratti + Banana Chips + Dry Fruits Mixture',
+    ]},
+  ]
+},
+{
+  id: 'sec3', title: '3. Pricing Strategy',
+  note: '',
+  questions: [
+    { q: 'MRP', a: '' },
+    { q: 'Selling price', a: 'See hero-SKU table in Section 2 for current selling prices. Full catalog pricing is in the source sheet.' },
+    { q: 'Discount limit', a: 'Suggested cap: 10–15% on first-order and repeat-purchase offers — keeps post-discount price above the ₹97–116 minimum profitable AOV floor. Anything deeper needs a matching COGS or logistics improvement first.' },
+    { q: 'Free-shipping threshold', a: '₹599 — confirmed.' },
+    { q: 'Contribution margin per order', type: 'table', calc: 'margin',
+      calcNotes: { quickcommerce: 'bundled commission, no separate logistics' },
+      headers: ['Channel', 'Margin / Order', 'Margin %'],
+      rows: [
+        ['Website', '₹150', '42.7%'],
+        ['Marketplace', '₹115', '32.7%'],
+        ['Quick Commerce', '₹119', '34.0%'],
+      ]
+    },
+    { q: 'Minimum profitable AOV', type: 'table', calc: 'minaov',
+      headers: ['Channel', 'Floor'],
+      rows: [
+        ['Website', '₹97'],
+        ['Marketplace', '₹116'],
+        ['Quick Commerce', 'No fixed floor — margin holds as a constant % of AOV'],
+      ]
+    },
+    { q: 'Price difference across website, marketplace and quick commerce', type: 'flexbox', items: [
+      'Hold price parity between Website and Marketplace — a visible gap invites comparison-shopping one tab away',
+      'Price 5–8% higher on Quick Commerce to cover its heavier 25% bundled commission (exact per-SKU numbers left open)',
+    ]},
+  ]
+},
+{
+  id: 'sec4', title: '4. Average Order Value Strategy',
+  note: '',
+  questions: [
+    { q: 'Target AOV for each month', a: 'Suggested flat ₹350/order across all months as the baseline model AOV — combo strategy (below) is the lever to push this toward the ₹599 free-shipping threshold, not a month-by-month target change.' },
+    { q: 'Weekly AOV target', a: 'Same ₹350 baseline — no separate weekly AOV target is modeled; AOV is tracked as a rolling average, not a weekly-reset figure.' },
+    { q: 'Combo names', a: '' },
+    { q: 'Combo contents', a: 'One worked example: Diwali trio — Sharkkaravaratti + Banana Chips (Coconut Oil) + Dry Fruits Mixture. Highest-margin combination in the catalog, timed for the festive window.' },
+    { q: 'Combo price', a: 'Diwali trio: ₹867 standalone → ₹780 at a 10% combo discount — comfortably above the ₹599 free-shipping line and both channel profitability floors.' },
+    { q: 'Expected margin per combo', a: 'Rough estimate ~60%+ blended for the Diwali trio, based on its component SKU margins (61–66% individually) net of the 10% combo discount. Needs a precise per-combo COGS roll-up to confirm.' },
+    { q: 'Expected monthly and weekly combo sales', a: '' },
+  ]
+},
+{
+  id: 'sec5', title: '5. Shipping & Logistics',
+  note: '',
+  questions: [
+    { q: 'Current shipping cost per order', a: '' },
+    { q: 'Target shipping cost per order', a: '₹57 modeled (forward + RTO blended) — this is a planning estimate, not a confirmed courier quote. Get a real quote to replace it.' },
+    { q: 'Shipping cost as % of AOV', a: '₹57 / ₹350 AOV ≈ 16.3%.' },
+    { q: 'Free-shipping threshold', a: '₹599 — confirmed.' },
+    { q: 'Delivery TAT by region', a: '' },
+    { q: 'Damaged order target', a: 'Suggested target: under 2% — a reasonable starting benchmark for a fragile snacks category (chips/murukku), pending your own courier data.' },
+    { q: 'Return/RTO target', type: 'table',
+      headers: ['Channel', 'RTO Target'],
+      rows: [
+        ['Website', '25% (COD-heavy D2C India average)'],
+        ['Marketplace', '12% (platform-fulfilled)'],
+        ['Quick Commerce', '10% (prepaid-heavy, fast delivery)'],
+      ]
+    },
+    { q: 'Monthly logistics cost estimate', a: '~10,857 orders/month (blended) × ₹57/order ≈ ₹6.19 L/month at the Realistic case. Scales with the ramp — recompute per month from the Monthly Targets table.' },
+    { q: 'Weekly logistics report format', a: 'Suggested minimal template: Orders placed | Orders delivered | RTO count & % | Total logistics cost | Avg cost/order | Damaged-order count. One row per week.' },
+  ]
+},
+{
+  id: 'sec6', title: '6. Packaging Redesign',
+  note: 'This is the workstream that should run during the August prep month, ahead of the September ramp start.',
+  questions: [
+    { q: 'Top 5 SKUs for immediate packaging redesign', type: 'bullets', items: [
+      'Sharkkaravaratti 350g',
+      'Banana Chips (Coconut Oil) 350g',
+      'Banana Chips (Coconut Oil) 180g',
+      'Dry Fruits Mixture 250g',
+      'Jackfruit Chips 180g',
+    ]},
+    { q: 'Cost per new pack', a: '~₹7/unit in bulk — confirmed.' },
+    { q: 'MOQ impact', a: '' },
+    { q: 'Total packaging investment required', a: '' },
+    { q: 'Design completion timeline', a: 'Suggested: lock design during the August prep window, well before late October — Diwali (early Nov) is the single tightest constraint in this plan.' },
+    { q: 'Print timeline', a: 'Suggested: 2–3 weeks of print lead time, completed within August–early September, ahead of the September ramp start.' },
+    { q: 'Launch timeline', a: 'Suggested: new packaging ready by the September ramp start, well ahead of the Nov Diwali sales window.' },
+    { q: 'Expected impact on sales/conversion', a: 'Directional only: better packaging/photography typically lifts online conversion in the high single digits to low teens (%) for food/snacks D2C — not a Krispino-specific number, treat as a rule of thumb until you have your own before/after data.' },
+  ]
+},
+{
+  id: 'sec7', title: '7. Website & Conversion',
+  note: '',
+  questions: [
+    { q: 'Current monthly traffic', a: '' },
+    { q: 'Target monthly traffic', a: '~1,30,286 visitors/month blended (reverse-engineered from Website channel orders ÷ 2.5% conversion). Rises with the ramp — recompute per month if needed.' },
+    { q: 'Target weekly traffic', a: '~29,950 visitors/week blended average.' },
+    { q: 'Target conversion rate', a: '2.5% — research-backed for Indian F&B D2C (benchmark range 2.5–6%), not the generic 1.5–2% e-commerce default.' },
+    { q: 'Target cart-to-checkout rate', a: 'Suggested starting benchmark: 60–70% (typical for mobile-heavy Indian D2C traffic) — confirm against your own funnel once live.' },
+    { q: 'Target checkout completion rate', a: 'Suggested starting benchmark: 80–85% if COD and UPI are both offered with minimal friction.' },
+    { q: 'Weekly website improvement plan', a: '' },
+    { q: 'Weekly website performance report', a: 'Suggested minimal template: Sessions | Conversion rate | AOV | Cart-to-checkout % | Checkout completion % | Top-selling SKU. One row per week.' },
+  ]
+},
+{
+  id: 'sec8', title: '8. Social Media Campaign Plan',
+  note: 'Content-calendar specifics need your creative/content team\'s input — the cadence numbers below are general D2C starting benchmarks, not Krispino-specific research. August is the month to stockpile this content before the September launch.',
+  questions: [
+    { q: 'Number of reels per week', a: 'Suggested starting cadence: 3–4/week.' },
+    { q: 'Number of posts per week', a: 'Suggested starting cadence: 4–5/week (static + carousel combined).' },
+    { q: 'Number of stories per week', a: 'Suggested starting cadence: daily (5–7/week).' },
+    { q: 'Number of product videos per week', a: 'Suggested starting cadence: 2–3/week.' },
+    { q: 'Language-wise content split', a: '' },
+    { q: 'Campaign theme for each month', type: 'table',
+      headers: ['Month', 'Theme'],
+      rows: [
+        ['Aug (prep)', 'Content stockpile — no public campaign yet'],
+        ['Sep', 'Brand introduction / awareness (ramp start)'],
+        ['Oct', 'Diwali gifting build-up'],
+        ['Nov', 'Diwali gifting push (the festive anchor)'],
+        ['Dec', 'Post-festive / repeat-purchase push'],
+      ]
+    },
+    { q: 'Weekly posting schedule', a: '' },
+    { q: 'Expected reach, engagement and sales impact', a: '' },
+    { q: 'Reporting format for content performance', a: 'Suggested minimal template: Post/reel | Platform | Reach | Engagement rate | Link clicks | Attributed orders (via coupon/UTM). One row per post.' },
+  ]
+},
+{
+  id: 'sec9', title: '9. Influencer Marketing Plan',
+  note: '',
+  questions: [
+    { q: 'Influencers to contact per week', a: 'Suggested starting cadence: 10–15/week.' },
+    { q: 'Influencers to close per week', a: 'Suggested: 2–3/week, assuming a ~15–20% close rate off the contact volume above.' },
+    { q: 'Sample boxes to send per week', a: 'Suggested: matched to influencers contacted, ~10–15/week.' },
+    { q: 'Videos expected live per week', a: 'Suggested: 2–3/week once the pipeline is running.' },
+    { q: 'Cost per influencer category', type: 'table',
+      headers: ['Tier', 'Cost Range (per post/video)'],
+      rows: [
+        ['Nano', '₹2,000 – 5,000, or barter (product + modest fee)'],
+        ['Micro', '₹5,000 – 15,000'],
+        ['Macro', '₹15,000+'],
+      ]
+    },
+    { q: 'Expected views per campaign', a: '' },
+    { q: 'Expected orders per influencer', a: '' },
+    { q: 'Coupon-code-wise sales tracking', a: 'Suggested method: one unique tracked coupon code per creator, capped at 15% off (ties to the Section 3 discount limit), funded from the Influencer/UGC line of the marketing budget.' },
+    { q: 'Target CAC from influencers', a: 'Suggested ceiling: ₹16.2/unit — the blended CAC ceiling computed from the total marketing budget ÷ total units needed. Use as the cap until real influencer-attributed order data narrows it further.' },
+  ]
+},
+{
+  id: 'sec10', title: '10. Marketplace & Quick Commerce',
+  note: '',
+  questions: [
+    { q: 'Platform-wise target launch date', a: '' },
+    { q: 'Weekly follow-up plan', a: '' },
+    { q: 'SKUs to list first', a: 'Rice Murukku, Bombay Mixture, Butter Murukku — price-safe, nationally recognized, low shipping risk. Same picks as the Section 2 marketplace channel-fit list.' },
+    { q: 'Platform-wise pricing', a: '' },
+    { q: 'Platform-wise margin', type: 'table', calc: 'platform-margin',
+      calcNotes: { marketplace: 'after marketplace commission + logistics', quickcommerce: 'bundled commission, no separate logistics' },
+      headers: ['Platform', 'Margin / Order', 'Margin %'],
+      rows: [
+        ['Marketplace', '₹115', '32.7%'],
+        ['Quick Commerce', '₹119', '34.0%'],
+      ]
+    },
+    { q: 'Expected monthly sales', type: 'table', calc: 'platform-sales',
+      headers: ['Platform', 'Monthly', 'Weekly'],
+      rows: [
+        ['Marketplace', '₹8.55 L', '₹1.97 L'],
+        ['Quick Commerce', '₹4.28 L', '₹0.98 L'],
+      ]
+    },
+    { q: 'Expected weekly sales', a: 'See table above — same figures, weekly column.' },
+    { q: 'Listing cost / commission / logistics impact', type: 'flexbox', items: [
+      'Marketplace: 10% commission + ₹57 logistics/order',
+      'Quick Commerce: 25% commission, bundled — covers fulfilment, no separate logistics line',
+    ]},
+    { q: 'Owner for each platform', a: '' },
+  ]
+},
+{
+  id: 'sec11', title: '11. Community & WhatsApp Sales',
+  note: '',
+  questions: [
+    { q: 'Communities to contact per week', a: 'Suggested starting cadence: 5–10/week.' },
+    { q: 'Offices to contact per week', a: 'Suggested starting cadence: 5/week.' },
+    { q: 'WhatsApp groups to target', a: '' },
+    { q: 'Sampling plan', a: '' },
+    { q: 'Weekly sales target', a: '~₹98.3K/week (15% channel split, blended average).' },
+    { q: 'Monthly sales target', a: '₹4.28 L/month (15% of the Realistic-case target).' },
+    { q: 'Repeat-order plan', a: 'Suggested lever: the existing NE offline customer base is a near-zero-CAC starting point for a WhatsApp community — these are already-paying, trust-established customers. Tracked separately from the offline P&L per your earlier instruction not to touch offline.' },
+    { q: 'Customer feedback process', a: '' },
+    { q: 'Referral tracking method', a: 'Suggested: unique referral codes per customer, tracked the same way as influencer coupon codes (Section 9).' },
+  ]
+},
+{
+  id: 'sec12', title: '12. Corporate Gifting & B2B',
+  note: '',
+  questions: [
+    { q: 'Number of corporate leads to contact weekly', a: 'Suggested starting cadence: 5–10/week.' },
+    { q: 'Number of samples to send weekly', a: 'Suggested starting cadence: 3–5/week.' },
+    { q: 'Expected conversion rate', a: 'Suggested starting benchmark: 10–20%, typical for warm B2B gifting outreach — confirm against your own pipeline once contacts start converting.' },
+    { q: 'Gift box price points', a: 'Suggested starting point from the Diwali trio combo: ₹780–870 per box; consider a second, lower tier (~₹400–500) using single hero SKUs for smaller corporate budgets.' },
+    { q: 'Minimum order quantity', a: '' },
+    { q: 'Margin per gift box', a: 'Rough estimate ~60%+ blended, based on the same high-margin hero SKUs used in the Diwali trio (Section 4). Needs a precise per-box COGS roll-up to confirm.' },
+    { q: 'Monthly corporate sales target', a: '₹2.85 L/month (10% channel split, Realistic case).' },
+    { q: 'Weekly corporate sales target', a: '~₹65.5K/week (blended average).' },
+  ]
+},
+{
+  id: 'sec13', title: '13. Marketing Budget Plan',
+  note: '',
+  questions: [
+    { q: 'Total budget required', a: '₹20.52 L (18% of the ₹1.14 Cr target, Realistic case).' },
+    { q: 'Budget by month', a: 'Avg ₹5.13 L/month blended across Sep–Dec. Phased: Early phase (Sep–Oct, 2 months, 18% of budget) ≈ ₹1.85 L/month; Scale phase (Nov–Dec, 2 months, 82% of budget) ≈ ₹8.41 L/month.' },
+    { q: 'Budget by week', a: '~₹117.9 K/week blended average across the full Sep–Dec period.' },
+    { q: 'Budget by channel', type: 'table', calc: 'stream',
+      headers: ['Stream', '%', 'Amount'],
+      rows: [
+        ['Marketplace ads', '30%', '₹6.16 L'],
+        ['Paid social', '30%', '₹6.16 L'],
+        ['Influencer / UGC', '15%', '₹3.08 L'],
+        ['D2C site & CRM', '20%', '₹4.10 L'],
+        ['Contingency', '5%', '₹1.03 L'],
+      ]
+    },
+    { q: 'Expected revenue from each spend area', a: '' },
+    { q: 'Expected CAC', a: '' },
+    { q: 'Expected ROAS', a: '' },
+    { q: 'Maximum acceptable CAC', a: '₹16.2/unit — the blended CAC ceiling (total marketing budget ÷ total units needed at target). Use as the hard cap for any channel-level spend decision.' },
+    { q: 'Stop-loss rules for campaigns', a: 'Suggested rule: pause or re-scope any channel/campaign whose trailing-7-day CAC exceeds the ₹16.2/unit ceiling for 2 consecutive weeks, and reallocate that budget to whichever channel is converting (see Section 17 feasibility note in the GTM plan).' },
+  ]
+},
+];
+
+// Section 14 — weekly execution structure (brief lists items but not an explicit "Need clear answers" block)
+const SECTION14 = {
+  id: 'sec14', title: '14. Weekly Planning & Reporting',
+  note: 'The brief lists these as items the weekly execution structure must cover, without a separate "Need clear answers" block — treated the same way here: fill in a weekly target/owner for each. Applies from the September ramp start (August runs on the prep checklist in Section 6/10 instead).',
+  questions: [
+    { q: 'Revenue target', a: 'Follows the Monthly Targets table, split evenly across the month\'s weeks (Month 1 = Sep has its own explicit weekly breakdown in the calculator).' },
+    { q: 'Orders target', a: '~2,496 orders/week blended (see Section 1).' },
+    { q: 'AOV target', a: '₹350 (see Section 4).' },
+    { q: 'Website traffic target', a: '~29,950 visitors/week blended (see Section 7).' },
+    { q: 'Conversion target', a: '2.5% (see Section 7).' },
+    { q: 'Content calendar', a: '' },
+    { q: 'Influencer outreach', a: '' },
+    { q: 'Influencer posts going live', a: '' },
+    { q: 'Paid ads', a: '' },
+    { q: 'Community sales', a: '' },
+    { q: 'Corporate/B2B outreach', a: '' },
+    { q: 'Marketplace follow-ups', a: '' },
+    { q: 'Quick commerce follow-ups', a: '' },
+    { q: 'Packaging progress', a: '' },
+    { q: 'Website changes', a: '' },
+    { q: 'Customer reviews and feedback', a: '' },
+  ]
+};
+
+const SECTION15 = {
+  id: 'sec15', title: '15. Monthly Planning & Reporting',
+  note: '',
+  questions: [
+    { q: 'Monthly review date', a: 'Suggested: 1st business day of each month, reviewing the prior month against the Monthly Targets table.' },
+    { q: 'Monthly dashboard format', a: 'Suggested minimal template: Revenue (target vs. actual) | Orders | AOV | Channel-wise breakdown | Marketing spend vs. revenue | Blended CAC vs. ceiling.' },
+    { q: 'Data sources', a: '' },
+    { q: 'Owner for each metric', a: 'See Section 16 owner table.' },
+    { q: 'Decision-making process when targets are missed', a: 'Suggested rule: if actuals fall more than 15% below target for 2 consecutive months, reallocate the marketing budget toward whichever channel is actually converting rather than holding the 30/30/15/15/10 channel split rigid.' },
+  ]
+};
+
+const SECTION16 = {
+  id: 'sec16', title: '16. Team Roles & Responsibilities',
+  note: 'From Ravi\'s original meeting notes: Giri, Vaitahavya, Hema, and Bhavana are the workstream owners, with Ravi chairing. Fill in the table below during or right after the meeting.',
+  people: ['Giri', 'Vaitahavya', 'Hema', 'Bhavana'],
+  cols: ['Proposed role', 'Weekly responsibilities', 'Monthly responsibilities', 'Measurable KPIs', 'Support needed from others', 'Dependencies on founders/management'],
+};
+
+const SECTION17 = {
+  id: 'sec17', title: '17. Checklist',
+  items: [
+    { t: 'Revenue target till 31-Dec-2026', done: true },
+    { t: 'Month-wise revenue plan', done: true },
+    { t: 'Week-wise revenue plan', done: true },
+    { t: 'Channel-wise revenue plan', done: true },
+    { t: 'Product and SKU strategy', done: true },
+    { t: 'Pricing strategy', done: true },
+    { t: 'Shipping strategy', done: true },
+    { t: 'AOV improvement strategy', done: false },
+    { t: 'Packaging redesign plan', done: false },
+    { t: 'Website conversion plan', done: false },
+    { t: 'Social media campaign calendar', done: false },
+    { t: 'Influencer marketing plan', done: false },
+    { t: 'Marketplace and quick-commerce plan', done: false },
+    { t: 'Community and WhatsApp sales plan', done: false },
+    { t: 'Corporate gifting plan', done: false },
+    { t: 'Marketing budget plan', done: true },
+    { t: 'Weekly planning format', done: false },
+    { t: 'Weekly reporting format', done: false },
+    { t: 'Monthly review format', done: false },
+    { t: 'Team roles and responsibilities', done: false },
+    { t: 'KPI dashboard', done: false },
+    { t: 'Risks and mitigation plan', done: false },
+  ]
+};
+
+// ---------------------------------------------------------------
+// Live-calc helpers (mirrors the Krispino Planning Tool's own math)
+// ---------------------------------------------------------------
+function fmtINR(n, opts) {
+  opts = opts || {};
+  if (isNaN(n)) return '₹0';
+  const neg = n < 0; n = Math.abs(n);
+  let value, suffix, decimals;
+  if (n >= 1e7) { value = n/1e7; suffix = ' Cr'; decimals = opts.compact ? 1 : 2; }
+  else if (n >= 1e5) { value = n/1e5; suffix = ' L'; decimals = opts.compact ? 1 : 2; }
+  else if (n >= 1e3) { value = n/1e3; suffix = ' K'; decimals = opts.compact ? 1 : 2; }
+  else { value = n; suffix = ''; decimals = 0; }
+  let str = value.toFixed(decimals);
+  str = str.replace(/\.0+$/,'').replace(/(\.\d*[1-9])0+$/,'$1');
+  return (neg?'-':'') + '₹' + str + suffix;
+}
+function fmtRupee(n) { return isNaN(n) ? '₹0' : '₹' + Math.round(n); }
+function fmtPct(n) { return isNaN(n) ? '0%' : n.toFixed(1) + '%'; }
+function monthsBetween(startStr, endStr) {
+  const [sy, sm] = startStr.split('-').map(Number);
+  const [ey, em] = endStr.split('-').map(Number);
+  const months = [];
+  let y = sy, m = sm;
+  if (!sy || !ey) return [{y: 2026, m: 9}];
+  while (y < ey || (y === ey && m <= em)) {
+    months.push({y, m});
+    m++;
+    if (m > 12) { m = 1; y++; }
+  }
+  return months.length ? months : [{y: sy, m: sm}];
+}
+function weeksInMonth(y, m) {
+  const days = new Date(y, m, 0).getDate();
+  return Math.round((days/7)*10)/10;
+}
+function slugKey(s) { return String(s).toLowerCase().replace(/[^a-z0-9]/g, ''); }
+
+// Which columns of each calc-tagged table are editable sources vs. computed outputs.
+// Index 0 is always the row label (handled separately); indexes below match header order.
+const CALC_COLS = {
+  channel:            ['label', 'src:pct', 'out:monthly', 'out:weekly'],
+  margin:              ['label', 'out:margin', 'out:marginPct'],
+  minaov:              ['label', 'out:minaov'],
+  'platform-margin':   ['label', 'out:margin', 'out:marginPct'],
+  'platform-sales':    ['label', 'out:monthly', 'out:weekly'],
+  stream:              ['label', 'src:pct', 'out:amount'],
+};
+
+// ---------------------------------------------------------------
+// Render
+// ---------------------------------------------------------------
+const root = document.getElementById('sectionsRoot');
+const nav = document.getElementById('sideNav');
+
+// Builds one removable chip/box for the flexbox answer type.
+function flexItemHTML(value, sectionTitle, qEsc, idx) {
+  return `<div class="flex-item"><input type="text" value="${String(value||'').replace(/"/g,'&quot;')}" data-section="${sectionTitle}" data-question="${qEsc} — item ${idx}" placeholder="Fill in..."><span class="rm" data-flex-remove title="Remove">&times;</span></div>`;
+}
+
+function renderAnswerField(item, sectionTitle) {
+  if (item.type === 'flexbox') {
+    const items = item.items || [];
+    const qEsc = item.q.replace(/"/g,'&quot;');
+    const secEsc = sectionTitle.replace(/"/g,'&quot;');
+    const itemsHtml = items.length
+      ? items.map((it, i) => flexItemHTML(it, secEsc, qEsc, i+1)).join('')
+      : flexItemHTML('', secEsc, qEsc, 1);
+    return `<div class="flex-list" data-flex-section="${secEsc}" data-flex-question="${qEsc}">${itemsHtml}</div>
+      <button type="button" class="flex-add-btn" data-flex-add data-flex-section="${secEsc}" data-flex-question="${qEsc}">+ Add box</button>`;
+  }
+  if (item.type === 'bullets') {
+    const items = item.items || [];
+    const wrap = document.createElement('div');
+    wrap.className = 'bullet-list';
+    if (items.length === 0) {
+      wrap.innerHTML = `<div class="bullet-row"><span class="bmark">•</span><input type="text" data-section="${sectionTitle}" data-question="${item.q.replace(/"/g,'&quot;')} — item 1" placeholder="Fill in..."></div>`;
+    } else {
+      wrap.innerHTML = items.map((it, i) => `
+        <div class="bullet-row"><span class="bmark">•</span><input type="text" value="${it.replace(/"/g,'&quot;')}" data-section="${sectionTitle}" data-question="${item.q.replace(/"/g,'&quot;')} — item ${i+1}"></div>
+      `).join('');
+    }
+    return wrap.outerHTML;
+  }
+  if (item.type === 'table') {
+    const rows = item.rows || [];
+    const headers = item.headers || [];
+    const calcType = item.calc || null;
+    const calcCols = calcType ? CALC_COLS[calcType] : null;
+    const calcNotes = item.calcNotes || {};
+    let html = `<table class="ans-table"${calcType ? ` data-calc-group="${calcType}"` : ''}><thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+    const dataRows = rows.length ? rows : [headers.map((h,i) => i === 0 ? '' : '')];
+    dataRows.forEach(r => {
+      const rowKey = calcType ? slugKey(r[0]) : '';
+      // Quick Commerce has no fixed AOV floor — that row stays a free-text note, not a computed cell.
+      const staticRow = calcType === 'minaov' && rowKey === 'quickcommerce';
+      html += `<tr${calcType ? ` data-calc-row="${rowKey}"` : ''}>`;
+      r.forEach((cell, ci) => {
+        if (ci === 0) {
+          html += `<td class="label-cell">${cell}</td>`;
+        } else {
+          const colName = headers[ci] || ('col'+ci);
+          const role = calcCols ? calcCols[ci] : null;
+          let calcAttr = '';
+          if (role && !staticRow) {
+            if (role.indexOf('src:') === 0) calcAttr = ` data-calc-src="${role.slice(4)}"`;
+            else if (role.indexOf('out:') === 0) calcAttr = ` data-calc-out="${role.slice(4)}" readonly`;
+          }
+          const note = (!staticRow && calcNotes[rowKey] && ci === r.length - 1)
+            ? `<span class="calc-note">${calcNotes[rowKey]}</span>` : '';
+          html += `<td><input type="text" value="${String(cell).replace(/"/g,'&quot;')}" data-section="${sectionTitle}" data-question="${item.q.replace(/"/g,'&quot;')} — ${r[0]} — ${colName}"${calcAttr}>${note}</td>`;
+        }
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    return html;
+  }
+  // plain text
+  const rows = item.a && item.a.length > 140 ? 3 : 2;
+  return `<textarea rows="${rows}" data-section="${sectionTitle}" data-question="${item.q.replace(/"/g,'&quot;')}">${item.a || ''}</textarea>`;
+}
+
+function isItemOpen(item) {
+  if (item.type === 'bullets' || item.type === 'flexbox') return !(item.items && item.items.length);
+  if (item.type === 'table') return !(item.rows && item.rows.length);
+  return !item.a;
+}
+
+function renderQSection(sec) {
+  const el = document.createElement('section');
+  el.className = 'qsec';
+  el.id = sec.id;
+  const noteHTML = sec.note ? `<p class="research-note">${sec.note}</p>` : '';
+  el.innerHTML = `<h2>${sec.title}</h2>${noteHTML}`;
+  sec.questions.forEach((item) => {
+    const isOpen = isItemOpen(item);
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    card.innerHTML = `
+      <div class="qtext"><span>${item.q}</span><span class="tag ${isOpen ? 'open' : 'sugg'}">${isOpen ? 'Open' : 'Suggested'}</span></div>
+      ${renderAnswerField(item, sec.title)}
+    `;
+    el.appendChild(card);
+  });
+  root.appendChild(el);
+
+  const link = document.createElement('a');
+  link.href = '#' + sec.id;
+  link.textContent = sec.title;
+  nav.appendChild(link);
+}
+
+SECTIONS.forEach(renderQSection);
+renderQSection(SECTION14);
+renderQSection(SECTION15);
+
+// Section 16 — owner table
+(function renderSection16() {
+  const el = document.createElement('section');
+  el.className = 'qsec';
+  el.id = SECTION16.id;
+  el.innerHTML = `<h2>${SECTION16.title}</h2><p class="research-note">${SECTION16.note}</p>`;
+  SECTION16.people.forEach(person => {
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `<div style="font-family:'Poppins',sans-serif; font-weight:700; font-size:13px; color:var(--slate); margin:14px 0 6px;">${person}</div>`;
+    const table = document.createElement('table');
+    table.className = 'owner-table';
+    let rows = '';
+    SECTION16.cols.forEach(col => {
+      rows += `<tr><td class="name-cell">${col}</td><td><input type="text" data-section="16. Team Roles & Responsibilities" data-question="${person} — ${col}" placeholder="Fill in..."></td></tr>`;
+    });
+    table.innerHTML = rows;
+    wrap.appendChild(table);
+    el.appendChild(wrap);
+  });
+  root.appendChild(el);
+  const link = document.createElement('a');
+  link.href = '#' + SECTION16.id;
+  link.textContent = SECTION16.title;
+  nav.appendChild(link);
+})();
+
+// Section 17 — checklist
+(function renderSection17() {
+  const el = document.createElement('section');
+  el.className = 'qsec';
+  el.id = SECTION17.id;
+  el.innerHTML = `<h2>${SECTION17.title}</h2><p class="research-note">Pre-checked where this project has already produced a substantive answer; everything is toggleable — use it as your real progress tracker.</p>`;
+  const ul = document.createElement('ul');
+  ul.className = 'checklist';
+  SECTION17.items.forEach((item, i) => {
+    const li = document.createElement('li');
+    if (item.done) li.classList.add('checked');
+    li.innerHTML = `<input type="checkbox" id="chk17_${i}" ${item.done ? 'checked' : ''}><label for="chk17_${i}">${item.t}</label>`;
+    ul.appendChild(li);
+  });
+  ul.addEventListener('change', (e) => {
+    if (e.target.type === 'checkbox') {
+      e.target.closest('li').classList.toggle('checked', e.target.checked);
+    }
+  });
+  el.appendChild(ul);
+  root.appendChild(el);
+  const link = document.createElement('a');
+  link.href = '#' + SECTION17.id;
+  link.textContent = SECTION17.title;
+  nav.appendChild(link);
+})();
+
+// ---- Flexbox answer type — add / remove boxes ----
+document.addEventListener('click', (e) => {
+  const addBtn = e.target.closest('[data-flex-add]');
+  if (addBtn) {
+    const list = addBtn.previousElementSibling;
+    if (!list || !list.classList.contains('flex-list')) return;
+    const qEsc = addBtn.dataset.flexQuestion;
+    const secEsc = addBtn.dataset.flexSection;
+    const idx = list.querySelectorAll('.flex-item').length + 1;
+    list.insertAdjacentHTML('beforeend', flexItemHTML('', secEsc, qEsc, idx));
+    const newInput = list.lastElementChild.querySelector('input');
+    if (newInput) newInput.focus();
+    return;
+  }
+  const rmBtn = e.target.closest('[data-flex-remove]');
+  if (rmBtn) {
+    const box = rmBtn.closest('.flex-item');
+    const list = box.parentElement;
+    if (list.querySelectorAll('.flex-item').length > 1) {
+      box.remove();
+    } else {
+      const inp = box.querySelector('input');
+      if (inp) { inp.value = ''; inp.focus(); }
+    }
+    return;
+  }
+});
+
+// ---------------------------------------------------------------
+// Live calculation — assumptions panel drives every calc-tagged table cell
+// ---------------------------------------------------------------
+const AP_DEFAULTS = {
+  targetRevenue: 11400000, startMonth: '2026-09', endMonth: '2026-12',
+  aov: 350, cogsPct: 41, logisticsCost: 57, mpCommission: 10, qcCommission: 25, mktPct: 18,
+};
+function getAssumptions() {
+  const num = (id, fallback) => {
+    const el = document.getElementById(id);
+    const v = el ? parseFloat(el.value) : NaN;
+    return isNaN(v) ? fallback : v;
+  };
+  const startEl = document.getElementById('ap_startMonth');
+  const endEl = document.getElementById('ap_endMonth');
+  return {
+    targetRevenue: num('ap_targetRevenue', AP_DEFAULTS.targetRevenue),
+    startMonth: (startEl && startEl.value) || AP_DEFAULTS.startMonth,
+    endMonth: (endEl && endEl.value) || AP_DEFAULTS.endMonth,
+    aov: num('ap_aov', AP_DEFAULTS.aov),
+    cogsPct: num('ap_cogsPct', AP_DEFAULTS.cogsPct),
+    logisticsCost: num('ap_logisticsCost', AP_DEFAULTS.logisticsCost),
+    mpCommission: num('ap_mpCommission', AP_DEFAULTS.mpCommission),
+    qcCommission: num('ap_qcCommission', AP_DEFAULTS.qcCommission),
+    mktPct: num('ap_mktPct', AP_DEFAULTS.mktPct),
+  };
+}
+
+function recalcTables() {
+  const A = getAssumptions();
+  const months = monthsBetween(A.startMonth, A.endMonth);
+  const n = months.length || 1;
+  let totalWeeks = 0;
+  months.forEach(mo => totalWeeks += weeksInMonth(mo.y, mo.m));
+  if (!totalWeeks) totalWeeks = n * 4.33;
+  const cogsFrac = A.cogsPct / 100;
+
+  // ---- Channel split (Sec 1) — also feeds Platform-wise expected sales (Sec 10) ----
+  const channelPct = {};
+  document.querySelectorAll('table[data-calc-group="channel"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    const srcInput = tr.querySelector('input[data-calc-src="pct"]');
+    const pct = srcInput ? (parseFloat(srcInput.value) || 0) : 0;
+    channelPct[key] = pct;
+    const outMonthly = tr.querySelector('input[data-calc-out="monthly"]');
+    const outWeekly = tr.querySelector('input[data-calc-out="weekly"]');
+    if (outMonthly) outMonthly.value = fmtINR(A.targetRevenue * pct / 100 / n);
+    if (outWeekly) outWeekly.value = fmtINR(A.targetRevenue * pct / 100 / totalWeeks);
+  });
+
+  // ---- Contribution margin per order (Sec 3) — also feeds Platform-wise margin (Sec 10) ----
+  const margins = {
+    website: A.aov * (1 - cogsFrac) - A.logisticsCost,
+    marketplace: A.aov * (1 - cogsFrac - A.mpCommission/100) - A.logisticsCost,
+    quickcommerce: A.aov * (1 - cogsFrac - A.qcCommission/100),
+  };
+  document.querySelectorAll('table[data-calc-group="margin"] tr[data-calc-row], table[data-calc-group="platform-margin"] tr[data-calc-row]').forEach(tr => {
+    const m = margins[tr.dataset.calcRow];
+    if (m === undefined) return;
+    const outMargin = tr.querySelector('input[data-calc-out="margin"]');
+    const outPct = tr.querySelector('input[data-calc-out="marginPct"]');
+    if (outMargin) outMargin.value = fmtRupee(m);
+    if (outPct) outPct.value = fmtPct(A.aov ? (m / A.aov * 100) : 0);
+  });
+
+  // ---- Minimum profitable AOV (Sec 3) — Quick Commerce row has no fixed floor, left static ----
+  document.querySelectorAll('table[data-calc-group="minaov"] tr[data-calc-row]').forEach(tr => {
+    const out = tr.querySelector('input[data-calc-out="minaov"]');
+    if (!out) return;
+    const key = tr.dataset.calcRow;
+    let floor = 0;
+    if (key === 'website') floor = (1 - cogsFrac) > 0 ? A.logisticsCost / (1 - cogsFrac) : 0;
+    else if (key === 'marketplace') floor = (1 - cogsFrac - A.mpCommission/100) > 0 ? A.logisticsCost / (1 - cogsFrac - A.mpCommission/100) : 0;
+    out.value = fmtRupee(floor);
+  });
+
+  // ---- Platform-wise expected sales (Sec 10) — mirrors the channel table's % split ----
+  document.querySelectorAll('table[data-calc-group="platform-sales"] tr[data-calc-row]').forEach(tr => {
+    const pct = channelPct[tr.dataset.calcRow] || 0;
+    const outMonthly = tr.querySelector('input[data-calc-out="monthly"]');
+    const outWeekly = tr.querySelector('input[data-calc-out="weekly"]');
+    if (outMonthly) outMonthly.value = fmtINR(A.targetRevenue * pct / 100 / n);
+    if (outWeekly) outWeekly.value = fmtINR(A.targetRevenue * pct / 100 / totalWeeks);
+  });
+
+  // ---- Marketing budget by stream (Sec 13) ----
+  const totalBudget = A.targetRevenue * A.mktPct / 100;
+  document.querySelectorAll('table[data-calc-group="stream"] tr[data-calc-row]').forEach(tr => {
+    const srcInput = tr.querySelector('input[data-calc-src="pct"]');
+    const pct = srcInput ? (parseFloat(srcInput.value) || 0) : 0;
+    const out = tr.querySelector('input[data-calc-out="amount"]');
+    if (out) out.value = fmtINR(totalBudget * pct / 100);
+  });
+}
+
+document.querySelectorAll('.assump-panel input').forEach(inp => inp.addEventListener('input', recalcTables));
+document.addEventListener('input', (e) => {
+  if (e.target.matches && e.target.matches('input[data-calc-src]')) recalcTables();
+});
+document.getElementById('apResetBtn').addEventListener('click', () => {
+  document.getElementById('ap_targetRevenue').value = AP_DEFAULTS.targetRevenue;
+  document.getElementById('ap_startMonth').value = AP_DEFAULTS.startMonth;
+  document.getElementById('ap_endMonth').value = AP_DEFAULTS.endMonth;
+  document.getElementById('ap_aov').value = AP_DEFAULTS.aov;
+  document.getElementById('ap_cogsPct').value = AP_DEFAULTS.cogsPct;
+  document.getElementById('ap_logisticsCost').value = AP_DEFAULTS.logisticsCost;
+  document.getElementById('ap_mpCommission').value = AP_DEFAULTS.mpCommission;
+  document.getElementById('ap_qcCommission').value = AP_DEFAULTS.qcCommission;
+  document.getElementById('ap_mktPct').value = AP_DEFAULTS.mktPct;
+  recalcTables();
+});
+recalcTables();
+
+// ---- Active-link highlight on scroll ----
+const navLinks = Array.from(nav.querySelectorAll('a'));
+const sectionEls = navLinks.map(l => document.querySelector(l.getAttribute('href')));
+function updateActive() {
+  let idx = 0;
+  const scrollPos = window.scrollY + 100;
+  sectionEls.forEach((el, i) => { if (el && el.offsetTop <= scrollPos) idx = i; });
+  navLinks.forEach((l, i) => l.classList.toggle('active', i === idx));
+}
+window.addEventListener('scroll', updateActive);
+updateActive();
+
+// ---- Export CSV ----
+function csvEscape(v) {
+  v = String(v == null ? '' : v);
+  return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+}
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const rows = [['Section', 'Question', 'Answer']];
+  document.querySelectorAll('textarea[data-question], input[data-question]').forEach(f => {
+    rows.push([f.dataset.section, f.dataset.question, f.value]);
+  });
+  document.querySelectorAll('.checklist input[type="checkbox"]').forEach(cb => {
+    rows.push(['17. Checklist', cb.nextElementSibling.textContent, cb.checked ? 'Done' : 'Not done']);
+  });
+  const csv = rows.map(r => r.map(csvEscape).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'krispino-gtm-answers.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+// ---------------------------------------------------------------
+// Autosave — stored right in this page (browser storage keyed to this
+// file), no separate download. Reopen this same HTML file later in the
+// same browser and your edits are restored automatically.
+// ---------------------------------------------------------------
+const STORAGE_KEY = 'krispino-answers-worksheet-progress-v1';
+const saveStatusEl = document.getElementById('saveStatus');
+function showSaveStatus(msg) { saveStatusEl.textContent = msg; }
+
+function storageAvailable() {
+  try {
+    const t = '__krispino_test__';
+    localStorage.setItem(t, '1');
+    localStorage.removeItem(t);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+const STORAGE_OK = storageAvailable();
+
+function findFieldEl(section, question) {
+  return Array.from(document.querySelectorAll('textarea[data-question], input[data-question]'))
+    .find(el => el.dataset.section === section && el.dataset.question === question);
+}
+
+function collectSaveData() {
+  const fields = [];
+  document.querySelectorAll('textarea[data-question], input[data-question]').forEach(el => {
+    fields.push({ section: el.dataset.section, question: el.dataset.question, value: el.value });
+  });
+  const checklist = [];
+  document.querySelectorAll('.checklist input[type="checkbox"]').forEach(cb => {
+    checklist.push({ text: cb.nextElementSibling.textContent, done: cb.checked });
+  });
+  return {
+    tool: 'krispino-answers-worksheet',
+    savedAt: new Date().toISOString(),
+    assumptions: getAssumptions(),
+    fields,
+    checklist,
+  };
+}
+
+let isRestoringSave = false;
+function applySaveData(data) {
+  if (!data || typeof data !== 'object') return;
+  isRestoringSave = true;
+
+  // 1. Assumptions panel
+  if (data.assumptions) {
+    const A = data.assumptions;
+    const setIf = (id, v) => { const el = document.getElementById(id); if (el && v !== undefined && v !== null && v !== '') el.value = v; };
+    setIf('ap_targetRevenue', A.targetRevenue);
+    setIf('ap_startMonth', A.startMonth);
+    setIf('ap_endMonth', A.endMonth);
+    setIf('ap_aov', A.aov);
+    setIf('ap_cogsPct', A.cogsPct);
+    setIf('ap_logisticsCost', A.logisticsCost);
+    setIf('ap_mpCommission', A.mpCommission);
+    setIf('ap_qcCommission', A.qcCommission);
+    setIf('ap_mktPct', A.mktPct);
+  }
+
+  // 2. Fields — flexbox-shaped questions ("... — item N") are restored by position and can
+  //    grow the box count; everything else is restored by an exact section+question match.
+  const fields = Array.isArray(data.fields) ? data.fields : [];
+  const flexItemRe = /^(.*) — item (\d+)$/;
+  const flexGroups = {};
+  const directFields = [];
+  fields.forEach(f => {
+    const m = f.question ? flexItemRe.exec(f.question) : null;
+    if (m) {
+      const key = f.section + '|||' + m[1];
+      (flexGroups[key] = flexGroups[key] || []).push({ idx: parseInt(m[2], 10), value: f.value });
+    } else {
+      directFields.push(f);
+    }
+  });
+
+  directFields.forEach(f => {
+    const el = findFieldEl(f.section, f.question);
+    if (el) el.value = f.value;
+  });
+
+  Object.keys(flexGroups).forEach(key => {
+    const sepIdx = key.indexOf('|||');
+    const section = key.slice(0, sepIdx);
+    const base = key.slice(sepIdx + 3);
+    const list = Array.from(document.querySelectorAll('.flex-list'))
+      .find(l => l.dataset.flexSection === section && l.dataset.flexQuestion === base);
+    if (list) {
+      // It's a real flexbox field — grow it to fit, then fill by position.
+      const items = flexGroups[key].sort((a, b) => a.idx - b.idx);
+      const addBtn = list.nextElementSibling;
+      let guard = 0;
+      while (list.querySelectorAll('.flex-item').length < items.length && addBtn && addBtn.hasAttribute('data-flex-add') && guard < 200) {
+        addBtn.click();
+        guard++;
+      }
+      const inputs = list.querySelectorAll('.flex-item input');
+      items.forEach((it, i) => { if (inputs[i]) inputs[i].value = it.value; });
+    } else {
+      // Not a flexbox on this page (e.g. a fixed bullet list) — restore whatever slots still exist.
+      flexGroups[key].forEach(it => {
+        const el = findFieldEl(section, base + ' — item ' + it.idx);
+        if (el) el.value = it.value;
+      });
+    }
+  });
+
+  // 3. Checklist — match by visible label text
+  if (Array.isArray(data.checklist)) {
+    data.checklist.forEach(c => {
+      const cb = Array.from(document.querySelectorAll('.checklist input[type="checkbox"]'))
+        .find(cb => cb.nextElementSibling.textContent === c.text);
+      if (cb) {
+        cb.checked = !!c.done;
+        cb.closest('li').classList.toggle('checked', cb.checked);
+      }
+    });
+  }
+
+  recalcTables();
+  isRestoringSave = false;
+}
+
+function persistNow() {
+  if (!STORAGE_OK) {
+    showSaveStatus('Autosave unavailable in this view');
+    return;
+  }
+  try {
+    const data = collectSaveData();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    showSaveStatus('Saved ' + new Date(data.savedAt).toLocaleTimeString());
+  } catch (e) {
+    showSaveStatus('Could not autosave (storage full or blocked)');
+  }
+}
+
+let autosaveTimer = null;
+function scheduleAutosave() {
+  showSaveStatus('Saving…');
+  clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(persistNow, 500);
+}
+
+// Any edit anywhere on the page (typed field, table cell, flex box, checkbox,
+// assumption input, or a newly added flex box) schedules an autosave. Skipped
+// while a save is actively being restored so the "Restored…" status isn't
+// immediately overwritten by the programmatic clicks that regrow flex boxes.
+document.addEventListener('input', () => { if (!isRestoringSave) scheduleAutosave(); });
+document.addEventListener('change', () => { if (!isRestoringSave) scheduleAutosave(); });
+document.addEventListener('click', (e) => {
+  if (isRestoringSave) return;
+  if (e.target.closest('[data-flex-add], [data-flex-remove]')) scheduleAutosave();
+});
+
+document.getElementById('clearSaveBtn').addEventListener('click', () => {
+  if (STORAGE_OK) localStorage.removeItem(STORAGE_KEY);
+  showSaveStatus('Saved data cleared');
+});
+
+// Restore autosaved progress, if any, once the page has finished rendering.
+(function restoreAutosave() {
+  if (!STORAGE_OK) { showSaveStatus('Autosave unavailable in this view'); return; }
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    applySaveData(data);
+    showSaveStatus('Restored from ' + (data.savedAt ? new Date(data.savedAt).toLocaleString() : 'autosave'));
+  } catch (e) {
+    // Corrupt/old autosave data — ignore and start fresh rather than breaking the page.
+  }
+})();
+</script>
+</body>
+</html>

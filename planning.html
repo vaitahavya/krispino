@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Top-Down Goal Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#4F46E5;
+    --cyan:#06B6D4;
+    --ink:#111827;
+    --slate:#0F172A;
+    --bg:#F6F7FB;
+    --card:#FFFFFF;
+    --line:#E5E7EB;
+    --muted:#6B7280;
+    --good:#059669;
+    --warn:#D97706;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    padding:28px 20px 60px;
+  }
+  .wrap{max-width:1180px;margin:0 auto;}
+
+  /* Header */
+  .header{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    margin-bottom:24px; flex-wrap:wrap; gap:14px;
+  }
+  .brand-mark{
+    display:flex; align-items:center; gap:10px;
+  }
+  .steps{display:flex; align-items:flex-end; gap:3px; height:26px;}
+  .steps span{
+    display:block; width:6px; border-radius:2px 2px 0 0;
+    background:linear-gradient(180deg,var(--cyan),var(--indigo));
+  }
+  .steps span:nth-child(1){height:8px;}
+  .steps span:nth-child(2){height:14px;}
+  .steps span:nth-child(3){height:20px;}
+  .steps span:nth-child(4){height:26px;}
+  h1{
+    font-family:'Poppins',sans-serif; font-weight:800; font-size:26px;
+    margin:0; color:var(--slate); letter-spacing:-0.02em;
+  }
+  .sub{color:var(--muted); font-size:13.5px; margin-top:2px;}
+  .badge{
+    font-family:'Poppins',sans-serif; font-size:11.5px; font-weight:600;
+    color:var(--indigo); background:#EEF0FD; border:1px solid #DCE0FA;
+    padding:5px 10px; border-radius:20px; white-space:nowrap;
+  }
+
+  /* Layout */
+  .grid{
+    display:grid; grid-template-columns:340px 1fr; gap:20px;
+  }
+  @media (max-width:860px){ .grid{grid-template-columns:1fr;} }
+
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:20px 20px 22px;
+  }
+  .card + .card{margin-top:18px;}
+
+  .card h2{
+    font-family:'Poppins',sans-serif; font-size:14px; font-weight:700;
+    color:var(--slate); margin:0 0 4px;
+  }
+  .card .hint{color:var(--muted); font-size:12px; margin:0 0 16px; line-height:1.5;}
+
+  .field{margin-bottom:15px;}
+  .field label{
+    display:block; font-size:12px; font-weight:600; color:var(--ink);
+    margin-bottom:6px;
+  }
+  .field .fhint{font-size:11px; color:var(--muted); font-weight:400; margin-left:4px;}
+  .amt-preview{
+    font-family:'Poppins',sans-serif; font-size:12px; font-weight:700; color:var(--indigo);
+    margin-top:5px;
+  }
+  input[type="number"], input[type="month"], select{
+    width:100%; padding:9px 11px; border:1px solid var(--line); border-radius:8px;
+    font-family:'Inter',sans-serif; font-size:14px; color:var(--ink);
+    background:#FBFBFE; transition:border-color .15s, box-shadow .15s;
+  }
+  input:focus, select:focus{
+    outline:none; border-color:var(--indigo);
+    box-shadow:0 0 0 3px rgba(79,70,229,0.12);
+  }
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+
+  .preset-row{display:flex; flex-wrap:wrap; gap:6px;}
+  .preset-pill{
+    font-family:'Inter',sans-serif; font-size:11.5px; font-weight:600; padding:6px 11px;
+    border-radius:20px; border:1px solid var(--line); background:#FBFBFE; color:var(--muted); cursor:pointer;
+  }
+  .preset-pill:hover{border-color:#C7CBF7; color:var(--ink);}
+  .preset-pill.active{background:var(--indigo); border-color:var(--indigo); color:#fff;}
+
+  .ramp-options{display:flex; flex-direction:column; gap:8px;}
+  .ramp-opt{
+    display:flex; align-items:flex-start; gap:9px; padding:9px 10px;
+    border:1px solid var(--line); border-radius:9px; cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .ramp-opt:hover{border-color:#C7CBF7;}
+  .ramp-opt.active{border-color:var(--indigo); background:#F5F5FF;}
+  .ramp-opt input{margin-top:3px;}
+  .ramp-opt .rtitle{font-size:13px; font-weight:600; color:var(--ink);}
+  .ramp-opt .rdesc{font-size:11.5px; color:var(--muted); margin-top:1px;}
+
+  /* Summary strip */
+  .summary{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:18px;
+  }
+  @media (max-width:700px){ .summary{grid-template-columns:1fr 1fr;} }
+  .stat{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:16px 16px;
+  }
+  .stat .label{font-size:11px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.04em;}
+  .stat .value{
+    font-family:'Poppins',sans-serif; font-weight:800; font-size:21px; color:var(--slate);
+    margin-top:5px;
+  }
+  .stat .value.accent{color:var(--indigo);}
+  .stat .foot{font-size:11px; color:var(--muted); margin-top:3px;}
+
+  /* Chart */
+  .chart-card .chart{
+    display:flex; align-items:flex-end; gap:6px; height:180px; padding:8px 4px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .bar-col{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%;}
+  .bar{
+    width:100%; max-width:34px; border-radius:5px 5px 0 0;
+    background:linear-gradient(180deg,var(--cyan),var(--indigo));
+    position:relative; min-height:3px;
+  }
+  .bar-labels{display:flex; gap:6px; margin-top:6px;}
+  .bar-label-col{flex:1; text-align:center; font-size:10px; color:var(--muted); max-width:34px; margin:0 auto;}
+  .chart-scroll{overflow-x:auto; padding-bottom:2px;}
+  .chart-inner{display:flex; min-width:max-content; gap:0;}
+
+  /* Table */
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  thead th{
+    text-align:left; font-family:'Poppins',sans-serif; font-size:11px; font-weight:700;
+    color:#fff; background:var(--slate); padding:9px 10px; text-transform:uppercase; letter-spacing:.03em;
+  }
+  thead th:first-child{border-radius:8px 0 0 0;}
+  thead th:last-child{border-radius:0 8px 0 0;}
+  tbody td{padding:8px 10px; border-bottom:1px solid var(--line); color:var(--ink);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#FAFAFE;}
+  td.num{text-align:right; font-variant-numeric:tabular-nums;}
+  td.month-cell{font-weight:600;}
+  .mini-bar-wrap{width:70px; height:6px; background:#EEF0F7; border-radius:4px; overflow:hidden; display:inline-block; vertical-align:middle; margin-right:8px;}
+  .mini-bar{height:100%; background:linear-gradient(90deg,var(--cyan),var(--indigo));}
+
+  details{border:1px solid var(--line); border-radius:10px; margin-top:8px; overflow:hidden;}
+  summary{
+    cursor:pointer; padding:10px 12px; font-size:13px; font-weight:600; color:var(--indigo);
+    background:#FAFAFE; list-style:none; display:flex; align-items:center; justify-content:space-between;
+  }
+  summary::-webkit-details-marker{display:none;}
+  summary:after{content:"+"; font-size:16px; color:var(--muted);}
+  details[open] summary:after{content:"–";}
+  .week-table-wrap{padding:10px 12px 12px;}
+
+  .section-title{
+    font-family:'Poppins',sans-serif; font-size:15px; font-weight:700; color:var(--slate);
+    margin:26px 0 10px;
+  }
+  footer{text-align:center; color:var(--muted); font-size:11.5px; margin-top:30px;}
+
+  .site-bar{
+    background:var(--slate); color:#fff; padding:12px 20px; margin:-28px -20px 24px;
+  }
+  .site-bar-inner{
+    max-width:1180px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  }
+  .site-bar .brand{font-family:'Poppins',sans-serif; font-weight:800; font-size:14px; letter-spacing:-.01em;}
+  .site-nav{display:flex; gap:6px;}
+  .site-nav a{
+    display:inline-block; padding:7px 12px; border-radius:7px; color:#CBD5E1; text-decoration:none;
+    font-size:12.5px; font-weight:600;
+  }
+  .site-nav a:hover{background:rgba(255,255,255,0.08); color:#fff;}
+  .site-nav a.active{background:var(--indigo); color:#fff;}
+</style>
+</head>
+<body>
+<div class="site-bar">
+  <div class="site-bar-inner">
+    <div class="brand">Krispino GTM</div>
+    <nav class="site-nav" aria-label="Site">
+      <a href="index.html">Home</a>
+      <a href="planning.html" class="active">Planning Tool</a>
+      <a href="answers.html">Answers Worksheet</a>
+    </nav>
+  </div>
+</div>
+<div class="wrap">
+
+  <div class="header">
+    <div class="brand-mark">
+      <div class="steps"><span></span><span></span><span></span><span></span></div>
+      <div>
+        <h1>Top-Down Goal Calculator</h1>
+        <div class="sub">Set the revenue target once — get monthly, weekly, and unit-level goals automatically.</div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div class="badge">Krispino · Planning Tool</div>
+      <button type="button" id="exportCsvBtn" class="badge" style="cursor:pointer; background:var(--indigo); color:#fff; border-color:var(--indigo);">Export CSV</button>
+    </div>
+  </div>
+
+  <div class="card" style="background:#F2FBF6; border-color:#CFEFDD; margin-bottom:20px;">
+    <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:700; color:var(--good); text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;">Confirmed / locked assumptions</div>
+    <div style="font-size:12.5px; color:var(--ink); line-height:1.6;">
+      ₹1.14 Cr target is <b>new online/D2C revenue only</b> — offline NE revenue (₹3 Cr/yr) is intentionally excluded from this plan.
+      Founder capital is available to deploy (modest, not large). AOV averages <b>₹90</b>, up to <b>₹150</b> by SKU weight. Free shipping above <b>₹599</b>.
+      Shelf life is <b>60 days</b> — a 5–7 day pan-India transit window is not a constraint. Bulk packaging cost is <b>~₹7/unit</b>. GTIN &amp; GST are already live.
+      <b>August 2026 is reserved for planning &amp; prep</b> (packaging sign-off, marketplace listings, content stockpile) — the revenue ramp itself starts <b>September 2026</b>.
+      All fields below are editable — these are just the confirmed starting point.
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- INPUT PANEL -->
+    <div class="input-col">
+      <div class="card">
+        <h2>Target &amp; Timeline</h2>
+        <p class="hint">Set the goal and the window you're planning across. ₹1.14 Cr is new online/D2C revenue only — offline NE revenue (₹3 Cr/yr) is intentionally excluded.</p>
+
+        <div class="field">
+          <label>Total revenue target (₹) <span class="fhint">enter full number, e.g. 10000000 = ₹1 Cr</span></label>
+          <input type="number" id="targetRevenue" value="11400000" min="0" step="1000">
+        </div>
+
+        <div class="field">
+          <label>Revenue already booked <span class="fhint">(optional — reduces what's left to plan)</span></label>
+          <input type="number" id="bookedRevenue" value="0" min="0" step="1000">
+        </div>
+
+        <div class="field" style="margin-bottom:8px;">
+          <label>Timeline preset</label>
+          <div class="preset-row" id="timelinePresets">
+            <button type="button" class="preset-pill" data-preset="dec26">Sep '26 → Dec '26</button>
+            <button type="button" class="preset-pill" data-preset="mar27">Sep '26 → Mar '27</button>
+            <button type="button" class="preset-pill" data-preset="m3">Next 3 mo</button>
+            <button type="button" class="preset-pill" data-preset="m6">Next 6 mo</button>
+            <button type="button" class="preset-pill" data-preset="m12">Next 12 mo</button>
+            <button type="button" class="preset-pill" data-preset="custom">Custom</button>
+          </div>
+          <div class="fhint" id="timelineHint" style="margin-top:6px; display:block;"></div>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label>Start month</label>
+            <input type="month" id="startMonth" value="2026-09">
+          </div>
+          <div class="field">
+            <label>Target month</label>
+            <input type="month" id="endMonth" value="2026-12">
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom:0;">
+          <label>Free shipping threshold (₹) <span class="fhint">confirmed — orders above this ship free</span></label>
+          <input type="number" id="freeShipThreshold" value="599" min="0" step="10">
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Ramp Shape</h2>
+        <p class="hint">How should the target build up over time?</p>
+        <div class="ramp-options" id="rampOptions">
+          <label class="ramp-opt" data-val="flat">
+            <input type="radio" name="ramp" value="flat">
+            <div>
+              <div class="rtitle">Flat / equal split</div>
+              <div class="rdesc">Same target every month — simplest baseline.</div>
+            </div>
+          </label>
+          <label class="ramp-opt" data-val="linear">
+            <input type="radio" name="ramp" value="linear">
+            <div>
+              <div class="rtitle">Steady ramp</div>
+              <div class="rdesc">Grows a fixed amount each month — good for scaling ad spend gradually.</div>
+            </div>
+          </label>
+          <label class="ramp-opt active" data-val="scurve">
+            <input type="radio" name="ramp" value="scurve" checked>
+            <div>
+              <div class="rtitle">S-curve (launch pattern)</div>
+              <div class="rdesc">Slow start, fast middle, plateau near target — calibrated to the Diwali (early Nov) peak in this window.</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Channel Split</h2>
+        <p class="hint">How the target should be distributed across sales channels. <span id="channelSumHint" class="fhint">(should total 100%)</span></p>
+        <div class="row2" style="margin-bottom:8px;">
+          <div class="field" style="margin-bottom:8px;">
+            <label style="font-weight:500;">Website (D2C)</label>
+            <input type="number" id="chWebsite" value="30" min="0" max="100" step="1">
+          </div>
+          <div class="field" style="margin-bottom:8px;">
+            <label style="font-weight:500;">Marketplace</label>
+            <input type="number" id="chMarketplace" value="30" min="0" max="100" step="1">
+          </div>
+        </div>
+        <div class="row2" style="margin-bottom:8px;">
+          <div class="field" style="margin-bottom:8px;">
+            <label style="font-weight:500;">Quick commerce</label>
+            <input type="number" id="chQcomm" value="15" min="0" max="100" step="1">
+          </div>
+          <div class="field" style="margin-bottom:8px;">
+            <label style="font-weight:500;">Community / WhatsApp</label>
+            <input type="number" id="chCommunity" value="15" min="0" max="100" step="1">
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label style="font-weight:500;">Corporate gifting / B2B</label>
+          <input type="number" id="chB2B" value="10" min="0" max="100" step="1">
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Orders, AOV &amp; Conversion</h2>
+        <p class="hint">These convert the revenue target into orders, traffic, and margin per order. Defaults are research-backed for Indian F&amp;B D2C, not generic e-commerce benchmarks.</p>
+        <div class="row2">
+          <div class="field">
+            <label>Target AOV <span class="fhint">(₹/order)</span></label>
+            <input type="number" id="aov" value="350" min="1" step="10">
+          </div>
+          <div class="field">
+            <label>RTO / return rate <span class="fhint">(%, COD-heavy D2C avg)</span></label>
+            <input type="number" id="rtoPct" value="25" min="0" max="90" step="1">
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Website conversion rate <span class="fhint">(%)</span></label>
+            <input type="number" id="convRate" value="2.5" min="0.1" max="20" step="0.1">
+          </div>
+          <div class="field">
+            <label>Marketplace commission <span class="fhint">(%, grocery/food tier)</span></label>
+            <input type="number" id="mpCommission" value="10" min="0" max="50" step="1">
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Quick commerce commission <span class="fhint">(%, bundled — commission + fulfilment)</span></label>
+            <input type="number" id="qcCommission" value="25" min="0" max="60" step="1">
+          </div>
+          <div class="field">
+            <label>Logistics cost/order <span class="fhint">(₹, fwd+RTO blended)</span></label>
+            <input type="number" id="logisticsCost" value="57" min="0" step="5">
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Product cost (COGS) <span class="fhint">(% of AOV, from real SKU data)</span></label>
+            <input type="number" id="cogsPct" value="41" min="0" max="90" step="1">
+          </div>
+          <div class="field">
+            <label>Bulk packaging cost <span class="fhint">(₹/unit, informational)</span></label>
+            <input type="number" id="packagingCost" value="7" min="0" step="1">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Scenario Range</h2>
+        <p class="hint">Target above is treated as "Realistic". Set multipliers for the other two cases.</p>
+        <div class="row2">
+          <div class="field">
+            <label>Conservative <span class="fhint">(× of Realistic)</span></label>
+            <input type="number" id="conservativeMult" value="0.75" min="0.1" max="1" step="0.05">
+          </div>
+          <div class="field">
+            <label>Best case <span class="fhint">(× of Realistic)</span></label>
+            <input type="number" id="bestMult" value="1.3" min="1" max="3" step="0.05">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Unit Economics <span class="fhint">(optional)</span></h2>
+        <p class="hint">Converts revenue targets into units / packs you need to sell.</p>
+        <div class="field">
+          <label>Average selling price per unit (₹) <span class="fhint">confirmed avg, up to ₹150 by weight</span></label>
+          <input type="number" id="asp" value="90" min="0" step="1">
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Marketing Budget</h2>
+        <p class="hint">Budget is derived as a % of the revenue target — the discipline that matters most when growth is self-funded, not capital-backed.</p>
+        <div class="field">
+          <label>Marketing spend <span class="fhint">as % of revenue target</span></label>
+          <input type="number" id="mktPct" value="18" min="0" max="100" step="0.5">
+          <div class="amt-preview" id="amtMktPct">₹0</div>
+        </div>
+
+        <div class="field" style="margin-bottom:8px;">
+          <label style="margin-bottom:2px;">Stream split <span class="fhint" id="streamSumHint">(should total 100%)</span></label>
+        </div>
+        <div class="row2" style="margin-bottom:8px;">
+          <div class="field" style="margin-bottom:8px;">
+            <label style="font-weight:500;">Marketplace ads</label>
+            <input type="number" id="streamMarketplace" value="30" min="0" max="100" step="1">
+            <div class="amt-preview" id="amtStreamMarketplace">₹0</div>
+          </div>
+          <div class="field" style="margin-bottom:8px;">
+            <label style="font-weight:500;">Paid social</label>
+            <input type="number" id="streamSocial" value="30" min="0" max="100" step="1">
+            <div class="amt-preview" id="amtStreamSocial">₹0</div>
+          </div>
+        </div>
+        <div class="row2" style="margin-bottom:8px;">
+          <div class="field" style="margin-bottom:8px;">
+            <label style="font-weight:500;">Influencer / UGC</label>
+            <input type="number" id="streamInfluencer" value="15" min="0" max="100" step="1">
+            <div class="amt-preview" id="amtStreamInfluencer">₹0</div>
+          </div>
+          <div class="field" style="margin-bottom:8px;">
+            <label style="font-weight:500;">D2C site & CRM <span class="fhint">(already live — traffic & retention)</span></label>
+            <input type="number" id="streamD2C" value="20" min="0" max="100" step="1">
+            <div class="amt-preview" id="amtStreamD2C">₹0</div>
+          </div>
+        </div>
+        <div class="field">
+          <label style="font-weight:500;">Contingency / testing</label>
+          <input type="number" id="streamContingency" value="5" min="0" max="100" step="1">
+          <div class="amt-preview" id="amtStreamContingency">₹0</div>
+        </div>
+
+        <div class="field" style="margin-top:4px;">
+          <label>Early-phase length <span class="fhint">months of lean testing before scaling spend</span></label>
+          <input type="number" id="earlyMonths" value="2" min="1" max="12" step="1">
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label>Early-phase share <span class="fhint">% of total budget spent during those months</span></label>
+          <input type="number" id="earlyPct" value="18" min="0" max="100" step="1">
+          <div class="amt-preview" id="amtEarlyPct">₹0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-col">
+
+      <div class="summary" id="summaryStrip"></div>
+
+      <div class="card chart-card">
+        <h2>Monthly Build-Up to Target</h2>
+        <p class="hint">Each bar is that month's revenue goal, stepping up to the target.</p>
+        <div class="chart-scroll">
+          <div class="chart-inner" id="chartInner"></div>
+        </div>
+      </div>
+
+      <div class="section-title">Monthly Targets</div>
+      <p style="font-size:12px; color:var(--muted); margin:-4px 0 10px;">Full weekly breakdown is shown for Month 1 only — from Month 2 onward, track against the monthly goal. Yearly target is totalled at the bottom.</p>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <table>
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th style="text-align:right;">Revenue Goal</th>
+              <th style="text-align:right;">Cumulative</th>
+              <th style="text-align:right;">Units*</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="monthlyBody"></tbody>
+        </table>
+      </div>
+      <p style="font-size:11px; color:var(--muted); margin-top:6px;">*Units = month's revenue goal ÷ average selling price entered above.</p>
+
+      <div class="section-title">Best / Realistic / Conservative</div>
+      <p style="font-size:12px; color:var(--muted); margin:-4px 0 10px;">Same timeline and ramp shape, scaled by the multipliers set in Scenario Range.</p>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <table>
+          <thead>
+            <tr>
+              <th>Case</th>
+              <th style="text-align:right;">Total Target</th>
+              <th style="text-align:right;">Avg / Month</th>
+              <th style="text-align:right;">Avg / Week</th>
+              <th style="text-align:right;">Orders / Month</th>
+            </tr>
+          </thead>
+          <tbody id="scenarioBody"></tbody>
+        </table>
+      </div>
+
+      <div class="section-title">Channel-wise Revenue Target</div>
+      <p style="font-size:12px; color:var(--muted); margin:-4px 0 10px;">Realistic-case target split by channel, using the Channel Split % set alongside.</p>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <table>
+          <thead>
+            <tr>
+              <th>Channel</th>
+              <th style="text-align:right;">% of Target</th>
+              <th style="text-align:right;">Total Target</th>
+              <th style="text-align:right;">Avg / Month</th>
+              <th style="text-align:right;">Orders / Month*</th>
+            </tr>
+          </thead>
+          <tbody id="channelBody"></tbody>
+        </table>
+      </div>
+      <p style="font-size:11px; color:var(--muted); margin-top:6px;">*Orders account for RTO/returns — placed orders needed to net this much delivered revenue at the target AOV.</p>
+
+      <div class="section-title">Orders, Traffic &amp; Margin</div>
+      <div class="summary" id="opsSummary" style="grid-template-columns:repeat(4,1fr);"></div>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th style="text-align:right;">Website</th>
+              <th style="text-align:right;">Marketplace</th>
+              <th style="text-align:right;">Quick Commerce</th>
+            </tr>
+          </thead>
+          <tbody id="marginBody"></tbody>
+        </table>
+      </div>
+      <p style="font-size:11px; color:var(--muted); margin-top:6px;">Contribution margin = AOV − product cost (COGS%) − logistics − channel commission (where applicable). Quick Commerce bundles commission + fulfilment into one % with no separate logistics line, so it has no fixed "minimum profitable AOV" — margin holds as a constant % of AOV regardless of order size.</p>
+
+      <div class="section-title">Marketing Budget Plan</div>
+      <p style="font-size:12px; color:var(--muted); margin:-4px 0 10px;">Derived from the revenue target above — spend the early months proving CAC cheaply, then scale into what's working.</p>
+
+      <div class="summary" id="mktSummary" style="grid-template-columns:repeat(3,1fr);"></div>
+
+      <div class="card" style="padding:0; overflow:hidden;">
+        <table>
+          <thead>
+            <tr>
+              <th>Stream</th>
+              <th style="text-align:right;">% of Budget</th>
+              <th style="text-align:right;">Amount</th>
+              <th>Why this stream</th>
+            </tr>
+          </thead>
+          <tbody id="streamBody"></tbody>
+        </table>
+      </div>
+
+      <div class="section-title" style="margin-top:22px;">Spend Phasing</div>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <table>
+          <thead>
+            <tr>
+              <th>Phase</th>
+              <th style="text-align:right;">Months</th>
+              <th style="text-align:right;">% of Budget</th>
+              <th style="text-align:right;">Amount</th>
+              <th style="text-align:right;">Avg / Month</th>
+            </tr>
+          </thead>
+          <tbody id="phaseBody"></tbody>
+        </table>
+      </div>
+      <p style="font-size:11px; color:var(--muted); margin-top:6px;">Early phase spends lean and cheap to find your real CAC. Scale phase reinvests a share of monthly online revenue on top of this budget once a channel proves itself.</p>
+
+    </div>
+  </div>
+
+  <footer>Adjust any field and every table, chart, and weekly breakdown recalculates instantly. Built for internal planning use.</footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+const fields = ['targetRevenue','bookedRevenue','startMonth','endMonth','asp',
+  'mktPct','streamMarketplace','streamSocial','streamInfluencer','streamD2C','streamContingency',
+  'earlyMonths','earlyPct',
+  'chWebsite','chMarketplace','chQcomm','chCommunity','chB2B',
+  'aov','rtoPct','convRate','mpCommission','qcCommission','logisticsCost','cogsPct','packagingCost','freeShipThreshold',
+  'conservativeMult','bestMult'];
+fields.forEach(id => $(id).addEventListener('input', recalc));
+document.querySelectorAll('input[name="ramp"]').forEach(r => r.addEventListener('change', () => {
+  document.querySelectorAll('.ramp-opt').forEach(o => o.classList.remove('active'));
+  r.closest('.ramp-opt').classList.add('active');
+  recalc();
+}));
+
+// Indian numbering: Crore (1,00,00,000) / Lakh (1,00,000) / Thousand — no long strings of zeros
+function fmtINR(n, opts){
+  opts = opts || {};
+  if (isNaN(n)) return '₹0';
+  const neg = n < 0; n = Math.abs(n);
+  let value, suffix, decimals;
+  if (n >= 1e7){ value = n/1e7; suffix = ' Cr'; decimals = opts.compact ? 1 : 2; }
+  else if (n >= 1e5){ value = n/1e5; suffix = ' L'; decimals = opts.compact ? 1 : 2; }
+  else if (n >= 1e3){ value = n/1e3; suffix = ' K'; decimals = opts.compact ? 1 : 2; }
+  else { value = n; suffix = ''; decimals = 0; }
+  let str = value.toFixed(decimals);
+  // trim trailing .0 / .00 for cleanliness
+  str = str.replace(/\.0+$/,'').replace(/(\.\d*[1-9])0+$/,'$1');
+  return (neg?'-':'') + '₹' + str + suffix;
+}
+function fmtNum(n){
+  n = Math.round(n);
+  const s = n.toString();
+  let last3 = s.substring(s.length-3);
+  let other = s.substring(0, s.length-3);
+  if (other !== '') last3 = ',' + last3;
+  return other.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + last3;
+}
+
+function monthsBetween(startStr, endStr){
+  const [sy, sm] = startStr.split('-').map(Number);
+  const [ey, em] = endStr.split('-').map(Number);
+  const months = [];
+  let y = sy, m = sm;
+  while (y < ey || (y === ey && m <= em)) {
+    months.push({y, m});
+    m++;
+    if (m > 12){ m = 1; y++; }
+  }
+  return months;
+}
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function monthLabel(y,m){ return MONTH_NAMES[m-1] + " '" + String(y).slice(2); }
+function weeksInMonth(y,m){
+  const days = new Date(y, m, 0).getDate();
+  return Math.round((days/7)*10)/10; // e.g. 4.4 weeks
+}
+
+function weightsFor(rampType, n){
+  if (n === 1) return [1];
+  if (rampType === 'flat') return new Array(n).fill(1);
+  if (rampType === 'linear') {
+    const w = [];
+    for (let i=1;i<=n;i++) w.push(i);
+    return w;
+  }
+  if (rampType === 'scurve') {
+    // logistic curve across n points, steepness tuned for a launch feel
+    const w = [];
+    const k = 8/n; // steepness
+    const mid = n/2;
+    for (let i=1;i<=n;i++){
+      const x = i - mid;
+      w.push(1/(1+Math.exp(-k*x)));
+    }
+    return w;
+  }
+  return new Array(n).fill(1);
+}
+
+function recalc(){
+  const target = parseFloat($('targetRevenue').value) || 0;
+  const booked = parseFloat($('bookedRevenue').value) || 0;
+  const remaining = Math.max(target - booked, 0);
+  const asp = parseFloat($('asp').value) || 0;
+  const startStr = $('startMonth').value;
+  const endStr = $('endMonth').value;
+  const rampType = document.querySelector('input[name="ramp"]:checked').value;
+
+  if (!startStr || !endStr) return;
+  const months = monthsBetween(startStr, endStr);
+  if (months.length === 0) return;
+
+  const weights = weightsFor(rampType, months.length);
+  const wSum = weights.reduce((a,b)=>a+b,0);
+  const monthRevenues = weights.map(w => remaining * (w / wSum));
+
+  // Summary strip
+  const totalWeeks = months.reduce((sum,mo)=>sum + weeksInMonth(mo.y, mo.m), 0);
+  const avgMonthly = remaining / months.length;
+  const avgWeekly = remaining / totalWeeks;
+  const totalUnits = asp > 0 ? remaining / asp : null;
+
+  $('summaryStrip').innerHTML = `
+    <div class="stat">
+      <div class="label">Remaining to plan</div>
+      <div class="value accent">${fmtINR(remaining)}</div>
+      <div class="foot">of ${fmtINR(target)} target${booked>0 ? ' · '+fmtINR(booked)+' booked' : ''}</div>
+    </div>
+    <div class="stat">
+      <div class="label">Timeline</div>
+      <div class="value">${months.length} months</div>
+      <div class="foot">${monthLabel(months[0].y,months[0].m)} → ${monthLabel(months[months.length-1].y,months[months.length-1].m)}</div>
+    </div>
+    <div class="stat">
+      <div class="label">Avg. monthly goal</div>
+      <div class="value">${fmtINR(avgMonthly)}</div>
+      <div class="foot">≈ ${fmtINR(avgWeekly)} / week</div>
+    </div>
+    <div class="stat">
+      <div class="label">Units needed</div>
+      <div class="value">${totalUnits!==null ? fmtNum(totalUnits) : '—'}</div>
+      <div class="foot">${asp>0 ? 'at ₹'+asp+' ASP' : 'enter ASP to calculate'}</div>
+    </div>
+  `;
+
+  // Chart
+  const maxRev = Math.max(...monthRevenues, 1);
+  let chartHTML = '';
+  months.forEach((mo, i) => {
+    const pct = Math.max((monthRevenues[i]/maxRev)*100, 2);
+    chartHTML += `
+      <div class="bar-col" style="min-width:52px;">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px; white-space:nowrap;">${fmtINR(monthRevenues[i], {compact:true})}</div>
+        <div class="bar" style="height:${pct}%;"></div>
+      </div>`;
+  });
+  document.getElementById('chartInner').innerHTML = chartHTML;
+
+  let labelsHTML = '';
+  months.forEach(mo => {
+    labelsHTML += `<div style="min-width:52px; text-align:center; font-size:10px; color:var(--muted); margin-top:6px;">${monthLabel(mo.y,mo.m)}</div>`;
+  });
+  const chartCard = document.querySelector('.chart-card');
+  let labelRow = chartCard.querySelector('.chart-labels-row');
+  if (!labelRow){
+    labelRow = document.createElement('div');
+    labelRow.className = 'chart-labels-row';
+    labelRow.style.cssText = 'display:flex; min-width:max-content;';
+    chartCard.querySelector('.chart-scroll').appendChild(labelRow);
+  }
+  labelRow.innerHTML = labelsHTML;
+
+  // Monthly table
+  let cumulative = booked;
+  let rows = '';
+  months.forEach((mo, i) => {
+    cumulative += monthRevenues[i];
+    const pct = Math.min((monthRevenues[i]/maxRev)*100, 100);
+    const units = asp > 0 ? monthRevenues[i]/asp : null;
+    const wCount = weeksInMonth(mo.y, mo.m);
+    const weeklyAmt = monthRevenues[i]/wCount;
+    const weekUnits = asp > 0 ? weeklyAmt/asp : null;
+
+    let weekRowsHTML = '';
+    const wholeWeeks = Math.round(wCount);
+    for (let w=1; w<=wholeWeeks; w++){
+      weekRowsHTML += `<tr>
+        <td>Week ${w}</td>
+        <td class="num">${fmtINR(weeklyAmt)}</td>
+        <td class="num">${weekUnits!==null ? fmtNum(weekUnits) : '—'}</td>
+      </tr>`;
+    }
+
+    const isFirstMonth = (i === 0);
+
+    rows += `
+      <tr>
+        <td class="month-cell">${monthLabel(mo.y,mo.m)}</td>
+        <td class="num">${fmtINR(monthRevenues[i])}</td>
+        <td class="num">${fmtINR(cumulative)}</td>
+        <td class="num">${units!==null ? fmtNum(units) : '—'}</td>
+        <td><div class="mini-bar-wrap"><div class="mini-bar" style="width:${pct}%;"></div></div></td>
+      </tr>
+    `;
+
+    if (isFirstMonth) {
+      rows += `
+      <tr>
+        <td colspan="5" style="padding:0; border-bottom:1px solid var(--line);">
+          <details open>
+            <summary>Weekly breakdown — ${monthLabel(mo.y,mo.m)} (${wholeWeeks} weeks) · Month 1 only</summary>
+            <div class="week-table-wrap">
+              <table>
+                <thead><tr><th>Week</th><th style="text-align:right;">Revenue Goal</th><th style="text-align:right;">Units*</th></tr></thead>
+                <tbody>${weekRowsHTML}</tbody>
+              </table>
+            </div>
+          </details>
+        </td>
+      </tr>
+      `;
+    }
+  });
+  $('monthlyBody').innerHTML = rows;
+
+  // Yearly target footer row
+  const yearlyRow = `
+    <tr style="background:#F5F5FF;">
+      <td class="month-cell" style="font-weight:800; color:var(--indigo);">Yearly Target</td>
+      <td class="num" style="font-weight:800; color:var(--indigo);">${fmtINR(remaining)}</td>
+      <td class="num" style="font-weight:800; color:var(--indigo);">${fmtINR(cumulative)}</td>
+      <td class="num" style="font-weight:800; color:var(--indigo);">${asp>0 ? fmtNum(remaining/asp) : '—'}</td>
+      <td></td>
+    </tr>
+  `;
+  $('monthlyBody').innerHTML += yearlyRow;
+
+  // ===== Orders / AOV / RTO inputs =====
+  const aov = parseFloat($('aov').value) || 1;
+  const rtoPct = parseFloat($('rtoPct').value) || 0;
+  const convRate = parseFloat($('convRate').value) || 0.1;
+  const mpCommission = parseFloat($('mpCommission').value) || 0;
+  const logisticsCost = parseFloat($('logisticsCost').value) || 0;
+  const cogsPct = parseFloat($('cogsPct').value) || 0;
+  const netFactor = 1 - (rtoPct/100); // share of placed orders that survive as delivered revenue
+
+  function ordersFor(revenue){
+    return netFactor > 0 ? (revenue/aov)/netFactor : 0;
+  }
+
+  // ===== Best / Realistic / Conservative =====
+  const consMult = parseFloat($('conservativeMult').value) || 1;
+  const bestMult = parseFloat($('bestMult').value) || 1;
+  const cases = [
+    { name: 'Conservative', mult: consMult },
+    { name: 'Realistic', mult: 1 },
+    { name: 'Best case', mult: bestMult },
+  ];
+  let scenarioRows = '';
+  cases.forEach(c => {
+    const rev = remaining * c.mult;
+    const avgM = rev / months.length;
+    const avgW = rev / totalWeeks;
+    const ordM = ordersFor(avgM);
+    const highlight = c.name === 'Realistic' ? 'style="background:#F5F5FF;"' : '';
+    scenarioRows += `
+      <tr ${highlight}>
+        <td class="month-cell" ${c.name==='Realistic' ? 'style="color:var(--indigo);font-weight:800;"' : ''}>${c.name}</td>
+        <td class="num">${fmtINR(rev)}</td>
+        <td class="num">${fmtINR(avgM)}</td>
+        <td class="num">${fmtINR(avgW)}</td>
+        <td class="num">${fmtNum(ordM)}</td>
+      </tr>
+    `;
+  });
+  $('scenarioBody').innerHTML = scenarioRows;
+
+  // ===== Channel-wise split (Realistic case) =====
+  const channels = [
+    { name: 'Website (D2C)', id: 'chWebsite' },
+    { name: 'Marketplace', id: 'chMarketplace' },
+    { name: 'Quick commerce', id: 'chQcomm' },
+    { name: 'Community / WhatsApp', id: 'chCommunity' },
+    { name: 'Corporate gifting / B2B', id: 'chB2B' },
+  ];
+  let channelPctSum = 0;
+  let channelRows = '';
+  let websiteOrdersMonth = 0;
+  channels.forEach(c => {
+    const pct = parseFloat($(c.id).value) || 0;
+    channelPctSum += pct;
+    const chTotal = remaining * (pct/100);
+    const chMonthly = chTotal / months.length;
+    const chOrdersMonth = ordersFor(chMonthly);
+    if (c.id === 'chWebsite') websiteOrdersMonth = chOrdersMonth;
+    channelRows += `
+      <tr>
+        <td class="month-cell">${c.name}</td>
+        <td class="num">${pct}%</td>
+        <td class="num">${fmtINR(chTotal)}</td>
+        <td class="num">${fmtINR(chMonthly)}</td>
+        <td class="num">${fmtNum(chOrdersMonth)}</td>
+      </tr>
+    `;
+  });
+  $('channelBody').innerHTML = channelRows;
+  const chSumHint = $('channelSumHint');
+  if (Math.round(channelPctSum) === 100) {
+    chSumHint.textContent = '(totals 100%)';
+    chSumHint.style.color = 'var(--good)';
+  } else {
+    chSumHint.textContent = `(currently totals ${channelPctSum}% — adjust to 100%)`;
+    chSumHint.style.color = 'var(--warn)';
+  }
+
+  // ===== Orders, Traffic & Margin =====
+  const totalOrdersMonth = ordersFor(remaining/months.length);
+  const totalOrdersWeek = ordersFor(remaining/totalWeeks);
+  const requiredTraffic = convRate > 0 ? websiteOrdersMonth / (convRate/100) : 0;
+
+  // Contribution margin per order
+  const qcCommission = parseFloat($('qcCommission').value) || 0;
+  const freeShipThreshold = parseFloat($('freeShipThreshold').value) || 0;
+  const cmWebsite = aov - (aov*(cogsPct/100)) - logisticsCost;
+  const cmMarketplace = aov - (aov*(cogsPct/100)) - logisticsCost - (aov*(mpCommission/100));
+  const cmQuickCommerce = aov - (aov*(cogsPct/100)) - (aov*(qcCommission/100)); // bundled — no separate logistics line
+  // Minimum profitable AOV (breakeven, before RTO): AOV*(1-cogs%) - logistics = 0  => AOV = logistics/(1-cogs%)
+  const minAOVWebsite = (1 - cogsPct/100) > 0 ? logisticsCost / (1 - cogsPct/100) : 0;
+  const minAOVMarketplace = (1 - cogsPct/100 - mpCommission/100) > 0 ? logisticsCost / (1 - cogsPct/100 - mpCommission/100) : 0;
+  const qcMarginPositive = (cogsPct/100 + qcCommission/100) < 1;
+
+  $('opsSummary').innerHTML = `
+    <div class="stat">
+      <div class="label">Orders needed / month</div>
+      <div class="value accent">${fmtNum(totalOrdersMonth)}</div>
+      <div class="foot">at ₹${aov} AOV, ${rtoPct}% RTO</div>
+    </div>
+    <div class="stat">
+      <div class="label">Orders needed / week</div>
+      <div class="value">${fmtNum(totalOrdersWeek)}</div>
+      <div class="foot">blended across all channels</div>
+    </div>
+    <div class="stat">
+      <div class="label">Required website traffic</div>
+      <div class="value">${fmtNum(requiredTraffic)}</div>
+      <div class="foot">visitors/month at ${convRate}% conversion</div>
+    </div>
+    <div class="stat">
+      <div class="label">Min. profitable AOV</div>
+      <div class="value">${fmtINR(Math.max(minAOVWebsite,minAOVMarketplace))}</div>
+      <div class="foot">breakeven, marketplace channel · free ship at ₹${fmtNum(freeShipThreshold)}</div>
+    </div>
+  `;
+
+  $('marginBody').innerHTML = `
+    <tr>
+      <td class="month-cell">Contribution margin / order</td>
+      <td class="num">${fmtINR(cmWebsite)}</td>
+      <td class="num">${fmtINR(cmMarketplace)}</td>
+      <td class="num">${fmtINR(cmQuickCommerce)}</td>
+    </tr>
+    <tr>
+      <td class="month-cell">Contribution margin %</td>
+      <td class="num">${aov>0 ? (cmWebsite/aov*100).toFixed(1) : '0'}%</td>
+      <td class="num">${aov>0 ? (cmMarketplace/aov*100).toFixed(1) : '0'}%</td>
+      <td class="num">${aov>0 ? (cmQuickCommerce/aov*100).toFixed(1) : '0'}%</td>
+    </tr>
+    <tr>
+      <td class="month-cell">Minimum profitable AOV</td>
+      <td class="num">${fmtINR(minAOVWebsite)}</td>
+      <td class="num">${fmtINR(minAOVMarketplace)}</td>
+      <td class="num">No fixed floor</td>
+    </tr>
+    <tr>
+      <td class="month-cell">Current AOV vs. minimum</td>
+      <td class="num" style="color:${aov>=minAOVWebsite ? 'var(--good)' : 'var(--warn)'};">${aov>=minAOVWebsite ? 'Above min ✓' : 'Below min ⚠'}</td>
+      <td class="num" style="color:${aov>=minAOVMarketplace ? 'var(--good)' : 'var(--warn)'};">${aov>=minAOVMarketplace ? 'Above min ✓' : 'Below min ⚠'}</td>
+      <td class="num" style="color:${qcMarginPositive ? 'var(--good)' : 'var(--warn)'};">${qcMarginPositive ? 'Profitable ✓' : 'Loss-making ⚠'}</td>
+    </tr>
+  `;
+
+  // ===== Marketing Budget Plan =====
+  const mktPct = parseFloat($('mktPct').value) || 0;
+  const totalBudget = remaining * (mktPct / 100);
+  $('amtMktPct').textContent = fmtINR(totalBudget) + ' total budget';
+
+  const streams = [
+    { name: 'Marketplace ads', id: 'streamMarketplace', why: 'Highest purchase intent — people already searching to buy. Fastest, most measurable ROAS.' },
+    { name: 'Paid social', id: 'streamSocial', why: 'Builds pan-India awareness where brand recall is currently zero; doubles as retargeting.' },
+    { name: 'Influencer / UGC', id: 'streamInfluencer', why: "Cheapest way to earn trust with a new audience; content is reusable in ads later." },
+    { name: 'D2C site & CRM', id: 'streamD2C', why: 'Site already built — this funds SEO, CRO, and retention (WhatsApp/email) to convert visits into repeat buyers, not development cost.' },
+    { name: 'Contingency / testing', id: 'streamContingency', why: "Funds the 'try 3, keep 1' experimentation before CAC is known — lower here since the site is already live." },
+  ];
+  let streamPctSum = 0;
+  let streamRows = '';
+  streams.forEach(s => {
+    const pct = parseFloat($(s.id).value) || 0;
+    streamPctSum += pct;
+    const amt = totalBudget * (pct/100);
+    document.getElementById('amt' + s.id.charAt(0).toUpperCase() + s.id.slice(1)).textContent = fmtINR(amt);
+    streamRows += `
+      <tr>
+        <td class="month-cell">${s.name}</td>
+        <td class="num">${pct}%</td>
+        <td class="num">${fmtINR(amt)}</td>
+        <td style="font-size:12px; color:var(--muted);">${s.why}</td>
+      </tr>
+    `;
+  });
+  $('streamBody').innerHTML = streamRows;
+  const sumHint = $('streamSumHint');
+  if (Math.round(streamPctSum) === 100) {
+    sumHint.textContent = '(totals 100%)';
+    sumHint.style.color = 'var(--good)';
+  } else {
+    sumHint.textContent = `(currently totals ${streamPctSum}% — adjust to 100%)`;
+    sumHint.style.color = 'var(--warn)';
+  }
+
+  // Phasing
+  const earlyMonthsCount = Math.min(Math.max(parseInt($('earlyMonths').value) || 1, 1), months.length);
+  const earlyPct = parseFloat($('earlyPct').value) || 0;
+  const scaleMonthsCount = Math.max(months.length - earlyMonthsCount, 0);
+  const earlyAmt = totalBudget * (earlyPct/100);
+  const scaleAmt = totalBudget - earlyAmt;
+  $('amtEarlyPct').textContent = fmtINR(earlyAmt) + ` over ${earlyMonthsCount} mo`;
+
+  $('phaseBody').innerHTML = `
+    <tr>
+      <td class="month-cell">Early phase <span style="font-weight:400;color:var(--muted);">(lean testing)</span></td>
+      <td class="num">${earlyMonthsCount}</td>
+      <td class="num">${earlyPct}%</td>
+      <td class="num">${fmtINR(earlyAmt)}</td>
+      <td class="num">${fmtINR(earlyMonthsCount>0 ? earlyAmt/earlyMonthsCount : 0)}</td>
+    </tr>
+    <tr>
+      <td class="month-cell">Scale phase <span style="font-weight:400;color:var(--muted);">(reinvest into what works)</span></td>
+      <td class="num">${scaleMonthsCount}</td>
+      <td class="num">${100-earlyPct}%</td>
+      <td class="num">${fmtINR(scaleAmt)}</td>
+      <td class="num">${fmtINR(scaleMonthsCount>0 ? scaleAmt/scaleMonthsCount : 0)}</td>
+    </tr>
+    <tr style="background:#F5F5FF;">
+      <td class="month-cell" style="font-weight:800; color:var(--indigo);">Total Marketing Budget</td>
+      <td class="num" style="font-weight:800; color:var(--indigo);">${months.length}</td>
+      <td class="num" style="font-weight:800; color:var(--indigo);">100%</td>
+      <td class="num" style="font-weight:800; color:var(--indigo);">${fmtINR(totalBudget)}</td>
+      <td></td>
+    </tr>
+  `;
+
+  $('mktSummary').innerHTML = `
+    <div class="stat">
+      <div class="label">Total marketing budget</div>
+      <div class="value accent">${fmtINR(totalBudget)}</div>
+      <div class="foot">${mktPct}% of ${fmtINR(remaining)} target</div>
+    </div>
+    <div class="stat">
+      <div class="label">Avg. monthly spend</div>
+      <div class="value">${fmtINR(totalBudget/months.length)}</div>
+      <div class="foot">across ${months.length} months</div>
+    </div>
+    <div class="stat">
+      <div class="label">Blended CAC ceiling</div>
+      <div class="value">${asp>0 ? fmtINR(totalBudget/(remaining/asp)) : '—'}</div>
+      <div class="foot">${asp>0 ? 'max spend per unit sold, at target' : 'enter ASP to calculate'}</div>
+    </div>
+  `;
+}
+
+// ---- Timeline presets ----
+function addMonths(str, delta){
+  let [y, m] = str.split('-').map(Number);
+  m += delta;
+  while (m > 12){ m -= 12; y++; }
+  while (m < 1){ m += 12; y--; }
+  return `${y}-${String(m).padStart(2,'0')}`;
+}
+function currentMonthStr(){
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+function applyPreset(name, silent){
+  const today = currentMonthStr();
+  let start, end, hint;
+  if (name === 'dec26'){ start = '2026-09'; end = '2026-12'; hint = 'Sep 2026 → Dec 2026 — the confirmed interim milestone (₹1.14 Cr online-only). August is planning & prep, not counted in the ramp.'; }
+  else if (name === 'mar27'){ start = '2026-09'; end = '2027-03'; hint = 'Sep 2026 → Mar 2027 — the CEO’s original annual planning horizon; same target spread across more months unless you raise it. August is planning & prep, not counted in the ramp.'; }
+  else if (name === 'm3'){ start = today; end = addMonths(today, 2); hint = 'Rolling 3-month window starting this month.'; }
+  else if (name === 'm6'){ start = today; end = addMonths(today, 5); hint = 'Rolling 6-month window starting this month.'; }
+  else if (name === 'm12'){ start = today; end = addMonths(today, 11); hint = 'Rolling 12-month window starting this month.'; }
+  else { hint = 'Custom range — set start and target month directly.'; }
+  if (start) $('startMonth').value = start;
+  if (end) $('endMonth').value = end;
+  $('timelineHint').textContent = hint;
+  document.querySelectorAll('.preset-pill').forEach(b => b.classList.toggle('active', b.dataset.preset === name));
+  if (!silent) recalc();
+}
+document.querySelectorAll('.preset-pill').forEach(b => b.addEventListener('click', () => applyPreset(b.dataset.preset)));
+$('startMonth').addEventListener('input', () => applyPreset('custom', true));
+$('endMonth').addEventListener('input', () => applyPreset('custom', true));
+
+// ---- CSV export (reads the live tables so it always matches what's on screen) ----
+function tableToCsvRows(tableEl, title){
+  const rows = [[title]];
+  const headerCells = tableEl.querySelectorAll(':scope > thead > tr > th');
+  if (headerCells.length) rows.push(Array.from(headerCells).map(c => c.textContent.trim()));
+  tableEl.querySelectorAll(':scope > tbody > tr').forEach(tr => {
+    // skip the nested weekly-breakdown row (a single colspan cell holding a <details> block) —
+    // its week-by-week numbers are already in the table above it
+    if (tr.querySelector('details')) return;
+    const cells = Array.from(tr.children).map(td => td.textContent.trim().replace(/\s+/g, ' '));
+    if (cells.some(c => c)) rows.push(cells);
+  });
+  rows.push([]);
+  return rows;
+}
+function csvEscape(v){
+  v = String(v == null ? '' : v);
+  return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+}
+function exportCsv(){
+  let allRows = [['Krispino Planning Tool — Export'], []];
+  const tables = [
+    ['monthlyBody', 'Monthly Targets'],
+    ['scenarioBody', 'Best / Realistic / Conservative'],
+    ['channelBody', 'Channel-wise Revenue Target'],
+    ['marginBody', 'Orders, Traffic & Margin'],
+    ['streamBody', 'Marketing Budget — Stream Split'],
+    ['phaseBody', 'Marketing Budget — Spend Phasing'],
+  ];
+  tables.forEach(([id, title]) => {
+    const tbody = $(id);
+    if (!tbody) return;
+    const table = tbody.closest('table');
+    allRows = allRows.concat(tableToCsvRows(table, title));
+    if (id === 'monthlyBody') {
+      const weekTable = tbody.querySelector('details table');
+      if (weekTable) allRows = allRows.concat(tableToCsvRows(weekTable, 'Weekly Breakdown — Month 1'));
+    }
+  });
+  const csv = allRows.map(r => r.map(csvEscape).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'krispino-planning-export.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+$('exportCsvBtn').addEventListener('click', exportCsv);
+
+applyPreset('dec26', true);
+recalc();
+</script>
+</body>
+</html>
