@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Krispino GTM — Answers Worksheet</title>
+<title>Krispino GTM — Trial-pack plan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --indigo:#4F46E5; --cyan:#06B6D4; --ink:#111827; --slate:#0F172A;
+    --indigo:#0F766E; --cyan:#06B6D4; --ink:#111827; --slate:#0F172A;
     --bg:#F6F7FB; --card:#FFFFFF; --line:#E5E7EB; --muted:#6B7280;
     --good:#059669; --warn:#D97706; --sugg-bg:#EEF0FD; --sugg-border:#DCE0FA; --open-bg:#FFF7ED; --open-border:#FDE3C0;
   }
@@ -255,12 +255,12 @@
 <div class="app">
   <aside class="sidebar">
     <h1>Krispino GTM</h1>
-    <div class="sub">Answers Worksheet — one page per brief section. Fill or edit any field.</div>
+    <div class="sub">Trial-pack plan — smaller pouches, lower price, more orders. Separate from the ₹1 Cr worksheet.</div>
     <nav class="site-nav" aria-label="Site">
       <a href="index.html">Home</a>
       <a href="planning.html">Planning Tool</a>
-      <a href="answers.html" class="active">Answers Worksheet</a>
-      <a href="trial.html">Trial plan</a>
+      <a href="answers.html">Answers Worksheet</a>
+      <a href="trial.html" class="active">Trial plan</a>
       <a href="presentation.html">Presentation</a>
     </nav>
     <nav id="sideNav"></nav>
@@ -272,7 +272,7 @@
 
   <main class="main">
     <div class="topbar">
-      <div class="title">Answers Worksheet<span class="sub">Every "Need clear answers" question from the brief, in one editable place.</span></div>
+      <div class="title">Trial-pack plan<span class="sub">Brand + ecom experiment: less quantity per pack, lower price, more purchases. Does not replace the ₹1 Cr worksheet.</span></div>
       <div class="actions">
         <span class="save-status" id="saveStatus"></span>
         <button class="act" id="clearSaveBtn">Clear saved data</button>
@@ -285,33 +285,33 @@
       <b>How this works:</b> every field below is editable — a text box, a bulleted list, a flex box, or a table cell, depending on the shape of the answer. Type over any suggested value, or fill in what's left blank. Everything you type is <b>autosaved right in this page</b> as you go (no download, no extra file) — close the tab and reopen this same file later and your edits are still there. Use <b>Export CSV</b> or <b>Print</b> if you want a separate copy to read or share, and <b>Clear saved data</b> to wipe the autosave and start over.
     </div>
     <div class="prep-banner">
-      <b>Timeline:</b> August 2026 is reserved for planning &amp; prep (packaging sign-off, marketplace listings, content stockpile) — it is not counted in the revenue ramp. All figures below run <b>September–December 2026</b> (4 months) against the ₹1 Cr online-only target. Change the assumptions below <b>or the channel % split in Section 1</b> and every indigo cell (platform sales, community, B2B, website traffic, marketing spend) recalculates.
+      <b>Why this tab exists:</b> the Answers Worksheet still holds the ₹1 Cr / ₹599 AOV plan. This tab is the expert rewrite: impulse trials (₹79–₹99), QC <b>₹199 combo</b> (platform MOV — not our free ship). <b>Krispino free shipping only at ₹599 combined cart</b>; ₹59 ship below that. Zepto before Blinkit ads. Goal <b>₹40 Lakh</b> · ~18,200 orders · blended AOV ~₹219.
     </div>
 
     <div class="assump-panel">
       <div class="ap-head">
         <div>
           <div class="ap-title">Live assumptions <span class="calc-badge">Drives tables below</span></div>
-          <div class="ap-hint">Matches the Krispino Planning Tool and the Business Plan sheet (Sep AOV ₹599). Edit any field — or the % column in “Which channel will contribute how much?” — and indigo cells across the sheet recalculate instantly.</div>
+          <div class="ap-hint">₹40 L · AOV ₹219 · freight ₹90 on site. <b>Free ship locked at ₹599 combined</b> — collect ₹59 below that. QC hero is a ₹199 combo (their MOV), not our free-ship rule.</div>
         </div>
         <button type="button" class="ap-reset" id="apResetBtn">Reset to defaults</button>
       </div>
       <div class="ap-grid">
-        <div class="ap-field"><label>Target revenue (₹)</label><input type="number" id="ap_targetRevenue" value="10000000" step="10000"></div>
+        <div class="ap-field"><label>Target revenue (₹)</label><input type="number" id="ap_targetRevenue" value="4000000" step="10000"></div>
         <div class="ap-field"><label>Start month</label><input type="month" id="ap_startMonth" value="2026-09"></div>
         <div class="ap-field"><label>End month</label><input type="month" id="ap_endMonth" value="2026-12"></div>
-        <div class="ap-field"><label>AOV (₹)</label><input type="number" id="ap_aov" value="599" step="1"></div>
-        <div class="ap-field"><label>COGS (%)</label><input type="number" id="ap_cogsPct" value="41" step="0.5"></div>
-        <div class="ap-field"><label>Logistics cost/order (₹)</label><input type="number" id="ap_logisticsCost" value="120" step="1"></div>
+        <div class="ap-field"><label>AOV (₹)</label><input type="number" id="ap_aov" value="219" step="1"></div>
+        <div class="ap-field"><label>COGS (%)</label><input type="number" id="ap_cogsPct" value="44" step="0.5"></div>
+        <div class="ap-field"><label>Logistics cost/order (₹)</label><input type="number" id="ap_logisticsCost" value="90" step="1"></div>
         <div class="ap-field"><label>Marketplace commission (%)</label><input type="number" id="ap_mpCommission" value="22" step="0.5"></div>
         <div class="ap-field"><label>Quick commerce commission (%)</label><input type="number" id="ap_qcCommission" value="30" step="0.5"></div>
-        <div class="ap-field"><label>Marketing spend (% of revenue)</label><input type="number" id="ap_mktPct" value="18" step="0.5"></div>
+        <div class="ap-field"><label>Marketing spend (% of revenue)</label><input type="number" id="ap_mktPct" value="20" step="0.5"></div>
       </div>
     </div>
 
     <div id="sectionsRoot"></div>
 
-    <footer>Krispino · GTM Answers Worksheet — reconstructed planning aid. Export or print to keep a copy of what you fill in.</footer>
+    <footer>Krispino · Trial-pack plan — experiment tab. The original Answers Worksheet is unchanged.</footer>
   </main>
 </div>
 
@@ -326,118 +326,118 @@
 const SECTIONS = [
 {
   id: 'sec1', title: '1. Revenue Target & Sales Plan',
-  note: 'Figures follow the Krispino Business Plan sheet (AOV Strategy + Revenue tabs). Sep–Dec is the ₹1 Cr interim window; the AOV tab also plans ₹2 Cr through Mar ’27. Live tables below use the assumptions panel (default AOV ₹599 = Sep starting AOV).',
+  note: 'Trial-pack experiment — not the ₹1 Cr sheet. ₹40 L Sep–Dec, ~18,200 orders at ~₹219. QC ₹199 combo is platform MOV. <b>Krispino free shipping only when the combined cart is ₹599.</b> Paid ship below. Bengaluru then Hyderabad. August is prep only.',
   questions: [
     { q: 'How much revenue should we target each month?', type: 'table',
       headers: ['Month', 'Revenue', 'Orders', 'AOV'],
       rows: [
-        ["Sep '26", '₹8.99 L', '1,500', '₹599'],
-        ["Oct '26", '₹29.21 L', '4,500', '₹649'],
-        ["Nov '26", '₹31.46 L', '4,500', '₹699'],
-        ["Dec '26", '₹29.96 L', '4,000', '₹749'],
-        ['Sep–Dec total', '~₹99.6 L (₹1 Cr target)', '14,500', 'blend'],
-        ["Jan '27", '₹39.95 L', '5,000', '₹799'],
-        ["Feb '27", '₹29.72 L', '3,500', '₹849'],
-        ["Mar '27", '₹31.47 L', '3,500', '₹899'],
-        ['7-month total', '₹2.01 Cr', '26,500', '₹749 blend'],
+        ["Sep '26", '₹3.20 L', '1,500', '₹213'],
+        ["Oct '26", '₹8.80 L', '4,000', '₹220'],
+        ["Nov '26", '₹13.00 L', '5,900', '₹220'],
+        ["Dec '26", '₹15.00 L', '6,800', '₹221'],
+        ['Sep–Dec total', '₹40.00 L', '18,200', '~₹220 blend'],
+        ["Jan '27", '₹16.00 L', '7,000', '₹229'],
+        ["Feb '27", '₹12.00 L', '5,000', '₹240'],
+        ["Mar '27", '₹14.00 L', '5,600', '₹250'],
+        ['7-month total', '₹82.00 L', '35,800', '~₹229 blend'],
       ]
     },
     { q: 'How much revenue should we target each week?', type: 'table',
       headers: ['Sep week', 'Share of Sep orders', 'Orders', 'Revenue'],
       rows: [
-        ['Week 1', '50%', '750', '₹4.49 L'],
-        ['Week 2', '30%', '450', '₹2.70 L'],
-        ['Week 3', '10%', '150', '₹0.90 L'],
-        ['Week 4', '10%', '150', '₹0.90 L'],
-        ['Sep total', '100%', '1,500', '₹8.99 L'],
+        ['Week 1', '35%', '525', '₹1.12 L'],
+        ['Week 2', '30%', '450', '₹0.96 L'],
+        ['Week 3', '20%', '300', '₹0.64 L'],
+        ['Week 4', '15%', '225', '₹0.48 L'],
+        ['Sep total', '100%', '1,500', '₹3.20 L'],
         ['Later months', 'Even split', 'month ÷ weeks', 'month revenue ÷ weeks'],
       ]
     },
     { q: 'How many orders are needed weekly?', type: 'table',
       headers: ['Month', 'Orders / month', 'Orders / week'],
       rows: [
-        ["Sep '26", '1,500', '500 (or 750 / 450 / 150 / 150)'],
-        ["Oct '26", '4,500', '~1,125'],
-        ["Nov '26", '4,500', '~1,125'],
-        ["Dec '26", '4,000', '~1,000'],
-        ['7-month plan', '26,500 total · ~3,785 / month', '~126 / day'],
+        ["Sep '26", '1,500', '~350 (525 / 450 / 300 / 225)'],
+        ["Oct '26", '4,000', '~920'],
+        ["Nov '26", '5,900', '~1,370'],
+        ["Dec '26", '6,800', '~1,545'],
+        ['7-month plan', '35,800 total · ~5,100 / month', '~170 / day'],
       ]
     },
     { q: 'What should be the minimum AOV?', type: 'table',
       headers: ['Floor', 'Amount', 'Source'],
       rows: [
-        ['Commercial / combo floor', '₹599', 'Revenue tab + Sep AOV + 3-item combo'],
-        ['Contribution floor', '₹380', 'Pricing tab — shipping + ₹150 CAC'],
-        ['Weekly reporting target', '₹699', 'Weekly Planning tab'],
-        ['7-month blend', '₹749', 'AOV Strategy tab'],
+        ['Impulse / first-order floor', '₹199', '2 minis — never ship one pouch (freight is per order)'],
+        ['Contribution floor (site, after ₹90 freight)', '₹199 + ₹59 ship', '2-pack never ships free'],
+        ['Free-ship bar (locked)', '₹599', 'Combined order value only — 6 minis or 120g mix. Not ₹349.'],
+        ['7-month blend', '₹229', 'Add a flavour, then upsell 120g — do not upsize the first bag'],
       ]
     },
     { q: 'Which channel will contribute how much?', type: 'table', calc: 'channel',
-      calcNotes: { website: 'Changing any % here updates website traffic, platform sales, community, B2B, and spend-linked revenue.' },
+      calcNotes: { website: 'QC is the volume engine at ₹99–129. Changing % updates live tables.' },
       headers: ['Channel', '% Split', 'Monthly Avg', 'Weekly Avg', 'No. of orders / month'],
       rows: [
-        ['Website', '45%', '', '', ''],
+        ['Website', '22%', '', '', ''],
         ['Marketplace', '15%', '', '', ''],
-        ['Quick Commerce', '8%', '', '', ''],
+        ['Quick Commerce', '30%', '', '', ''],
         ['Community / WhatsApp', '28%', '', '', ''],
-        ['Corporate Gifting / B2B', '4%', '', '', ''],
+        ['Corporate Gifting / B2B', '5%', '', '', ''],
       ]
     },
   ]
 },
 {
   id: 'sec2', title: '2. Product & SKU Strategy',
-  note: 'Hero SKUs, pack sizes, and monthly pack targets from the Product and SKU Strategy tab.',
+  note: 'Same seven heroes, cut to trial pouches so the first yes is ₹99 not ₹204. More packs per month, lower rupees per pack. Everyday 120g stays as the second purchase, not the first.',
   questions: [
     { q: 'Top 5–10 SKUs to focus on', type: 'table',
       headers: ['Hero SKU', 'Pack / price', 'Monthly', 'Weekly', 'Margin', 'Channel fit'],
       rows: [
-        ['Banana Chips – Coconut Oil', '180g · ₹204', '800 packs', '175–200', '40–45%', 'D2C, Amazon, influencers, B2B'],
-        ['Jackfruit Chips', '180g · ₹272', '500 packs', '120–130', '40–45%', 'D2C, influencers, gifting, marketplaces'],
-        ['Chilli Tapioca Chips', '200g · ₹179', '700 packs', '150–175', '45–50%', 'D2C, influencers, marketplaces'],
-        ['Kanthari Murukku', '140g · ₹132', '500 packs', '100–125', '45–50%', 'D2C, influencers, combos'],
-        ['Baby Murukku', '140g · ₹159', '700 packs', '150–200', '45–50%', 'D2C, B2B, office snacks, marketplaces'],
-        ['Kozhikodan Mixture', '180g · ₹162', '500 packs', '100–125', '45–50%', 'D2C, B2B, marketplaces, combos'],
-        ['Madhuraseva', '140g · ₹135', '500 packs', '100–125', '45–50%', 'D2C, discovery boxes, gifting, influencers'],
-        ['TOTAL', '', '4,200 packs', '~1,100/week', '—', ''],
+        ['Banana Chips – Coconut Oil', '70g trial · ₹99', '2,400 packs', '550', '38–42%', 'QC, D2C first order, influencers'],
+        ['Chilli Tapioca Chips', '70g trial · ₹89', '2,200 packs', '500', '40–44%', 'QC impulse, D2C, influencers'],
+        ['Baby Murukku', '60g trial · ₹79', '2,200 packs', '500', '42–46%', 'QC, office, B2B tins'],
+        ['Jackfruit Chips', '70g trial · ₹129', '1,200 packs', '275', '38–42%', 'Gifting add-on, influencers'],
+        ['Kanthari Murukku', '60g trial · ₹79', '1,400 packs', '320', '42–46%', 'QC, spicy Reels, combos'],
+        ['Kozhikodan Mixture', '70g trial · ₹89', '1,400 packs', '320', '42–46%', 'QC, community, combos'],
+        ['Madhuraseva', '60g trial · ₹89', '1,200 packs', '275', '40–44%', 'Discovery, gifting, influencers'],
+        ['TOTAL', 'trial line', '12,000 packs', '~2,740/week', '—', 'vs 4,200 of the large pouches'],
       ]
     },
     { q: 'Expected monthly sales per SKU', type: 'table',
       headers: ['Hero SKU', 'Packs / month'],
       rows: [
-        ['Banana Chips – Coconut Oil', '800'],
-        ['Chilli Tapioca Chips', '700'],
-        ['Baby Murukku', '700'],
-        ['Jackfruit Chips', '500'],
-        ['Kanthari Murukku', '500'],
-        ['Kozhikodan Mixture', '500'],
-        ['Madhuraseva', '500'],
-        ['TOTAL', '4,200'],
+        ['Banana Chips – Coconut Oil', '2,400'],
+        ['Chilli Tapioca Chips', '2,200'],
+        ['Baby Murukku', '2,200'],
+        ['Kanthari Murukku', '1,400'],
+        ['Kozhikodan Mixture', '1,400'],
+        ['Jackfruit Chips', '1,200'],
+        ['Madhuraseva', '1,200'],
+        ['TOTAL', '12,000'],
       ]
     },
     { q: 'Expected weekly sales per SKU', type: 'table',
       headers: ['Hero SKU', 'Packs / week'],
       rows: [
-        ['Banana Chips – Coconut Oil', '175–200'],
-        ['Jackfruit Chips', '120–130'],
-        ['Chilli Tapioca Chips', '150–175'],
-        ['Kanthari Murukku', '100–125'],
-        ['Baby Murukku', '150–200'],
-        ['Kozhikodan Mixture', '100–125'],
-        ['Madhuraseva', '100–125'],
-        ['TOTAL', '~1,100'],
+        ['Banana Chips – Coconut Oil', '550'],
+        ['Chilli Tapioca Chips', '500'],
+        ['Baby Murukku', '500'],
+        ['Kanthari Murukku', '320'],
+        ['Kozhikodan Mixture', '320'],
+        ['Jackfruit Chips', '275'],
+        ['Madhuraseva', '275'],
+        ['TOTAL', '~2,740'],
       ]
     },
     { q: 'Product-wise margin estimate', type: 'table',
       headers: ['Hero SKU', 'Target gross margin'],
       rows: [
-        ['Banana Chips – Coconut Oil', '40–45%'],
-        ['Jackfruit Chips', '40–45%'],
-        ['Chilli Tapioca Chips', '45–50%'],
-        ['Kanthari Murukku', '45–50%'],
-        ['Baby Murukku', '45–50%'],
-        ['Kozhikodan Mixture', '45–50%'],
-        ['Madhuraseva', '45–50%'],
+        ['Banana Chips – Coconut Oil', '38–42% (film % is worse on 70g — volume must pay for it)'],
+        ['Jackfruit Chips', '38–42%'],
+        ['Chilli Tapioca Chips', '40–44%'],
+        ['Kanthari Murukku', '42–46%'],
+        ['Baby Murukku', '42–46%'],
+        ['Kozhikodan Mixture', '42–46%'],
+        ['Madhuraseva', '40–44%'],
       ]
     },
     { q: 'Product-wise reorder potential', type: 'table',
@@ -455,11 +455,11 @@ const SECTIONS = [
     { q: 'Product-wise channel fit', type: 'table',
       headers: ['Channel', 'Hero SKUs'],
       rows: [
-        ['D2C / website', 'All seven hero SKUs'],
-        ['Marketplace', 'Banana Chips, Chilli Tapioca, Baby Murukku, Kozhikodan Mixture, Jackfruit'],
-        ['Influencers', 'Banana, Jackfruit, Chilli Tapioca, Kanthari, Madhuraseva'],
-        ['B2B / office', 'Banana Chips, Baby Murukku, Kozhikodan Mixture'],
-        ['Gifting / combos', 'Jackfruit, Kanthari, Madhuraseva, Kozhikodan'],
+        ['D2C / website', '2-pack sampler ₹199 (paid ship); free ship only when cart hits ₹599'],
+        ['Marketplace', 'Flipkart: ₹99–129 singles + ₹249 twin. Keep every listing under ₹1,000 for 0% comm'],
+        ['Quick commerce', '₹79–129 singles only — this is the volume aisle'],
+        ['Influencers', '₹99 CTA + “add a second flavour” — not a ₹699 combo'],
+        ['B2B / office', 'Baby Murukku + Banana trial tins, 25 × ₹249'],
       ]
     },
   ]
@@ -471,32 +471,45 @@ const SECTIONS = [
     { q: 'MRP', type: 'table',
       headers: ['Range', 'Amount'],
       rows: [
-        ['Low', '₹135'],
-        ['High', '₹680'],
+        ['Low', '₹79 (60g murukku trial — impulse band ₹50–150)'],
+        ['High', '₹599 (free-ship combined cart / 6-mini box)'],
       ]
     },
     { q: 'Selling price', type: 'table',
       headers: ['Channel', 'Rule', 'Customer price'],
       rows: [
-        ['Website', 'MRP × 0.80 (20% standard discount)', '₹108 – ₹544'],
-        ['Marketplace', 'MRP × 0.90', '₹122 – ₹612'],
-        ['Quick commerce', 'Full MRP, 0% customer discount', '₹135 – ₹680'],
+        ['Website', 'Singles listed; cart default 2-pack. ₹59 ship under ₹599 combined', '₹79–₹99 singles · ₹199 twin'],
+        ['Marketplace', 'Twin ₹249; Flipkart < ₹1,000', '₹99–₹249'],
+        ['Quick commerce', 'Hero = ₹199–₹249 combo (clears ₹199–299 MOV). Singles ₹99–109 as add-ons, ~8% above site MRP', 'Do not lead with a lone ₹79 pouch'],
       ]
     },
     { q: 'Discount limit', type: 'table',
       headers: ['Rule', 'Discount'],
       rows: [
-        ['Everyday', '20%'],
-        ['Promotions max', '30%'],
-        ['Absolute breakeven floor', '~65–67% — never, except genuine clearance'],
+        ['Everyday', '0–10% on twins only — the trial price is already the offer'],
+        ['Promotions max', '15% (never 30% — we already cut pack size)'],
+        ['Absolute floor', 'Do not go under ₹79 on a branded pouch'],
       ]
     },
     { q: 'Free-shipping threshold', type: 'table',
       headers: ['Metric', 'Amount'],
       rows: [
-        ['Free-shipping threshold', '₹599'],
-        ['Estimated AOV (pricing tab)', '~₹597'],
-        ['Gap above estimated AOV', 'At the bar — combined cart ₹599 ships free; below that, paid ship'],
+        ['Free-shipping threshold', '₹599 (combined order value — locked)'],
+        ['Paid shipping below threshold', '₹59'],
+        ['First-order AOV', '₹199–₹219 (does not qualify)'],
+        ['Gap to free ship', '₹599 − ₹219 ≈ ₹380 — add flavours / 120g, do not waive the bar'],
+      ]
+    },
+    { q: 'Worked unit economics (by channel)', type: 'table',
+      headers: ['Line', 'Site 2-pack ₹199', 'QC combo ₹199', 'QC single ₹99 (add-on)'],
+      rows: [
+        ['Customer pays', '₹199 + ₹59 ship', '₹199 (inside their grocery MOV)', '₹99'],
+        ['COGS ~44%', '₹88', '₹88', '₹44'],
+        ['Commission', '₹0', '~₹60 (30%)', '~₹30'],
+        ['Freight / fulfilment', '₹90 (you still pay courier; ₹59 collected)', 'bundled in comm', 'bundled'],
+        ['Contribution before ads', '~₹80 with ship collected; ~₹21 if you waive ship', '~₹51', '~₹25'],
+        ['Launch ads (if paid)', '₹65–75 ceiling', '₹80–150 — book as CAC', 'do not advertise the single'],
+        ['Verdict', 'Never free-ship a ₹199 cart. Collect ₹59 until ₹599 combined', 'Hero SKU on Zepto', 'Attach only — not a listing strategy'],
       ]
     },
     { q: 'Contribution margin per order', type: 'table', calc: 'margin',
@@ -519,83 +532,87 @@ const SECTIONS = [
     { q: 'Price difference across website, marketplace and quick commerce', type: 'table',
       headers: ['Channel', 'Customer price rule', 'Commission / note'],
       rows: [
-        ['Website', 'MRP × 0.80 (₹108–544)', 'Best margin, no commission'],
-        ['Marketplace', 'MRP × 0.90 (₹122–612)', '~22% commission'],
-        ['Quick Commerce', 'Full MRP (₹135–680)', '~30% commission; similar per-pack profit to marketplace'],
+        ['Website', '2-pack ₹199 + ₹59 ship; free ship only at ₹599 combined', 'Freight is per order — one 70g pouch loses money'],
+        ['Marketplace', '₹99–249, Flipkart 0% under ₹1,000', '~22% if not Flipkart grocery'],
+        ['Quick Commerce', '₹199 combo hero; ₹99–109 add-on', '~30% bundled; 5–12% MRP premium vs site'],
       ]
     },
   ]
 },
 {
   id: 'sec4', title: '4. Average Order Value Strategy',
-  note: 'From the Average Order Value Strategy tab. Default model AOV in the assumptions panel is Sep’s ₹599; raise it month by month as combos land.',
+  note: 'AOV is a 2–3 mini-pouch basket, not a ₹599 combo. Raise rupees by adding a flavour, not by upsizing the bag.',
   questions: [
     { q: 'Target AOV for each month', type: 'table',
       headers: ['Month', 'AOV', 'Orders / month', 'Revenue'],
       rows: [
-        ["Sep '26", '₹599', '1,500', '₹8,98,500'],
-        ["Oct '26", '₹649', '4,500', '₹29,20,500'],
-        ["Nov '26", '₹699', '4,500', '₹31,45,500'],
-        ["Dec '26", '₹749', '4,000', '₹29,96,000'],
-        ["Jan '27", '₹799', '5,000', '₹39,95,000'],
-        ["Feb '27", '₹849', '3,500', '₹29,71,500'],
-        ["Mar '27", '₹899', '3,500', '₹31,46,500'],
-        ['7-month total / blend', '₹749', '26,500', '₹2.01 Cr'],
+        ["Sep '26", '₹213', '1,500', '₹3,20,000'],
+        ["Oct '26", '₹220', '4,000', '₹8,80,000'],
+        ["Nov '26", '₹220', '5,900', '₹13,00,000'],
+        ["Dec '26", '₹221', '6,800', '₹15,00,000'],
+        ["Jan '27", '₹229', '7,000', '₹16,00,000'],
+        ["Feb '27", '₹240', '5,000', '₹12,00,000'],
+        ["Mar '27", '₹250', '5,600', '₹14,00,000'],
+        ['7-month total / blend', '₹229', '35,800', '₹82.0 L'],
       ]
     },
     { q: 'Weekly AOV target', type: 'table',
       headers: ['Sep week', 'AOV', 'Share of Sep orders', 'Orders'],
       rows: [
-        ['Week 1', '₹599', '50%', '750'],
-        ['Week 2', '₹599', '30%', '450'],
-        ['Week 3', '₹599', '10%', '150'],
-        ['Week 4', '₹599', '10%', '150'],
-        ['Weekly reporting steer', '₹699', 'later months', 'Weekly Planning tab'],
+        ['Week 1', '₹199', '35%', '525'],
+        ['Week 2', '₹213', '30%', '450'],
+        ['Week 3', '₹213', '20%', '300'],
+        ['Week 4', '₹249', '15%', '225'],
+        ['Weekly reporting steer', '₹59 ship until ₹599 combined', 'from Sep', ''],
       ]
     },
     { q: 'Combo names', type: 'table',
       headers: ['Combo', 'Contents'],
       rows: [
-        ['Tapioca fusion', 'All tapioca flavours'],
-        ['Kerala Classics', 'Kerala heritage snacks'],
-        ['Tea time snacks', 'Banana chips, mixture, murukku'],
-        ['Party time snacks', 'Banana chips, mixture, murukku, peanut candy, sesame candy'],
-        ['Kerala Premium snacks', 'Nendran banana chips'],
-        ['Kanthari punch', 'For spicy lovers'],
+        ['Two-flavour start', 'Banana 70g + Chilli Tapioca 70g'],
+        ['Salty trio', 'Banana + Baby Murukku + Kozhikodan'],
+        ['Heat pack', 'Kanthari + Chilli Tapioca'],
+        ['Tea-time minis', 'Banana + mixture + murukku trials'],
+        ['Office tin', '25 × mixed 60–70g'],
+        ['Sweet discover', 'Madhuraseva + Banana'],
       ]
     },
     { q: 'Combo contents', type: 'table',
       headers: ['Free-ship combo', 'Target price', 'Composition'],
       rows: [
-        ['Murukku Trio', '₹699', '3 × 400g varieties'],
-        ['Kerala Snack Box', '₹799', 'Mixed 5–6 pouch assortment'],
-        ['Festival Hamper', '₹999–1,299', 'Gift-boxed, higher-margin, seasonal'],
+        ['Two-flavour start', '₹199', '2 × 70g — the default first order'],
+        ['Salty trio', '₹349', '3–4 minis — still paid ship'],
+        ['Free-ship box (locked)', '₹599', '6 minis or mixed 70g+120g — only cart that ships free'],
+        ['Office tin', '₹249 / head', 'MOQ 25'],
       ]
     },
     { q: 'Combo price', type: 'table',
       headers: ['Price', 'Items', 'Vs free-shipping ₹599'],
       rows: [
-        ['₹599', '3', 'At free-ship — combined order value ₹599'],
-        ['₹699', '5', 'Above free-ship'],
-        ['₹799', '6', 'Above free-ship'],
+        ['₹199', '2', 'Paid ₹59 ship — default first order'],
+        ['₹249', '2–3', 'Paid ship'],
+        ['₹349', '3–4', 'Paid ship — not free'],
+        ['₹599', '6 minis / mix', 'Free ship — locked combined value'],
       ]
     },
     { q: 'Expected margin per combo', type: 'table',
       headers: ['Combo price', 'Expected margin'],
       rows: [
-        ['₹599', '25%'],
-        ['₹699', '35%'],
-        ['₹799', '25%'],
+        ['₹199', '22% after ₹59 collected on site; ~28% on QC 2-pack'],
+        ['₹249', 'paid ship still'],
+        ['₹349', 'paid ship still'],
+        ['₹599', 'free ship; freight diluted across 6 minis'],
       ]
     },
     { q: 'Expected monthly and weekly combo sales', type: 'table',
       headers: ['Price', 'Combos / month', 'Mix', 'Revenue / month'],
       rows: [
-        ['₹599', '625', '25%', ''],
-        ['₹699', '1,250', '50%', ''],
-        ['₹799', '625', '25%', ''],
-        ['Total', '2,500', '100%', '~₹17.48 L'],
-        ['If held Sep–Mar', '', '', '~₹1.22 Cr overlay, not a second revenue target'],
+        ['₹199', '3,800', '50%', '₹7.56 L'],
+        ['₹249', '2,280', '30%', '₹5.68 L'],
+        ['₹349', '1,140', '15%', '₹3.98 L'],
+        ['₹599', '380', '5%', '₹2.28 L'],
+        ['Total', '7,600 orders of combos (subset of 19k)', '100%', 'overlay inside the ₹40 L, not extra'],
+        ['If held Sep–Mar', '', '', 'Stay inside the ₹82 L 7-month plan'],
       ]
     },
   ]
@@ -606,31 +623,31 @@ const SECTIONS = [
   questions: [
     { q: 'Current shipping cost per order', type: 'table',
       headers: ['Metric', 'Amount'],
-      rows: [['Current freight / order', '₹120 (actual, last month)']]
+      rows: [['Current freight / order', '₹90 target on 2-pouch satchel (last month ₹120 was a 180g problem)']]
     },
     { q: 'Target shipping cost per order', type: 'table',
       headers: ['Volume', 'Freight / order'],
       rows: [
-        ['Now (~10 orders)', '₹120'],
-        ['50 orders', '₹135'],
-        ['150 orders', '₹145'],
-        ['500 orders', '₹150'],
-        ['~3,815 orders / month', '₹170'],
-        ['National-scale target', '≤ ₹150 blended'],
+        ['Now (~10 orders)', '₹90 (light 2-pouch satchel)'],
+        ['50 orders', '₹95'],
+        ['150 orders', '₹99'],
+        ['500 orders', '₹105'],
+        ['~5,300 orders / month', '₹110'],
+        ['National-scale target', '≤ ₹99 blended — QC/community have no D2C freight'],
       ]
     },
     { q: 'Shipping cost as % of AOV', type: 'table',
       headers: ['Case', '% of AOV'],
       rows: [
-        ['Current (last-month AOV)', '24%'],
-        ['Sep AOV ₹599 @ ₹120 freight', '~20%'],
-        ['Target at ₹800 AOV', '≤ 19%'],
-        ['Target at ₹950 AOV', '≤ 15%'],
+        ['Current (last-month AOV)', 'Too high — that is why we cut pack size'],
+        ['Sep AOV ₹199 @ ₹90 freight', '~45% on a 1-order site shipment — hence 2-pack minimum'],
+        ['Target at ₹249 AOV', '≤ 36%'],
+        ['Blended (QC + WA have no courier)', '≤ 18% of all-channel AOV'],
       ]
     },
     { q: 'Free-shipping threshold', type: 'table',
       headers: ['Metric', 'Amount'],
-      rows: [['Free-shipping threshold', '₹599 (combined order value)']]
+      rows: [['Free-shipping threshold', '₹599 combined order value (locked) · ₹59 below']]
     },
     { q: 'Delivery TAT by region', type: 'table',
       headers: ['Region', 'TAT'],
@@ -659,11 +676,11 @@ const SECTIONS = [
     { q: 'Monthly logistics cost estimate', type: 'table',
       headers: ['Volume', 'Freight', 'Packaging', 'Labour', 'COD + RTO', 'Total / order', 'Monthly total'],
       rows: [
-        ['Now (10)', '₹120', '₹30', '₹15', '₹0', '₹165', '₹1,650'],
-        ['50 orders', '₹135', '₹28', '₹15', '₹0', '₹178', '₹8,900'],
-        ['150 orders', '₹145', '₹26', '₹18', '₹0', '₹189', '₹28,350'],
-        ['500 orders', '₹150', '₹24', '₹20', '₹35', '₹229', '₹1,14,500'],
-        ['3,815 orders', '₹170', '₹20', '₹25', '₹70', '₹285', '₹10,87,275'],
+        ['Now (10)', '₹90', '₹12', '₹12', '₹0', '₹114', '₹1,140'],
+        ['50 orders', '₹95', '₹12', '₹12', '₹0', '₹119', '₹5,950'],
+        ['150 orders', '₹99', '₹11', '₹14', '₹0', '₹124', '₹18,600'],
+        ['500 orders', '₹105', '₹10', '₹15', '₹20', '₹150', '₹75,000'],
+        ['5,300 orders', '₹110', '₹9', '₹18', '₹25', '₹162', '₹8,58,600'],
       ]
     },
     { q: 'Weekly logistics report format', type: 'table',
@@ -671,10 +688,10 @@ const SECTIONS = [
       rows: [
         ['Orders shipped', ''],
         ['AOV', ''],
-        ['Freight / order', '≤ ₹150'],
-        ['Freight as % of AOV', '≤ 19%'],
-        ['Packaging / order', '≤ ₹30'],
-        ['Total logistics / order', '≤ ₹193'],
+        ['Freight / order', '≤ ₹99 on D2C'],
+        ['Freight as % of AOV', '≤ 36% on site; ≤ 18% blended'],
+        ['Packaging / order', '≤ ₹12 (trial film)'],
+        ['Total logistics / order', '≤ ₹130 D2C'],
         ['On-time %', ''],
         ['Damage %', ''],
         ['RTO %', ''],
@@ -687,34 +704,33 @@ const SECTIONS = [
   note: 'This is the workstream that should run during the August prep month, ahead of the September ramp start.',
   questions: [
     { q: 'Top 5 SKUs for immediate packaging redesign', type: 'bullets', items: [
-      'Banana chips',
-      'Jackfruit chips',
-      'Chilli Tapioca chips',
-      'Kanthari murukku',
-      'Baby murukku',
-      'Kozhikodan mixture',
-      'Madhuraseva',
+      'Banana chips 70g trial',
+      'Chilli Tapioca 70g trial',
+      'Baby murukku 60g trial',
+      'Kanthari murukku 60g trial',
+      'Kozhikodan mixture 70g trial',
+      'Jackfruit 70g trial',
+      'Madhuraseva 60g trial',
     ]},
-    { q: 'Cost per new pack', a: '₹10–15.' },
+    { q: 'Cost per new pack', a: '₹6–9 per trial pouch (less film, more units).' },
     { q: 'MOQ impact', type: 'table',
       headers: ['Item', 'Amount'],
       rows: [
-        ['Pilot packs per SKU', '2,000'],
-        ['Pilot packs total', '10,000'],
-        ['MOQ cash', '₹1,00,000–1,50,000'],
-        ['If you scale', 'Double the MOQ amount'],
+        ['Pilot packs per SKU', '4,000 (trial runs faster than 180g)'],
+        ['Pilot packs total', '20,000'],
+        ['Pilot cash', '₹1,20,000–1,80,000'],
+        ['If you scale', 'Print the 120g everyday line only after 8 weeks of trial sell-through'],
       ]
     },
     { q: 'Total packaging investment required', type: 'table',
       headers: ['Component', 'Budget'],
       rows: [
-        ['Packaging strategy + design system', '₹1,00,000–₹1,50,000'],
-        ['5 SKU adaptations / artwork', 'Included above'],
-        ['Prototypes / physical samples', '₹15,000–₹25,000'],
-        ['Initial packaging — 10,000 packs', '~₹1,50,000'],
-        ['Testing / colour proofs / revisions', '₹15,000–₹25,000'],
-        ['Contingency', '₹20,000–₹30,000'],
-        ['Total', '₹3.25–4 L'],
+        ['Packaging strategy + trial artwork (7 SKUs)', '₹80,000–₹1,20,000'],
+        ['Prototypes / physical samples', '₹12,000–₹18,000'],
+        ['Initial packaging — 20,000 trial pouches', '~₹1,40,000'],
+        ['Testing / colour proofs / revisions', '₹12,000–₹18,000'],
+        ['Contingency', '₹15,000–₹25,000'],
+        ['Total', '₹2.6–3.2 L (cheaper than the 180g relaunch)'],
       ]
     },
     { q: 'Design completion timeline', type: 'table',
@@ -736,9 +752,9 @@ const SECTIONS = [
     { q: 'Expected impact on sales/conversion', type: 'table',
       headers: ['Case', 'Conversion lift'],
       rows: [
-        ['Conservative', '+5–8%'],
-        ['Base', '+8–12%'],
-        ['Strong upside', '+12–20%'],
+        ['Conservative', '+8–12% CVR vs ₹204 PDPs — price is the conversion'],
+        ['Base', '+12–18%'],
+        ['Strong upside', '+18–25% on QC and WhatsApp'],
       ]
     },
   ]
@@ -762,14 +778,14 @@ const SECTIONS = [
     { q: 'Target conversion rate', type: 'table',
       headers: ['Stage', 'Conversion'],
       rows: [
-        ['Start', '2%'],
-        ['In 6 months', '3.5%'],
-        ['Hero products', '3.5–5%'],
+        ['Start', '2.5% (₹199 is an easier yes than ₹599)'],
+        ['In 6 months', '4.0%'],
+        ['Hero trial PDPs', '4–6%'],
       ]
     },
     { q: 'Target cart-to-checkout rate', type: 'table',
       headers: ['Metric', 'Target'],
-      rows: [['Cart → checkout', '40–50% of add-to-cart']]
+      rows: [['Cart → checkout', '50–60% of add-to-cart (fewer rupees in the cart)']]
     },
     { q: 'Target checkout completion rate', type: 'table',
       headers: ['Metric', 'Target'],
@@ -778,33 +794,33 @@ const SECTIONS = [
     { q: 'Weekly website improvement plan', type: 'table',
       headers: ['Week focus', 'Change', 'Success metric'],
       rows: [
-        ['Wed 1', 'Hero SKU PDP above fold + ₹699 combo', 'CVR ≥ 2.0%'],
-        ['Wed 2', 'COD + UPI both visible; remove extra checkout fields', 'Checkout completion ≥ 55%'],
-        ['Wed 3', 'Free-ship bar at ₹599 on cart (combined value only)', 'AOV ≥ ₹599'],
-        ['Wed 4', 'Reviews + UGC on Banana Chips PDP', 'ATC rate +10%'],
+        ['Wed 1', '₹199 twin PDP + ₹59 ship / free-ship bar at ₹599 combined', 'CVR ≥ 2.5%; no 1-pouch checkout'],
+        ['Wed 2', 'COD + UPI; default cart is 2 minis not 1', 'Checkout completion ≥ 58%'],
+        ['Wed 3', '“Add 3rd flavour ₹50” upsell on cart', 'AOV ≥ ₹199'],
+        ['Wed 4', 'UGC of opening a 70g pouch (sound / crunch)', 'ATC rate +12%'],
       ]
     },
     { q: 'Weekly website performance report', type: 'table', calc: 'web-report',
       headers: ['Metric', 'How it is calculated', 'Sep (launch week)', 'Dec (peak week)'],
       rows: [
-        ['Sessions / week', 'Website orders ÷ conversion rate (scales with Website % in Sec 1)', '', ''],
-        ['Conversion rate', 'Paid orders ÷ sessions — PDP, checkout, and reviews lift CVR by Dec', '2.0%', '3.0%'],
+        ['Sessions / week', 'Website orders ÷ conversion rate (scales with Website 22%)', '', ''],
+        ['Conversion rate', 'Paid orders ÷ sessions — price is the lever', '2.5%', '3.5%'],
         ['Orders / week', 'Sessions × CVR', '', ''],
-        ['AOV', 'Revenue ÷ orders. Free-ship bar at ₹599 (combined cart) lifts Dec basket', '', ''],
-        ['Revenue / week', 'Orders × AOV — Website share of the ₹1 Cr window', '', ''],
-        ['Add-to-cart rate', '% of sessions that add a SKU (hero PDP + UGC)', '7%', '9%'],
-        ['Cart-to-checkout', 'ATC → checkout start (COD + UPI visible, fewer fields)', '40%', '50%'],
-        ['Checkout completion', 'Checkout start → paid order', '55%', '65%'],
-        ['RTO %', 'Reverse / undelivered of prepaid + COD — keep ≤ 3%', '3%', '3%'],
-        ['Paid vs organic sessions', 'Meta/Google vs SEO, direct, influencer, WhatsApp', '55 / 45', '45 / 55'],
-        ['Top-selling SKU', 'Merchandising focus that week', 'Banana Chips 180g', 'Festive combo ₹699'],
+        ['AOV', '2 minis Sep → 3 minis Dec', '', ''],
+        ['Revenue / week', 'Orders × AOV — Website share of ₹40 L', '', ''],
+        ['Add-to-cart rate', '% of sessions that add a trial SKU', '9%', '12%'],
+        ['Cart-to-checkout', 'ATC → checkout start', '50%', '58%'],
+        ['Checkout completion', 'Checkout start → paid order', '58%', '65%'],
+        ['RTO %', 'Keep prepaid-first; COD only above ₹249', '3%', '3%'],
+        ['Paid vs organic sessions', 'Meta/Google vs SEO, WhatsApp, influencer', '60 / 40', '50 / 50'],
+        ['Top-selling SKU', 'Merchandising', 'Banana 70g ₹99', 'Twin ₹199 + 3rd flavour'],
       ]
     },
   ]
 },
 {
   id: 'sec8', title: '8. Social Media Campaign Plan',
-  note: 'Content-calendar specifics need your creative/content team\'s input — the cadence numbers below are general D2C starting benchmarks, not Krispino-specific research. August is the month to stockpile this content before the September launch. Language mix is for rest-of-India D2C: English first, Malayalam second (brand origin / recipes — not a market geo).',
+  note: 'Content sells a ₹99 yes. English 40% / Malayalam 25% / Hindi 20% / Tamil 8% / Telugu 7% unchanged. August stockpile: crunch ASMR, 70g unbox, “two flavours / ₹199”.',
   questions: [
     { q: 'Number of reels per week', type: 'table',
       headers: ['Format', 'Per week'],
@@ -853,24 +869,24 @@ const SECTIONS = [
     { q: 'Weekly posting schedule', a: 'Instagram and Facebook. Timings to be A/B tested.' },
     { q: 'Expected reach, engagement and sales impact', type: 'table',
       headers: ['Metric', 'Value'],
-      rows: [['Reach', '6,00,000']]
+      rows: [['Reach', '3,20,000 (Sep–Dec paid+organic)']]
     },
     { q: 'Reporting format for content performance', type: 'table',
       headers: ['Metric', 'Sep target'],
       rows: [
         ['Post / reel', '4–5 reels + 3 static'],
         ['Platform', 'Instagram 70% / Facebook 30%'],
-        ['Reach / views', '1,50,000 / week'],
-        ['Engagement', '3.5% ER'],
-        ['Link clicks / traffic', '2,250 (1.5% CTR on 1.5 L views)'],
-        ['Attributed orders', '45 (2% CVR on clicks)'],
+        ['Reach / views', '80,000 / week (smaller budget than the crore plan)'],
+        ['Engagement', '4.0% ER (impulse creative)'],
+        ['Link clicks / traffic', '1,600 (2% CTR on 80k)'],
+        ['Attributed orders', '48 (3% CVR on ₹199 PDPs)'],
       ]
     },
   ]
 },
 {
   id: 'sec9', title: '9. Influencer Marketing Plan',
-  note: 'Funnel below uses 4,00,000 campaign views and Sep AOV ₹599. The sheet’s 2% on views is not a site conversion rate — applying it to views would imply 8,000 orders per campaign.',
+  note: 'Funnel uses 1,50,000 campaign views (right-sized to ₹8 L marketing) and ₹199 AOV. Nano in Bengaluru and Hyderabad. CTA is “try two flavours”.',
   questions: [
     { q: 'Influencers to contact per week', type: 'table',
       headers: ['Metric', 'Value'],
@@ -901,30 +917,30 @@ const SECTIONS = [
     },
     { q: 'Expected views per campaign', type: 'table',
       headers: ['Metric', 'Value'],
-      rows: [['Campaign views', '4,00,000']]
+      rows: [['Campaign views', '1,50,000']]
     },
     { q: 'Expected orders per influencer', type: 'table',
-      headers: ['Scenario', 'Views', 'CTR %', 'Website visits', 'CVR %', 'Orders', 'Revenue @ ₹599 AOV'],
+      headers: ['Scenario', 'Views', 'CTR %', 'Website visits', 'CVR %', 'Orders', 'Revenue @ ₹199 AOV'],
       rows: [
-        ['Conservative — passive content', '4,00,000', '0.5%', '2,000', '1.2%', '24', '₹14,376'],
-        ['Moderate — standard CTA', '4,00,000', '1.5%', '6,000', '2.0%', '120', '₹71,880'],
-        ['Aggressive — discount / high intent', '4,00,000', '3.0%', '12,000', '3.5%', '420', '₹2,51,580'],
+        ['Conservative — passive content', '1,50,000', '0.6%', '900', '1.8%', '16', '₹3,184'],
+        ['Moderate — ₹199 CTA', '1,50,000', '1.8%', '2,700', '2.8%', '76', '₹15,124'],
+        ['Aggressive — BOGO flavour', '1,50,000', '3.0%', '4,500', '4.0%', '180', '₹35,820'],
       ]
     },
     { q: 'Coupon-code-wise sales tracking', a: 'Shopflo — unique code per creator.' },
     { q: 'Target CAC from influencers', type: 'table',
       headers: ['Metric', 'Amount'],
       rows: [
-        ['Influencer CAC (sheet)', '₹239.6'],
-        ['Blended max CAC (Marketing tab)', '₹112 / order'],
-        ['Note', 'Influencer CAC is above the blended ceiling — keep this line small until codes prove out'],
+        ['Influencer CAC (this plan)', '₹95–120 — must beat ₹75 ceiling on ₹199 AOV'],
+        ['Blended max CAC', '₹75 / order'],
+        ['Note', 'Barter nano only until codes prove; no ₹3k micros until 50 orders/code'],
       ]
     },
   ]
 },
 {
   id: 'sec10', title: '10. Marketplace & Quick Commerce',
-  note: 'Online geo is rest of India (Bengaluru and Hyderabad first). QC starts Bengaluru (Nov), then Hyderabad. 8% of the ₹1 Cr Sep–Dec mix is a Nov–Dec burst, not a Sep run-rate. QC AOV ₹280 (1–2 packs); marketplace ₹450; website ₹599.',
+  note: '₹40 L mix: QC 30% is a Nov–Dec Zepto burst at ₹199 combo AOV (not ₹99 singles). Blinkit ads are off-budget until velocity. Marketplace 15% = Flipkart twins. Website 22% = ₹199 twin + ₹59 ship. QC still starts Nov.',
   questions: [
     { q: 'Platform-wise target launch date', type: 'table',
       headers: ['Platform', 'Target launch', 'Notes'],
@@ -949,17 +965,17 @@ const SECTIONS = [
     { q: 'SKUs to list first', type: 'table',
       headers: ['Platform', 'First SKUs', 'Why'],
       rows: [
-        ['Flipkart / Amazon', 'Banana Chips 180g, Chilli Tapioca, Baby Murukku, Kozhikodan Mixture, Jackfruit', 'Price < ₹1,000 (Flipkart 0% comm), recognizable, ship-safe'],
-        ['Zepto (Bengaluru)', 'Banana Chips 180g, Chilli Tapioca 200g, Baby Murukku 140g, Kozhikodan 180g', 'Impulse packs, dark-store fit, MRP ₹132–204'],
-        ['Blinkit / Instamart (Bengaluru)', 'Same 3–4 SKUs only — do not list full catalog', 'Ad-wallet and dark-store slot cost; prove 1 city first, then Hyderabad'],
+        ['Flipkart / Amazon', 'Banana 70g, Chilli Tapioca 70g, Baby Murukku 60g, Kozhikodan 70g, twin ₹249', 'Impulse price, Flipkart 0% comm, ship-light'],
+        ['Zepto (Bengaluru)', '₹199 twin (Banana+Chilli) + ₹99–109 singles as add-ons', 'Clears ₹199 MOV; Zepto first 8 weeks; AOV ₹199'],
+        ['Blinkit / Instamart (Bengaluru)', 'Same combo only — no ad wallet', 'Blinkit ₹25k/SKU/state + ₹2–3 L min ads — do not pay until 80 orders/week on Zepto'],
       ]
     },
     { q: 'Platform-wise pricing', type: 'table',
       headers: ['Platform', 'Price rule', 'Commission'],
       rows: [
-        ['Marketplace (general)', 'MRP × 0.90', '~22%'],
-        ['Flipkart items < ₹1,000', 'Same listing price', '0%'],
-        ['Quick commerce', 'Full MRP', '~30%'],
+        ['Marketplace (general)', 'Twin ₹249 / singles ₹99–129', '~22%'],
+        ['Flipkart items < ₹1,000', 'All of this range', '0%'],
+        ['Quick commerce', 'Singles ₹79–129', '~30%'],
       ]
     },
     { q: 'Platform-wise margin', type: 'table', calc: 'platform-margin',
@@ -973,14 +989,14 @@ const SECTIONS = [
     { q: 'Expected monthly sales', type: 'table', calc: 'platform-month',
       headers: ['Platform', 'Sep', 'Oct', 'Nov', 'Dec', 'Sep–Dec total', 'AOV used', 'Dec orders / month'],
       rows: [
-        ['Flipkart', '', '', '', '', '', '₹450', ''],
-        ['Amazon', '', '', '', '', '', '₹450', ''],
-        ['Zepto Bengaluru', '', '', '', '', '', '₹280', ''],
-        ['Blinkit Bengaluru', '', '', '', '', '', '₹280', ''],
-        ['Instamart Bengaluru', '', '', '', '', '', '₹280', ''],
+        ['Flipkart', '', '', '', '', '', '₹179', ''],
+        ['Amazon', '', '', '', '', '', '₹179', ''],
+        ['Zepto Bengaluru', '', '', '', '', '', '₹199', ''],
+        ['Blinkit Bengaluru', '', '', '', '', '', '₹199', ''],
+        ['Instamart Bengaluru', '', '', '', '', '', '₹199', ''],
         ['Amazon Now', '', '', '', '', '', '—', ''],
-        ['Marketplace total', '', '', '', '', '', '₹450', ''],
-        ['Quick commerce total', '', '', '', '', '', '₹280', ''],
+        ['Marketplace total', '', '', '', '', '', '₹179', ''],
+        ['Quick commerce total', '', '', '', '', '', '₹199', ''],
       ]
     },
     { q: 'Expected weekly sales', type: 'table', calc: 'platform-week',
@@ -998,10 +1014,10 @@ const SECTIONS = [
     { q: 'Listing cost / commission / logistics impact', type: 'table',
       headers: ['Platform', 'Commission', 'Logistics / extra cost'],
       rows: [
-        ['Marketplace', '~22%', '₹120 / order freight'],
-        ['Flipkart < ₹1,000', '0%', 'Priority platform'],
-        ['Quick commerce', '~30% bundled', 'No separate logistics line'],
-        ['Blinkit ads', '~28% + fulfilment', '₹25,000 / SKU / state wallet + ₹2–3 L/month min — 3 SKUs, Bengaluru only'],
+        ['Marketplace', '~22%', '₹90 / order light freight'],
+        ['Flipkart < ₹1,000', '0%', 'List every trial + twin here first'],
+        ['Quick commerce', '~30% bundled', 'No separate logistics — this is why QC is 30% of mix'],
+        ['Blinkit ads', '~28% + fulfilment', '₹25k/SKU/state + ₹2–3 L/mo min — skip until Zepto hits 80 orders/week. Not in the ₹8 L budget.'],
       ]
     },
     { q: 'Owner for each platform', type: 'table',
@@ -1049,10 +1065,10 @@ const SECTIONS = [
       headers: ['Metric', 'Value'],
       rows: [
         ['Format', 'Manned tasting tables, not individual samples'],
-        ['Cost / activation', '₹850'],
-        ['People / activation', '40–120'],
-        ['Conversion', '12–18%'],
-        ['Return', '4–9×'],
+        ['Cost / activation', '₹650 (trial pouches, not 180g)'],
+        ['People / activation', '50–140'],
+        ['Conversion', '18–25% (₹79–99 is a tasting-to-pay jump)'],
+        ['Return', '5–11×'],
         ['Office timing', '4–5 PM'],
       ]
     },
@@ -1074,7 +1090,7 @@ const SECTIONS = [
         ['Dec', '', ''],
       ]
     },
-    { q: 'Repeat-order plan', a: 'Retargeting with numbers received + WhatsApp automation. A ₹500 order of 4–5 pouches is consumed in 2–4 weeks; monthly reorder (e.g. first Saturday = Krispino Day) is the natural cycle.' },
+    { q: 'Repeat-order plan', a: 'A ₹199 order of 2 minis is gone in 7–12 days — faster than the 180g pouch. Krispino Day every other Saturday. WhatsApp: “same two flavours, one tap”. 120g everyday pack is the second-month upsell, not the first SKU.' },
     { q: 'Customer feedback process', type: 'table',
       headers: ['Step', 'Detail'],
       rows: [
@@ -1107,16 +1123,16 @@ const SECTIONS = [
         ['Sample send rate', '~35% of leads'],
         ['Samples / week', '8'],
         ['Expected conversions / week', '1.6 (20% of samples)'],
-        ['At MOQ 25 × ₹699', '~₹28,000 revenue per converted account'],
+        ['At MOQ 25 × ₹249', '~₹6,225 revenue per converted account'],
       ]
     },
     { q: 'Expected conversion rate', a: '20% of samples sent.' },
     { q: 'Gift box price points', type: 'table',
       headers: ['Tier', 'Price'],
       rows: [
-        ['Standard', '₹399–499'],
-        ['Premium', '₹699–899'],
-        ['Deluxe', '₹1,299–1,499'],
+        ['Standard', '₹199–249 (trial tin)'],
+        ['Premium', '₹349–449'],
+        ['Deluxe', '₹699–799 (only if they ask)'],
       ]
     },
     { q: 'Minimum order quantity', a: '25.' },
@@ -1149,28 +1165,29 @@ const SECTIONS = [
     { q: 'Total budget required', type: 'table',
       headers: ['Window', 'Budget (18% of revenue)'],
       rows: [
-        ['Sep–Dec ₹1 Cr', '₹18 L'],
-        ['7-month ₹2 Cr', 'Not restated on Marketing tab'],
+        ['Sep–Dec ₹40 L', '₹8.0 L (20%)'],
+        ['7-month ₹82 L', '~₹16.4 L if 20% holds'],
       ]
     },
     { q: 'Budget by month', type: 'table',
       headers: ['Basis', 'Amount'],
       rows: [
-        ['18% of ₹1 Cr ÷ 4 months', '₹4.5 L / month'],
-        ['Marketing tab (old ₹1.14 Cr window)', '₹5.13 L / month'],
+        ['20% of ₹40 L ÷ 4 months', '₹2.0 L / month'],
+        ['Do not use the old ₹5.13 L / month figure', 'That assumed a crore'],
       ]
     },
     { q: 'Budget by week', type: 'table',
       headers: ['Basis', 'Amount'],
-      rows: [['Sep–Dec blended', '~₹1.04 L / week']]
+      rows: [['Sep–Dec blended', '~₹46 k / week']]
     },
     { q: 'Budget by channel', type: 'table', calc: 'stream',
       headers: ['Stream', '%', 'Period amount', 'Monthly spend'],
       rows: [
-        ['Marketplace ads', '30%', '', ''],
-        ['Paid social', '30%', '', ''],
-        ['Influencer / UGC', '15%', '', ''],
-        ['D2C site & CRM', '20%', '', ''],
+        ['Marketplace ads', '20%', '', ''],
+        ['Paid social', '35%', '', ''],
+        ['Influencer / UGC', '10%', '', ''],
+        ['D2C site & CRM', '15%', '', ''],
+        ['QC ads (from Nov)', '15%', '', ''],
         ['Contingency', '5%', '', ''],
       ]
     },
@@ -1181,30 +1198,31 @@ const SECTIONS = [
         ['Paid social', ''],
         ['Influencer / UGC', ''],
         ['D2C site', ''],
+        ['QC ads (from Nov)', ''],
         ['Community / WhatsApp', ''],
       ]
     },
     { q: 'Expected CAC', type: 'table',
       headers: ['Metric', 'Amount'],
-      rows: [['Expected CAC', '₹89.8 / order']]
+      rows: [['Expected CAC', '₹44 blended (₹8 L / 18,200). Paid lines ₹65–75. QC launch ads ₹80–150 — treat as acquisition.']]
     },
     { q: 'Expected ROAS', type: 'table',
-      headers: ['Channel', 'Target ROAS', 'Implied CAC @ ₹599 AOV'],
+      headers: ['Channel', 'Target ROAS', 'Implied CAC @ ₹199 AOV'],
       rows: [
-        ['Blended (18% mkt spend)', '5.6×', '₹107'],
-        ['Marketplace ads (Flipkart/Amazon)', '5.0×', '₹120'],
-        ['Paid social', '3.5×', '₹171'],
-        ['D2C site / CRM', '4.5×', '₹133'],
-        ['Influencer / UGC', '2.5×', '₹240'],
-        ['Quick commerce ads', '2.8×', '₹214 (on ₹280 QC AOV: ₹100)'],
-        ['Stop / reallocate below', '2.0×', '₹300'],
+        ['Blended (20% mkt spend)', '5.0×', '₹40 @ ₹199'],
+        ['Marketplace ads (Flipkart twins)', '4.5×', '₹44'],
+        ['Paid social (₹199 PDP)', '3.2×', '₹62'],
+        ['D2C site / CRM', '4.0×', '₹50'],
+        ['Influencer / UGC', '2.2×', '₹90 — barter until proven'],
+        ['Quick commerce ads', '3.0×', '₹43 on ₹129 QC AOV'],
+        ['Stop / reallocate below', '2.0×', '₹100'],
       ]
     },
     { q: 'Maximum acceptable CAC', type: 'table',
       headers: ['Metric', 'Amount'],
-      rows: [['Maximum acceptable CAC', '₹112 / order']]
+      rows: [['Maximum acceptable CAC', '₹75 site/MP · ₹100 QC launch for 8 weeks then ₹80 · never ₹2–3 L Blinkit min-spend']]
     },
-    { q: 'Stop-loss rules for campaigns', a: 'Pause or re-scope any channel whose trailing-7-day CAC exceeds ₹112/order for 2 consecutive weeks, and move budget to whatever is converting.' },
+    { q: 'Stop-loss rules for campaigns', a: 'Pause any paid line whose trailing-7-day CAC exceeds ₹75/order (₹50 on QC) for 2 consecutive weeks. Reallocate to tasting, Flipkart twins, or the ₹199 PDP — do not protect the old 45/15/8 mix.' },
   ]
 },
 ];
@@ -1219,14 +1237,14 @@ const SECTION14 = {
       headers: ['Period', 'Orders'],
       rows: [
         ['Sep / month', '1,500'],
-        ['Sep / week (Revenue tab)', '500'],
+        ['Sep / week', '~350'],
       ]
     },
     { q: 'AOV target', type: 'table',
       headers: ['Source', 'AOV'],
       rows: [
-        ['Weekly Planning tab', '₹699'],
-        ['Sep modeled (Section 4)', '₹599'],
+        ['Weekly Planning tab', '₹249'],
+        ['Sep modeled (Section 4)', '₹199'],
       ]
     },
     { q: 'Website traffic target', type: 'table', calc: 'web-traffic',
@@ -1236,8 +1254,8 @@ const SECTION14 = {
     { q: 'Conversion target', type: 'table',
       headers: ['Stage', 'Rate'],
       rows: [
-        ['Start', '2%'],
-        ['In 6 months', '3.5%'],
+        ['Start', '2.5%'],
+        ['In 6 months', '4.0%'],
       ]
     },
     { q: 'Content calendar', type: 'table',
@@ -1265,9 +1283,9 @@ const SECTION14 = {
     { q: 'Paid ads', type: 'table',
       headers: ['Channel', 'Weekly spend (Sep)', 'Owner'],
       rows: [
-        ['Marketplace ads', '₹1.15 L', 'V'],
-        ['Paid social', '₹1.15 L', 'V'],
-        ['QC ads (from Nov)', '₹0 until Nov, then ₹0.40 L', 'V'],
+        ['Marketplace ads', '₹23 k', 'V'],
+        ['Paid social', '₹40 k', 'V'],
+        ['QC ads (from Nov)', '₹0 until Nov, then ₹35 k', 'V'],
       ]
     },
     { q: 'Community sales', type: 'table', calc: 'community-week',
@@ -1284,8 +1302,8 @@ const SECTION14 = {
       rows: [
         ['Leads', '20–25'],
         ['Samples', '8'],
-        ['Sep revenue', '₹4,600'],
-        ['Nov–Dec revenue', '₹34,600'],
+        ['Sep revenue', '₹2,300'],
+        ['Nov–Dec revenue', '₹11,600'],
       ]
     },
     { q: 'Marketplace follow-ups', type: 'table',
@@ -1298,8 +1316,8 @@ const SECTION14 = {
     { q: 'Quick commerce follow-ups', type: 'table',
       headers: ['Platform', 'Weekly action', 'Owner'],
       rows: [
-        ['Zepto', 'Bengaluru NPI + 4 SKUs, no ads until week 2 live; Hyderabad next', 'V, Bhavana, Giri'],
-        ['Blinkit', 'Bengaluru 3 SKUs; do not pay ₹2–3 L ads until 50 orders/week', 'V, Bhavana, Giri'],
+        ['Zepto', 'Bengaluru NPI + 4 trial SKUs at ₹79–99; no ads until week 2; Hyderabad next', 'V, Bhavana, Giri'],
+        ['Blinkit', 'Bengaluru 3–4 trials; no ₹2–3 L ads until 80 orders/week', 'V, Bhavana, Giri'],
         ['Instamart', 'Bengaluru parallel with Blinkit; pick winner in 8 weeks, then Hyderabad', 'V, Bhavana, Giri'],
       ]
     },
@@ -1307,8 +1325,8 @@ const SECTION14 = {
     { q: 'Website changes', type: 'table',
       headers: ['Change', 'By'],
       rows: [
-        ['₹599 free-ship bar + combo PDP', 'Sep week 1'],
-        ['COD + UPI checkout', 'Sep week 2'],
+        ['₹599 free-ship bar (combined) + ₹59 ship below + ₹199 twin PDP', 'Sep week 1'],
+        ['COD + UPI; default 2 minis in cart', 'Sep week 2'],
         ['Shopflo influencer codes', 'Sep week 2'],
       ]
     },
@@ -1331,12 +1349,12 @@ const SECTION15 = {
     { q: 'Monthly dashboard format', type: 'table',
       headers: ['Metric', 'Sep target', 'Dec target'],
       rows: [
-        ['Revenue', '₹8.99 L', '₹29.96 L'],
-        ['Orders', '1,500', '4,000'],
-        ['AOV', '₹599', '₹749'],
-        ['Channel-wise', 'Site 45 / MP 15 / QC 0 / WA 28 / B2B 4', 'Site 45 / MP 15 / QC 8 / WA 28 / B2B 4'],
-        ['Marketing spend vs revenue', '18% · ₹1.62 L', '18% · ₹5.39 L'],
-        ['Blended CAC vs ₹112 ceiling', '₹90', '₹90'],
+        ['Revenue', '₹3.20 L', '₹15.00 L'],
+        ['Orders', '1,500', '6,800'],
+        ['AOV', '₹213', '₹221'],
+        ['Channel-wise', 'Site 22 / MP 15 / QC 0 / WA 28 / B2B 5', 'Site 22 / MP 15 / QC 30 / WA 28 / B2B 5'],
+        ['Marketing spend vs revenue', '20% · ₹0.64 L', '20% · ₹3.00 L'],
+        ['Blended CAC vs ₹75 ceiling', '₹65', '₹65'],
       ]
     },
     { q: 'Data sources', type: 'table',
@@ -1351,13 +1369,13 @@ const SECTION15 = {
       ]
     },
     { q: 'Owner for each metric', a: 'See Section 16 owner table.' },
-    { q: 'Decision-making process when targets are missed', a: 'If actuals fall more than 15% below target for 2 consecutive months, reallocate marketing toward whichever channel is converting rather than holding the 45/15/8/28/4 (Website / Marketplace / QC / Community-WA / B2B) split rigid.' },
+    { q: 'Decision-making process when targets are missed', a: 'If actuals fall more than 15% below target for 2 consecutive months, cut paid social first and pour into Bengaluru tastings + Flipkart twins + QC — do not climb back toward a ₹599 AOV to “make the rupees look bigger”.' },
   ]
 };
 
 const SECTION16 = {
   id: 'sec16', title: '16. Team Roles & Responsibilities',
-  note: 'Ownership from the team RACI sheet. Giri, Vaitahavya (V), Hema, and Bhavana are workstream owners; Ravi chairs. Names in order are owner, then co-owners. Per-person detail tables follow.',
+  note: 'Ownership is the same team as the main worksheet. This tab only changes the commercial plan, not who owns the work.',
   people: ['Giri', 'Vaitahavya', 'Hema', 'Bhavana', 'Ravi'],
   cols: ['Proposed role', 'Weekly responsibilities', 'Monthly responsibilities', 'Measurable KPIs', 'Support needed from others', 'Dependencies on founders/management'],
   ownership: {
@@ -1678,8 +1696,8 @@ document.addEventListener('click', (e) => {
 // Live calculation — assumptions panel drives every calc-tagged table cell
 // ---------------------------------------------------------------
 const AP_DEFAULTS = {
-  targetRevenue: 10000000, startMonth: '2026-09', endMonth: '2026-12',
-  aov: 599, cogsPct: 41, logisticsCost: 120, mpCommission: 22, qcCommission: 30, mktPct: 18,
+  targetRevenue: 4000000, startMonth: '2026-09', endMonth: '2026-12',
+  aov: 219, cogsPct: 44, logisticsCost: 90, mpCommission: 22, qcCommission: 30, mktPct: 20,
 };
 function getAssumptions() {
   const num = (id, fallback) => {
@@ -1712,12 +1730,12 @@ function fmtMoneyOrDash(n) {
 
 // Platform mix inside Marketplace / QC (of that channel's Sep–Dec total).
 const PLATFORM_SPLIT = {
-  flipkart:           { parent: 'marketplace', share: 8 / 15, months: [0.10, 0.30, 0.3125, 0.2875], aov: 450 },
-  amazon:             { parent: 'marketplace', share: 7 / 15, months: [0, 0.228571, 0.385714, 0.385714], aov: 450 },
-  zeptobengaluru:     { parent: 'quickcommerce', share: 4 / 8, months: [0, 0, 0.45, 0.55], aov: 280 },
-  blinkitbengaluru:   { parent: 'quickcommerce', share: 2.5 / 8, months: [0, 0, 0.36, 0.64], aov: 280 },
-  instamartbengaluru: { parent: 'quickcommerce', share: 1.5 / 8, months: [0, 0, 1 / 3, 2 / 3], aov: 280 },
-  amazonnow:          { parent: 'quickcommerce', share: 0, months: [0, 0, 0, 0], aov: 280 },
+  flipkart:           { parent: 'marketplace', share: 8 / 15, months: [0.10, 0.30, 0.3125, 0.2875], aov: 179 },
+  amazon:             { parent: 'marketplace', share: 7 / 15, months: [0, 0.228571, 0.385714, 0.385714], aov: 179 },
+  zeptobengaluru:     { parent: 'quickcommerce', share: 4 / 8, months: [0, 0, 0.45, 0.55], aov: 199 },
+  blinkitbengaluru:   { parent: 'quickcommerce', share: 2.5 / 8, months: [0, 0, 0.36, 0.64], aov: 199 },
+  instamartbengaluru: { parent: 'quickcommerce', share: 1.5 / 8, months: [0, 0, 1 / 3, 2 / 3], aov: 199 },
+  amazonnow:          { parent: 'quickcommerce', share: 0, months: [0, 0, 0, 0], aov: 199 },
 };
 const RAMP_WA = { sep: 0.067, oct: 0.161, nov: 0.337, dec: 0.435 };
 const RAMP_B2B = { sep: 0.05, oct: 0.20, nov: 0.375, dec: 0.375 };
@@ -1804,8 +1822,8 @@ function recalcTables() {
   monthRev.quickcommercetotal = [0, 1, 2, 3].map(i =>
     (monthRev.zeptobengaluru[i] || 0) + (monthRev.blinkitbengaluru[i] || 0) + (monthRev.instamartbengaluru[i] || 0));
   const aovByPlatform = {
-    flipkart: 450, amazon: 450, marketplacetotal: 450,
-    zeptobengaluru: 280, blinkitbengaluru: 280, instamartbengaluru: 280, amazonnow: 280, quickcommercetotal: 280,
+    flipkart: 179, amazon: 179, marketplacetotal: 179,
+    zeptobengaluru: 199, blinkitbengaluru: 199, instamartbengaluru: 199, amazonnow: 199, quickcommercetotal: 199,
   };
   document.querySelectorAll('table[data-calc-group="platform-month"] tr[data-calc-row]').forEach(tr => {
     const vals = monthRev[tr.dataset.calcRow];
@@ -1825,8 +1843,8 @@ function recalcTables() {
   // ---- Community (Sec 11 + 14) and B2B (Sec 12) — ramp × channel % ----
   const waMonth = MONTH_KEYS.map(k => waTotal * RAMP_WA[k]);
   const b2bMonth = MONTH_KEYS.map(k => b2bTotal * RAMP_B2B[k]);
-  const communityAov = 500;
-  const b2bBox = 25 * 699;
+  const communityAov = 199;
+  const b2bBox = 25 * 249;
   document.querySelectorAll('table[data-calc-group="community-month"] tr[data-calc-row]').forEach(tr => {
     const idx = MONTH_KEYS.indexOf(tr.dataset.calcRow);
     if (idx < 0) return;
@@ -1857,9 +1875,9 @@ function recalcTables() {
   });
 
   // ---- Website weekly scorecard + traffic (Sec 7 + 14) ----
-  const sepCvr = 0.02, decCvr = 0.03;
+  const sepCvr = 0.025, decCvr = 0.035;
   const sepAov = A.aov;
-  const decAov = A.aov <= 599 ? 749 : Math.round(A.aov * 1.25);
+  const decAov = A.aov <= 219 ? 249 : Math.round(A.aov * 1.12);
   const avgWeeks = totalWeeks / n;
   const sepOrdersW = sepAov > 0 ? (webTotal / n / sepAov) / avgWeeks : 0;
   const sepSessW = sepCvr > 0 ? sepOrdersW / sepCvr : 0;
@@ -1873,8 +1891,8 @@ function recalcTables() {
       setOut(tr, 'sep', fmtNum(sepSessW));
       setOut(tr, 'dec', fmtNum(decSessW));
     } else if (key === 'conversionrate') {
-      setOut(tr, 'sep', '2.0%');
-      setOut(tr, 'dec', '3.0%');
+      setOut(tr, 'sep', '2.5%');
+      setOut(tr, 'dec', '3.5%');
     } else if (key === 'ordersweek') {
       setOut(tr, 'sep', fmtNum(sepOrdersW));
       setOut(tr, 'dec', fmtNum(decOrdersW));
@@ -1907,9 +1925,10 @@ function recalcTables() {
     const key = tr.dataset.calcRow;
     let rev = 0;
     if (key === 'marketplaceads') rev = mpTotal;
-    else if (key === 'paidsocial') rev = webTotal * 0.48;
-    else if (key === 'influencerugc') rev = webTotal * 0.20;
+    else if (key === 'paidsocial') rev = webTotal * 0.55;
+    else if (key === 'influencerugc') rev = webTotal * 0.18;
     else if (key === 'd2csite') rev = webTotal;
+    else if (key === 'qcadfromnov' || key === 'qcadsfromnov') rev = qcTotal;
     else if (key === 'communitywhatsapp') rev = waTotal;
     setOut(tr, 'revenue', fmtINR(rev));
   });
@@ -1975,7 +1994,7 @@ document.getElementById('exportBtn').addEventListener('click', () => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'krispino-gtm-answers.csv';
+  a.download = 'krispino-trial-pack-plan.csv';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -1989,7 +2008,7 @@ document.getElementById('printBtn').addEventListener('click', () => window.print
 // file), no separate download. Reopen this same HTML file later in the
 // same browser and your edits are restored automatically.
 // ---------------------------------------------------------------
-const STORAGE_KEY = 'krispino-answers-worksheet-progress-v6';
+const STORAGE_KEY = 'krispino-trial-pack-worksheet-v3';
 const saveStatusEl = document.getElementById('saveStatus');
 function showSaveStatus(msg) { saveStatusEl.textContent = msg; }
 
@@ -2020,7 +2039,7 @@ function collectSaveData() {
     checklist.push({ text: cb.nextElementSibling.textContent, done: cb.checked });
   });
   return {
-    tool: 'krispino-answers-worksheet',
+    tool: 'krispino-trial-pack-worksheet',
     savedAt: new Date().toISOString(),
     assumptions: getAssumptions(),
     fields,

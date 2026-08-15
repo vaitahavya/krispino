@@ -207,6 +207,7 @@
       <a href="index.html">Home</a>
       <a href="planning.html" class="active">Planning Tool</a>
       <a href="answers.html">Answers Worksheet</a>
+      <a href="trial.html">Trial plan</a>
       <a href="presentation.html">Presentation</a>
     </nav>
   </div>
@@ -233,7 +234,7 @@
     <div style="font-family:'Poppins',sans-serif; font-size:11px; font-weight:700; color:var(--good); text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;">Confirmed / locked assumptions</div>
     <div style="font-size:12.5px; color:var(--ink); line-height:1.6;">
       ₹1 Cr target (Sep–Dec) is <b>new online/D2C revenue only</b> — offline NE revenue (₹3 Cr/yr) is intentionally excluded. Online demand is <b>rest of India</b> (Bengaluru and Hyderabad first).
-      Founder capital is available to deploy (modest, not large). Target AOV starts at <b>₹599 in Sep</b> and steps up monthly to <b>₹899 by Mar ’27</b> (7-month blend <b>₹749</b>). Free shipping above <b>₹699</b>.
+      Founder capital is available to deploy (modest, not large). Target AOV starts at <b>₹599 in Sep</b> and steps up monthly to <b>₹899 by Mar ’27</b> (7-month blend <b>₹749</b>). Free shipping only when combined order value is <b>₹599</b>.
       Shelf life is <b>60 days</b>. Current shipping is <b>₹120/order</b> (target ≤ ₹150 blended). Bulk packaging cost is <b>₹10–15/unit</b>. GTIN &amp; GST are already live.
       <b>August 2026 is reserved for planning &amp; prep</b> (packaging sign-off, marketplace listings, content stockpile) — the revenue ramp itself starts <b>September 2026</b>.
       All fields below are editable — these are just the confirmed starting point.
@@ -285,7 +286,7 @@
 
         <div class="field" style="margin-bottom:0;">
           <label>Free shipping threshold (₹) <span class="fhint">confirmed — orders above this ship free</span></label>
-          <input type="number" id="freeShipThreshold" value="699" min="0" step="10">
+          <input type="number" id="freeShipThreshold" value="599" min="0" step="10">
         </div>
       </div>
 
@@ -1133,7 +1134,7 @@ $('exportCsvBtn').addEventListener('click', exportCsv);
 // Autosave — browser storage keyed to this page. Reopen later in the
 // same browser and every input (targets, ramp, channels, costs) restores.
 // ---------------------------------------------------------------
-const STORAGE_KEY = 'krispino-planning-tool-progress-v4';
+const STORAGE_KEY = 'krispino-planning-tool-progress-v5';
 const saveStatusEl = $('saveStatus');
 function showSaveStatus(msg){ saveStatusEl.textContent = msg; }
 
