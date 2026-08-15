@@ -1412,6 +1412,11 @@ const SECTION17 = {
 // ---------------------------------------------------------------
 // Live-calc helpers (mirrors the Krispino Planning Tool's own math)
 // ---------------------------------------------------------------
+function inrGroup(n) {
+  n = Math.round(Number(n));
+  if (!isFinite(n)) return '0';
+  return n.toLocaleString('en-IN');
+}
 function fmtINR(n, opts) {
   opts = opts || {};
   if (isNaN(n)) return '₹0';
@@ -1419,22 +1424,13 @@ function fmtINR(n, opts) {
   let value, suffix, decimals;
   if (n >= 1e7) { value = n/1e7; suffix = ' Cr'; decimals = opts.compact ? 1 : 2; }
   else if (n >= 1e5) { value = n/1e5; suffix = ' L'; decimals = opts.compact ? 1 : 2; }
-  else if (n >= 1e3) { value = n/1e3; suffix = ' K'; decimals = opts.compact ? 1 : 2; }
-  else { value = n; suffix = ''; decimals = 0; }
+  else { return (neg ? '-' : '') + '₹' + inrGroup(n); }
   let str = value.toFixed(decimals);
   str = str.replace(/\.0+$/,'').replace(/(\.\d*[1-9])0+$/,'$1');
   return (neg?'-':'') + '₹' + str + suffix;
 }
-function fmtRupee(n) { return isNaN(n) ? '₹0' : '₹' + Math.round(n); }
-function fmtNum(n) {
-  n = Math.round(n);
-  if (isNaN(n)) return '0';
-  const s = String(Math.abs(n));
-  let last3 = s.substring(s.length - 3);
-  let other = s.substring(0, s.length - 3);
-  if (other !== '') last3 = ',' + last3;
-  return (n < 0 ? '-' : '') + other.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + last3;
-}
+function fmtRupee(n) { return isNaN(n) ? '₹0' : (n < 0 ? '-' : '') + '₹' + inrGroup(Math.abs(n)); }
+function fmtNum(n) { return inrGroup(n); }
 function fmtPct(n) { return isNaN(n) ? '0%' : n.toFixed(1) + '%'; }
 function monthsBetween(startStr, endStr) {
   const [sy, sm] = startStr.split('-').map(Number);

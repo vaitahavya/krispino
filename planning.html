@@ -611,7 +611,12 @@ document.querySelectorAll('input[name="ramp"]').forEach(r => r.addEventListener(
   recalc();
 }));
 
-// Indian numbering: Crore (1,00,00,000) / Lakh (1,00,000) / Thousand — no long strings of zeros
+// Indian numbering: 12,34,567 · Crore (1,00,00,000) / Lakh (1,00,000)
+function inrGroup(n) {
+  n = Math.round(Number(n));
+  if (!isFinite(n)) return '0';
+  return n.toLocaleString('en-IN');
+}
 function fmtINR(n, opts){
   opts = opts || {};
   if (isNaN(n)) return '₹0';
@@ -619,21 +624,12 @@ function fmtINR(n, opts){
   let value, suffix, decimals;
   if (n >= 1e7){ value = n/1e7; suffix = ' Cr'; decimals = opts.compact ? 1 : 2; }
   else if (n >= 1e5){ value = n/1e5; suffix = ' L'; decimals = opts.compact ? 1 : 2; }
-  else if (n >= 1e3){ value = n/1e3; suffix = ' K'; decimals = opts.compact ? 1 : 2; }
-  else { value = n; suffix = ''; decimals = 0; }
+  else { return (neg?'-':'') + '₹' + inrGroup(n); }
   let str = value.toFixed(decimals);
-  // trim trailing .0 / .00 for cleanliness
   str = str.replace(/\.0+$/,'').replace(/(\.\d*[1-9])0+$/,'$1');
   return (neg?'-':'') + '₹' + str + suffix;
 }
-function fmtNum(n){
-  n = Math.round(n);
-  const s = n.toString();
-  let last3 = s.substring(s.length-3);
-  let other = s.substring(0, s.length-3);
-  if (other !== '') last3 = ',' + last3;
-  return other.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + last3;
-}
+function fmtNum(n){ return inrGroup(n); }
 
 function monthsBetween(startStr, endStr){
   const [sy, sm] = startStr.split('-').map(Number);
@@ -718,7 +714,7 @@ function recalc(){
     <div class="stat">
       <div class="label">Units needed</div>
       <div class="value">${totalUnits!==null ? fmtNum(totalUnits) : '—'}</div>
-      <div class="foot">${asp>0 ? 'at ₹'+asp+' ASP' : 'enter ASP to calculate'}</div>
+      <div class="foot">${asp>0 ? 'at ₹'+inrGroup(asp)+' ASP' : 'enter ASP to calculate'}</div>
     </div>
   `;
 
