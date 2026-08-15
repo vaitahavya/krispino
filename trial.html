@@ -292,7 +292,7 @@
       <div class="ap-head">
         <div>
           <div class="ap-title">Live assumptions <span class="calc-badge">Drives tables below</span></div>
-          <div class="ap-hint">₹40 L · AOV ₹219 · freight ₹90 on site. <b>Free ship locked at ₹599 combined</b> — collect ₹59 below that. QC hero is a ₹199 combo (their MOV), not our free-ship rule.</div>
+          <div class="ap-hint">Change any assumption or any yellow % cell — teal cells across every linked table recalculate. Free-ship default is ₹599 combined (you can model other values here; the business rule is still ₹599).</div>
         </div>
         <button type="button" class="ap-reset" id="apResetBtn">Reset to defaults</button>
       </div>
@@ -300,12 +300,18 @@
         <div class="ap-field"><label>Target revenue (₹)</label><input type="number" id="ap_targetRevenue" value="4000000" step="10000"></div>
         <div class="ap-field"><label>Start month</label><input type="month" id="ap_startMonth" value="2026-09"></div>
         <div class="ap-field"><label>End month</label><input type="month" id="ap_endMonth" value="2026-12"></div>
-        <div class="ap-field"><label>AOV (₹)</label><input type="number" id="ap_aov" value="219" step="1"></div>
+        <div class="ap-field"><label>Blended AOV (₹)</label><input type="number" id="ap_aov" value="219" step="1"></div>
+        <div class="ap-field"><label>QC AOV (₹)</label><input type="number" id="ap_qcAov" value="199" step="1"></div>
+        <div class="ap-field"><label>Marketplace AOV (₹)</label><input type="number" id="ap_mpAov" value="179" step="1"></div>
+        <div class="ap-field"><label>Trial pack price (₹)</label><input type="number" id="ap_packPrice" value="95" step="1"></div>
         <div class="ap-field"><label>COGS (%)</label><input type="number" id="ap_cogsPct" value="44" step="0.5"></div>
-        <div class="ap-field"><label>Logistics cost/order (₹)</label><input type="number" id="ap_logisticsCost" value="90" step="1"></div>
+        <div class="ap-field"><label>Logistics / D2C order (₹)</label><input type="number" id="ap_logisticsCost" value="90" step="1"></div>
+        <div class="ap-field"><label>Paid ship below free (₹)</label><input type="number" id="ap_paidShip" value="59" step="1"></div>
+        <div class="ap-field"><label>Free ship combined (₹)</label><input type="number" id="ap_freeShip" value="599" step="1"></div>
         <div class="ap-field"><label>Marketplace commission (%)</label><input type="number" id="ap_mpCommission" value="22" step="0.5"></div>
         <div class="ap-field"><label>Quick commerce commission (%)</label><input type="number" id="ap_qcCommission" value="30" step="0.5"></div>
         <div class="ap-field"><label>Marketing spend (% of revenue)</label><input type="number" id="ap_mktPct" value="20" step="0.5"></div>
+        <div class="ap-field"><label>Site CVR start (%)</label><input type="number" id="ap_convPct" value="2.5" step="0.1"></div>
       </div>
     </div>
 
@@ -328,48 +334,47 @@ const SECTIONS = [
   id: 'sec1', title: '1. Revenue Target & Sales Plan',
   note: 'Trial-pack experiment — not the ₹1 Cr sheet. ₹40 L Sep–Dec, ~18,200 orders at ~₹219. QC ₹199 combo is platform MOV. <b>Krispino free shipping only when the combined cart is ₹599.</b> Paid ship below. Bengaluru then Hyderabad. August is prep only.',
   questions: [
-    { q: 'How much revenue should we target each month?', type: 'table',
+    { q: 'How much revenue should we target each month?', type: 'table', calc: 'rev-month',
       headers: ['Month', 'Revenue', 'Orders', 'AOV'],
       rows: [
-        ["Sep '26", '₹3.20 L', '1,500', '₹213'],
-        ["Oct '26", '₹8.80 L', '4,000', '₹220'],
-        ["Nov '26", '₹13.00 L', '5,900', '₹220'],
-        ["Dec '26", '₹15.00 L', '6,800', '₹221'],
-        ['Sep–Dec total', '₹40.00 L', '18,200', '~₹220 blend'],
-        ["Jan '27", '₹16.00 L', '7,000', '₹229'],
-        ["Feb '27", '₹12.00 L', '5,000', '₹240'],
-        ["Mar '27", '₹14.00 L', '5,600', '₹250'],
-        ['7-month total', '₹82.00 L', '35,800', '~₹229 blend'],
+        ["Sep '26", '', '', ''],
+        ["Oct '26", '', '', ''],
+        ["Nov '26", '', '', ''],
+        ["Dec '26", '', '', ''],
+        ['Sep–Dec total', '', '', ''],
+        ["Jan '27", '', '', ''],
+        ["Feb '27", '', '', ''],
+        ["Mar '27", '', '', ''],
+        ['7-month total', '', '', ''],
       ]
     },
-    { q: 'How much revenue should we target each week?', type: 'table',
-      headers: ['Sep week', 'Share of Sep orders', 'Orders', 'Revenue'],
+    { q: 'How much revenue should we target each week?', type: 'table', calc: 'sep-week',
+      headers: ['Sep week', '% of Sep', 'Orders', 'Revenue'],
       rows: [
-        ['Week 1', '35%', '525', '₹1.12 L'],
-        ['Week 2', '30%', '450', '₹0.96 L'],
-        ['Week 3', '20%', '300', '₹0.64 L'],
-        ['Week 4', '15%', '225', '₹0.48 L'],
-        ['Sep total', '100%', '1,500', '₹3.20 L'],
-        ['Later months', 'Even split', 'month ÷ weeks', 'month revenue ÷ weeks'],
+        ['Week 1', '35%', '', ''],
+        ['Week 2', '30%', '', ''],
+        ['Week 3', '20%', '', ''],
+        ['Week 4', '15%', '', ''],
+        ['Sep total', '', '', ''],
       ]
     },
-    { q: 'How many orders are needed weekly?', type: 'table',
+    { q: 'How many orders are needed weekly?', type: 'table', calc: 'ord-week',
       headers: ['Month', 'Orders / month', 'Orders / week'],
       rows: [
-        ["Sep '26", '1,500', '~350 (525 / 450 / 300 / 225)'],
-        ["Oct '26", '4,000', '~920'],
-        ["Nov '26", '5,900', '~1,370'],
-        ["Dec '26", '6,800', '~1,545'],
-        ['7-month plan', '35,800 total · ~5,100 / month', '~170 / day'],
+        ["Sep '26", '', ''],
+        ["Oct '26", '', ''],
+        ["Nov '26", '', ''],
+        ["Dec '26", '', ''],
+        ['7-month plan', '', ''],
       ]
     },
-    { q: 'What should be the minimum AOV?', type: 'table',
+    { q: 'What should be the minimum AOV?', type: 'table', calc: 'aov-floor',
       headers: ['Floor', 'Amount', 'Source'],
       rows: [
-        ['Impulse / first-order floor', '₹199', '2 minis — never ship one pouch (freight is per order)'],
-        ['Contribution floor (site, after ₹90 freight)', '₹199 + ₹59 ship', '2-pack never ships free'],
-        ['Free-ship bar (locked)', '₹599', 'Combined order value only — 6 minis or 120g mix. Not ₹349.'],
-        ['7-month blend', '₹229', 'Add a flavour, then upsell 120g — do not upsize the first bag'],
+        ['Impulse / first-order floor', '', '2 minis — never ship one pouch'],
+        ['Paid-ship 2-pack', '', 'AOV + paid ship — does not qualify for free ship'],
+        ['Free-ship bar (combined cart)', '', 'Locked business rule default ₹599'],
+        ['Window blend AOV', '', 'From live AOV × monthly step-up'],
       ]
     },
     { q: 'Which channel will contribute how much?', type: 'table', calc: 'channel',
@@ -389,55 +394,55 @@ const SECTIONS = [
   id: 'sec2', title: '2. Product & SKU Strategy',
   note: 'Same seven heroes, cut to trial pouches so the first yes is ₹99 not ₹204. More packs per month, lower rupees per pack. Everyday 120g stays as the second purchase, not the first.',
   questions: [
-    { q: 'Top 5–10 SKUs to focus on', type: 'table',
+    { q: 'Top 5–10 SKUs to focus on', type: 'table', calc: 'sku-hero',
       headers: ['Hero SKU', 'Pack / price', 'Monthly', 'Weekly', 'Margin', 'Channel fit'],
       rows: [
-        ['Banana Chips – Coconut Oil', '70g trial · ₹99', '2,400 packs', '550', '38–42%', 'QC, D2C first order, influencers'],
-        ['Chilli Tapioca Chips', '70g trial · ₹89', '2,200 packs', '500', '40–44%', 'QC impulse, D2C, influencers'],
-        ['Baby Murukku', '60g trial · ₹79', '2,200 packs', '500', '42–46%', 'QC, office, B2B tins'],
-        ['Jackfruit Chips', '70g trial · ₹129', '1,200 packs', '275', '38–42%', 'Gifting add-on, influencers'],
-        ['Kanthari Murukku', '60g trial · ₹79', '1,400 packs', '320', '42–46%', 'QC, spicy Reels, combos'],
-        ['Kozhikodan Mixture', '70g trial · ₹89', '1,400 packs', '320', '42–46%', 'QC, community, combos'],
-        ['Madhuraseva', '60g trial · ₹89', '1,200 packs', '275', '40–44%', 'Discovery, gifting, influencers'],
-        ['TOTAL', 'trial line', '12,000 packs', '~2,740/week', '—', 'vs 4,200 of the large pouches'],
+        ['Banana Chips – Coconut Oil', '', '', '', '', 'QC, D2C first order, influencers'],
+        ['Chilli Tapioca Chips', '', '', '', '', 'QC impulse, D2C, influencers'],
+        ['Baby Murukku', '', '', '', '', 'QC, office, B2B tins'],
+        ['Jackfruit Chips', '', '', '', '', 'Gifting add-on, influencers'],
+        ['Kanthari Murukku', '', '', '', '', 'QC, spicy Reels, combos'],
+        ['Kozhikodan Mixture', '', '', '', '', 'QC, community, combos'],
+        ['Madhuraseva', '', '', '', '', 'Discovery, gifting, influencers'],
+        ['TOTAL', 'trial line', '', '', '', 'vs the large-pouch plan'],
       ]
     },
-    { q: 'Expected monthly sales per SKU', type: 'table',
+    { q: 'Expected monthly sales per SKU', type: 'table', calc: 'sku-packs',
       headers: ['Hero SKU', 'Packs / month'],
       rows: [
-        ['Banana Chips – Coconut Oil', '2,400'],
-        ['Chilli Tapioca Chips', '2,200'],
-        ['Baby Murukku', '2,200'],
-        ['Kanthari Murukku', '1,400'],
-        ['Kozhikodan Mixture', '1,400'],
-        ['Jackfruit Chips', '1,200'],
-        ['Madhuraseva', '1,200'],
-        ['TOTAL', '12,000'],
+        ['Banana Chips – Coconut Oil', ''],
+        ['Chilli Tapioca Chips', ''],
+        ['Baby Murukku', ''],
+        ['Kanthari Murukku', ''],
+        ['Kozhikodan Mixture', ''],
+        ['Jackfruit Chips', ''],
+        ['Madhuraseva', ''],
+        ['TOTAL', ''],
       ]
     },
-    { q: 'Expected weekly sales per SKU', type: 'table',
+    { q: 'Expected weekly sales per SKU', type: 'table', calc: 'sku-week',
       headers: ['Hero SKU', 'Packs / week'],
       rows: [
-        ['Banana Chips – Coconut Oil', '550'],
-        ['Chilli Tapioca Chips', '500'],
-        ['Baby Murukku', '500'],
-        ['Kanthari Murukku', '320'],
-        ['Kozhikodan Mixture', '320'],
-        ['Jackfruit Chips', '275'],
-        ['Madhuraseva', '275'],
-        ['TOTAL', '~2,740'],
+        ['Banana Chips – Coconut Oil', ''],
+        ['Chilli Tapioca Chips', ''],
+        ['Baby Murukku', ''],
+        ['Kanthari Murukku', ''],
+        ['Kozhikodan Mixture', ''],
+        ['Jackfruit Chips', ''],
+        ['Madhuraseva', ''],
+        ['TOTAL', ''],
       ]
     },
-    { q: 'Product-wise margin estimate', type: 'table',
+    { q: 'Product-wise margin estimate', type: 'table', calc: 'sku-gm',
       headers: ['Hero SKU', 'Target gross margin'],
       rows: [
-        ['Banana Chips – Coconut Oil', '38–42% (film % is worse on 70g — volume must pay for it)'],
-        ['Jackfruit Chips', '38–42%'],
-        ['Chilli Tapioca Chips', '40–44%'],
-        ['Kanthari Murukku', '42–46%'],
-        ['Baby Murukku', '42–46%'],
-        ['Kozhikodan Mixture', '42–46%'],
-        ['Madhuraseva', '40–44%'],
+        ['Banana Chips – Coconut Oil', ''],
+        ['Jackfruit Chips', ''],
+        ['Chilli Tapioca Chips', ''],
+        ['Kanthari Murukku', ''],
+        ['Baby Murukku', ''],
+        ['Kozhikodan Mixture', ''],
+        ['Madhuraseva', ''],
       ]
     },
     { q: 'Product-wise reorder potential', type: 'table',
@@ -468,19 +473,19 @@ const SECTIONS = [
   id: 'sec3', title: '3. Pricing Strategy',
   note: '',
   questions: [
-    { q: 'MRP', type: 'table',
+    { q: 'MRP', type: 'table', calc: 'mrp',
       headers: ['Range', 'Amount'],
       rows: [
-        ['Low', '₹79 (60g murukku trial — impulse band ₹50–150)'],
-        ['High', '₹599 (free-ship combined cart / 6-mini box)'],
+        ['Low', ''],
+        ['High', ''],
       ]
     },
-    { q: 'Selling price', type: 'table',
+    { q: 'Selling price', type: 'table', calc: 'selling',
       headers: ['Channel', 'Rule', 'Customer price'],
       rows: [
-        ['Website', 'Singles listed; cart default 2-pack. ₹59 ship under ₹599 combined', '₹79–₹99 singles · ₹199 twin'],
-        ['Marketplace', 'Twin ₹249; Flipkart < ₹1,000', '₹99–₹249'],
-        ['Quick commerce', 'Hero = ₹199–₹249 combo (clears ₹199–299 MOV). Singles ₹99–109 as add-ons, ~8% above site MRP', 'Do not lead with a lone ₹79 pouch'],
+        ['Website', '', ''],
+        ['Marketplace', '', ''],
+        ['Quick Commerce', '', ''],
       ]
     },
     { q: 'Discount limit', type: 'table',
@@ -491,25 +496,25 @@ const SECTIONS = [
         ['Absolute floor', 'Do not go under ₹79 on a branded pouch'],
       ]
     },
-    { q: 'Free-shipping threshold', type: 'table',
+    { q: 'Free-shipping threshold', type: 'table', calc: 'free-ship',
       headers: ['Metric', 'Amount'],
       rows: [
-        ['Free-shipping threshold', '₹599 (combined order value — locked)'],
-        ['Paid shipping below threshold', '₹59'],
-        ['First-order AOV', '₹199–₹219 (does not qualify)'],
-        ['Gap to free ship', '₹599 − ₹219 ≈ ₹380 — add flavours / 120g, do not waive the bar'],
+        ['Free-shipping threshold', ''],
+        ['Paid shipping below threshold', ''],
+        ['First-order AOV', ''],
+        ['Gap to free ship', ''],
       ]
     },
-    { q: 'Worked unit economics (by channel)', type: 'table',
-      headers: ['Line', 'Site 2-pack ₹199', 'QC combo ₹199', 'QC single ₹99 (add-on)'],
+    { q: 'Worked unit economics (by channel)', type: 'table', calc: 'unit-econ',
+      headers: ['Line', 'Site 2-pack', 'QC combo', 'QC single (add-on)'],
       rows: [
-        ['Customer pays', '₹199 + ₹59 ship', '₹199 (inside their grocery MOV)', '₹99'],
-        ['COGS ~44%', '₹88', '₹88', '₹44'],
-        ['Commission', '₹0', '~₹60 (30%)', '~₹30'],
-        ['Freight / fulfilment', '₹90 (you still pay courier; ₹59 collected)', 'bundled in comm', 'bundled'],
-        ['Contribution before ads', '~₹80 with ship collected; ~₹21 if you waive ship', '~₹51', '~₹25'],
+        ['Customer pays', '', '', ''],
+        ['COGS', '', '', ''],
+        ['Commission', '', '', ''],
+        ['Freight / fulfilment', '', '', ''],
+        ['Contribution before ads', '', '', ''],
         ['Launch ads (if paid)', '₹65–75 ceiling', '₹80–150 — book as CAC', 'do not advertise the single'],
-        ['Verdict', 'Never free-ship a ₹199 cart. Collect ₹59 until ₹599 combined', 'Hero SKU on Zepto', 'Attach only — not a listing strategy'],
+        ['Verdict', 'Never free-ship the 2-pack. Collect paid ship until the free-ship bar.', 'Hero SKU on Zepto', 'Attach only — not a listing strategy'],
       ]
     },
     { q: 'Contribution margin per order', type: 'table', calc: 'margin',
@@ -529,12 +534,12 @@ const SECTIONS = [
         ['Quick Commerce', 'No fixed floor — margin holds as a constant % of AOV'],
       ]
     },
-    { q: 'Price difference across website, marketplace and quick commerce', type: 'table',
+    { q: 'Price difference across website, marketplace and quick commerce', type: 'table', calc: 'price-diff',
       headers: ['Channel', 'Customer price rule', 'Commission / note'],
       rows: [
-        ['Website', '2-pack ₹199 + ₹59 ship; free ship only at ₹599 combined', 'Freight is per order — one 70g pouch loses money'],
-        ['Marketplace', '₹99–249, Flipkart 0% under ₹1,000', '~22% if not Flipkart grocery'],
-        ['Quick Commerce', '₹199 combo hero; ₹99–109 add-on', '~30% bundled; 5–12% MRP premium vs site'],
+        ['Website', '', ''],
+        ['Marketplace', '', ''],
+        ['Quick Commerce', '', ''],
       ]
     },
   ]
@@ -543,27 +548,27 @@ const SECTIONS = [
   id: 'sec4', title: '4. Average Order Value Strategy',
   note: 'AOV is a 2–3 mini-pouch basket, not a ₹599 combo. Raise rupees by adding a flavour, not by upsizing the bag.',
   questions: [
-    { q: 'Target AOV for each month', type: 'table',
+    { q: 'Target AOV for each month', type: 'table', calc: 'aov-month',
       headers: ['Month', 'AOV', 'Orders / month', 'Revenue'],
       rows: [
-        ["Sep '26", '₹213', '1,500', '₹3,20,000'],
-        ["Oct '26", '₹220', '4,000', '₹8,80,000'],
-        ["Nov '26", '₹220', '5,900', '₹13,00,000'],
-        ["Dec '26", '₹221', '6,800', '₹15,00,000'],
-        ["Jan '27", '₹229', '7,000', '₹16,00,000'],
-        ["Feb '27", '₹240', '5,000', '₹12,00,000'],
-        ["Mar '27", '₹250', '5,600', '₹14,00,000'],
-        ['7-month total / blend', '₹229', '35,800', '₹82.0 L'],
+        ["Sep '26", '', '', ''],
+        ["Oct '26", '', '', ''],
+        ["Nov '26", '', '', ''],
+        ["Dec '26", '', '', ''],
+        ["Jan '27", '', '', ''],
+        ["Feb '27", '', '', ''],
+        ["Mar '27", '', '', ''],
+        ['7-month total / blend', '', '', ''],
       ]
     },
-    { q: 'Weekly AOV target', type: 'table',
+    { q: 'Weekly AOV target', type: 'table', calc: 'aov-week',
       headers: ['Sep week', 'AOV', 'Share of Sep orders', 'Orders'],
       rows: [
-        ['Week 1', '₹199', '35%', '525'],
-        ['Week 2', '₹213', '30%', '450'],
-        ['Week 3', '₹213', '20%', '300'],
-        ['Week 4', '₹249', '15%', '225'],
-        ['Weekly reporting steer', '₹59 ship until ₹599 combined', 'from Sep', ''],
+        ['Week 1', '', '35%', ''],
+        ['Week 2', '', '30%', ''],
+        ['Week 3', '', '20%', ''],
+        ['Week 4', '', '15%', ''],
+        ['Weekly reporting steer', '', '', ''],
       ]
     },
     { q: 'Combo names', type: 'table',
@@ -577,42 +582,42 @@ const SECTIONS = [
         ['Sweet discover', 'Madhuraseva + Banana'],
       ]
     },
-    { q: 'Combo contents', type: 'table',
-      headers: ['Free-ship combo', 'Target price', 'Composition'],
+    { q: 'Combo contents', type: 'table', calc: 'combo-contents',
+      headers: ['Combo', 'Target price', 'Composition'],
       rows: [
-        ['Two-flavour start', '₹199', '2 × 70g — the default first order'],
-        ['Salty trio', '₹349', '3–4 minis — still paid ship'],
-        ['Free-ship box (locked)', '₹599', '6 minis or mixed 70g+120g — only cart that ships free'],
-        ['Office tin', '₹249 / head', 'MOQ 25'],
+        ['Two-flavour start', '', '2 × 70g — the default first order'],
+        ['Salty trio', '', '3–4 minis — still paid ship'],
+        ['Free-ship box', '', '6 minis or mixed 70g+120g — only cart that ships free'],
+        ['Office tin', '', 'MOQ 25'],
       ]
     },
-    { q: 'Combo price', type: 'table',
-      headers: ['Price', 'Items', 'Vs free-shipping ₹599'],
+    { q: 'Combo price', type: 'table', calc: 'combo-price',
+      headers: ['Offer', 'Price', 'Vs free-shipping bar'],
       rows: [
-        ['₹199', '2', 'Paid ₹59 ship — default first order'],
-        ['₹249', '2–3', 'Paid ship'],
-        ['₹349', '3–4', 'Paid ship — not free'],
-        ['₹599', '6 minis / mix', 'Free ship — locked combined value'],
+        ['2-pack (default first order)', '', ''],
+        ['2–3 pack', '', ''],
+        ['3–4 pack', '', ''],
+        ['Free-ship box', '', ''],
       ]
     },
-    { q: 'Expected margin per combo', type: 'table',
-      headers: ['Combo price', 'Expected margin'],
+    { q: 'Expected margin per combo', type: 'table', calc: 'combo-margin',
+      headers: ['Offer', 'Expected margin'],
       rows: [
-        ['₹199', '22% after ₹59 collected on site; ~28% on QC 2-pack'],
-        ['₹249', 'paid ship still'],
-        ['₹349', 'paid ship still'],
-        ['₹599', 'free ship; freight diluted across 6 minis'],
+        ['2-pack (default first order)', ''],
+        ['2–3 pack', ''],
+        ['3–4 pack', ''],
+        ['Free-ship box', ''],
       ]
     },
-    { q: 'Expected monthly and weekly combo sales', type: 'table',
-      headers: ['Price', 'Combos / month', 'Mix', 'Revenue / month'],
+    { q: 'Expected monthly and weekly combo sales', type: 'table', calc: 'combo-sales',
+      headers: ['Offer', 'Combos / month', 'Mix', 'Revenue / month'],
       rows: [
-        ['₹199', '3,800', '50%', '₹7.56 L'],
-        ['₹249', '2,280', '30%', '₹5.68 L'],
-        ['₹349', '1,140', '15%', '₹3.98 L'],
-        ['₹599', '380', '5%', '₹2.28 L'],
-        ['Total', '7,600 orders of combos (subset of 19k)', '100%', 'overlay inside the ₹40 L, not extra'],
-        ['If held Sep–Mar', '', '', 'Stay inside the ₹82 L 7-month plan'],
+        ['2-pack (default first order)', '', '50%', ''],
+        ['2–3 pack', '', '30%', ''],
+        ['3–4 pack', '', '15%', ''],
+        ['Free-ship box', '', '5%', ''],
+        ['Total', '', '', ''],
+        ['If held Sep–Mar', '', '', ''],
       ]
     },
   ]
@@ -621,33 +626,32 @@ const SECTIONS = [
   id: 'sec5', title: '5. Shipping & Logistics',
   note: '',
   questions: [
-    { q: 'Current shipping cost per order', type: 'table',
+    { q: 'Current shipping cost per order', type: 'table', calc: 'current-ship',
       headers: ['Metric', 'Amount'],
-      rows: [['Current freight / order', '₹90 target on 2-pouch satchel (last month ₹120 was a 180g problem)']]
+      rows: [['Current freight / order', '']]
     },
-    { q: 'Target shipping cost per order', type: 'table',
+    { q: 'Target shipping cost per order', type: 'table', calc: 'target-ship',
       headers: ['Volume', 'Freight / order'],
       rows: [
-        ['Now (~10 orders)', '₹90 (light 2-pouch satchel)'],
-        ['50 orders', '₹95'],
-        ['150 orders', '₹99'],
-        ['500 orders', '₹105'],
-        ['~5,300 orders / month', '₹110'],
-        ['National-scale target', '≤ ₹99 blended — QC/community have no D2C freight'],
+        ['Now (~10 orders)', ''],
+        ['50 orders', ''],
+        ['150 orders', ''],
+        ['500 orders', ''],
+        ['Peak D2C month', ''],
+        ['National-scale target', ''],
       ]
     },
-    { q: 'Shipping cost as % of AOV', type: 'table',
+    { q: 'Shipping cost as % of AOV', type: 'table', calc: 'ship-pct',
       headers: ['Case', '% of AOV'],
       rows: [
-        ['Current (last-month AOV)', 'Too high — that is why we cut pack size'],
-        ['Sep AOV ₹199 @ ₹90 freight', '~45% on a 1-order site shipment — hence 2-pack minimum'],
-        ['Target at ₹249 AOV', '≤ 36%'],
-        ['Blended (QC + WA have no courier)', '≤ 18% of all-channel AOV'],
+        ['D2C freight / blended AOV', ''],
+        ['Paid ship collected / AOV', ''],
+        ['Free-ship bar / AOV', ''],
       ]
     },
-    { q: 'Free-shipping threshold', type: 'table',
+    { q: 'Free-shipping threshold', type: 'table', calc: 'free-ship',
       headers: ['Metric', 'Amount'],
-      rows: [['Free-shipping threshold', '₹599 combined order value (locked) · ₹59 below']]
+      rows: [['Free-shipping threshold', '']]
     },
     { q: 'Delivery TAT by region', type: 'table',
       headers: ['Region', 'TAT'],
@@ -673,28 +677,28 @@ const SECTIONS = [
         ['Quick Commerce', 'Prepaid-heavy; no separate RTO line in the sheet'],
       ]
     },
-    { q: 'Monthly logistics cost estimate', type: 'table',
+    { q: 'Monthly logistics cost estimate', type: 'table', calc: 'logi-month',
       headers: ['Volume', 'Freight', 'Packaging', 'Labour', 'COD + RTO', 'Total / order', 'Monthly total'],
       rows: [
-        ['Now (10)', '₹90', '₹12', '₹12', '₹0', '₹114', '₹1,140'],
-        ['50 orders', '₹95', '₹12', '₹12', '₹0', '₹119', '₹5,950'],
-        ['150 orders', '₹99', '₹11', '₹14', '₹0', '₹124', '₹18,600'],
-        ['500 orders', '₹105', '₹10', '₹15', '₹20', '₹150', '₹75,000'],
-        ['5,300 orders', '₹110', '₹9', '₹18', '₹25', '₹162', '₹8,58,600'],
+        ['Now (10)', '', '', '', '', '', ''],
+        ['50 orders', '', '', '', '', '', ''],
+        ['150 orders', '', '', '', '', '', ''],
+        ['500 orders', '', '', '', '', '', ''],
+        ['Peak D2C month', '', '', '', '', '', ''],
       ]
     },
-    { q: 'Weekly logistics report format', type: 'table',
+    { q: 'Weekly logistics report format', type: 'table', calc: 'logi-week',
       headers: ['Metric', 'Target'],
       rows: [
         ['Orders shipped', ''],
         ['AOV', ''],
-        ['Freight / order', '≤ ₹99 on D2C'],
-        ['Freight as % of AOV', '≤ 36% on site; ≤ 18% blended'],
-        ['Packaging / order', '≤ ₹12 (trial film)'],
-        ['Total logistics / order', '≤ ₹130 D2C'],
-        ['On-time %', ''],
-        ['Damage %', ''],
-        ['RTO %', ''],
+        ['Freight / order', ''],
+        ['Freight as % of AOV', ''],
+        ['Packaging / order', ''],
+        ['Total logistics / order', ''],
+        ['On-time %', '≥ 92%'],
+        ['Damage %', '< 3% first 90 days'],
+        ['RTO %', '< 3% prepaid'],
       ]
     },
   ]
@@ -713,24 +717,24 @@ const SECTIONS = [
       'Madhuraseva 60g trial',
     ]},
     { q: 'Cost per new pack', a: '₹6–9 per trial pouch (less film, more units).' },
-    { q: 'MOQ impact', type: 'table',
+    { q: 'MOQ impact', type: 'table', calc: 'pack-moq',
       headers: ['Item', 'Amount'],
       rows: [
-        ['Pilot packs per SKU', '4,000 (trial runs faster than 180g)'],
-        ['Pilot packs total', '20,000'],
-        ['Pilot cash', '₹1,20,000–1,80,000'],
+        ['Pilot packs per SKU', ''],
+        ['Pilot packs total', ''],
+        ['Pilot cash', ''],
         ['If you scale', 'Print the 120g everyday line only after 8 weeks of trial sell-through'],
       ]
     },
-    { q: 'Total packaging investment required', type: 'table',
+    { q: 'Total packaging investment required', type: 'table', calc: 'pack-invest',
       headers: ['Component', 'Budget'],
       rows: [
-        ['Packaging strategy + trial artwork (7 SKUs)', '₹80,000–₹1,20,000'],
-        ['Prototypes / physical samples', '₹12,000–₹18,000'],
-        ['Initial packaging — 20,000 trial pouches', '~₹1,40,000'],
-        ['Testing / colour proofs / revisions', '₹12,000–₹18,000'],
-        ['Contingency', '₹15,000–₹25,000'],
-        ['Total', '₹2.6–3.2 L (cheaper than the 180g relaunch)'],
+        ['Packaging strategy + trial artwork (7 SKUs)', ''],
+        ['Prototypes / physical samples', ''],
+        ['Initial packaging — trial pouches', ''],
+        ['Testing / colour proofs / revisions', ''],
+        ['Contingency', ''],
+        ['Total', ''],
       ]
     },
     { q: 'Design completion timeline', type: 'table',
@@ -775,12 +779,12 @@ const SECTIONS = [
       headers: ['Metric', 'Value'],
       rows: [['Target weekly traffic', '']]
     },
-    { q: 'Target conversion rate', type: 'table',
+    { q: 'Target conversion rate', type: 'table', calc: 'conv-rate',
       headers: ['Stage', 'Conversion'],
       rows: [
-        ['Start', '2.5% (₹199 is an easier yes than ₹599)'],
-        ['In 6 months', '4.0%'],
-        ['Hero trial PDPs', '4–6%'],
+        ['Start', ''],
+        ['In 6 months', ''],
+        ['Hero trial PDPs', ''],
       ]
     },
     { q: 'Target cart-to-checkout rate', type: 'table',
@@ -1162,23 +1166,23 @@ const SECTIONS = [
   id: 'sec13', title: '13. Marketing Budget Plan',
   note: '',
   questions: [
-    { q: 'Total budget required', type: 'table',
-      headers: ['Window', 'Budget (18% of revenue)'],
+    { q: 'Total budget required', type: 'table', calc: 'total-budget',
+      headers: ['Window', 'Budget'],
       rows: [
-        ['Sep–Dec ₹40 L', '₹8.0 L (20%)'],
-        ['7-month ₹82 L', '~₹16.4 L if 20% holds'],
+        ['Sep–Dec window', ''],
+        ['7-month plan', ''],
       ]
     },
-    { q: 'Budget by month', type: 'table',
+    { q: 'Budget by month', type: 'table', calc: 'budget-month',
       headers: ['Basis', 'Amount'],
       rows: [
-        ['20% of ₹40 L ÷ 4 months', '₹2.0 L / month'],
+        ['Marketing % × window ÷ months', ''],
         ['Do not use the old ₹5.13 L / month figure', 'That assumed a crore'],
       ]
     },
-    { q: 'Budget by week', type: 'table',
+    { q: 'Budget by week', type: 'table', calc: 'budget-week',
       headers: ['Basis', 'Amount'],
-      rows: [['Sep–Dec blended', '~₹46 k / week']]
+      rows: [['Window blended', '']]
     },
     { q: 'Budget by channel', type: 'table', calc: 'stream',
       headers: ['Stream', '%', 'Period amount', 'Monthly spend'],
@@ -1202,25 +1206,25 @@ const SECTIONS = [
         ['Community / WhatsApp', ''],
       ]
     },
-    { q: 'Expected CAC', type: 'table',
+    { q: 'Expected CAC', type: 'table', calc: 'cac',
       headers: ['Metric', 'Amount'],
-      rows: [['Expected CAC', '₹44 blended (₹8 L / 18,200). Paid lines ₹65–75. QC launch ads ₹80–150 — treat as acquisition.']]
+      rows: [['Expected CAC', '']]
     },
-    { q: 'Expected ROAS', type: 'table',
-      headers: ['Channel', 'Target ROAS', 'Implied CAC @ ₹199 AOV'],
+    { q: 'Expected ROAS', type: 'table', calc: 'roas',
+      headers: ['Channel', 'Target ROAS', 'Implied CAC'],
       rows: [
-        ['Blended (20% mkt spend)', '5.0×', '₹40 @ ₹199'],
-        ['Marketplace ads (Flipkart twins)', '4.5×', '₹44'],
-        ['Paid social (₹199 PDP)', '3.2×', '₹62'],
-        ['D2C site / CRM', '4.0×', '₹50'],
-        ['Influencer / UGC', '2.2×', '₹90 — barter until proven'],
-        ['Quick commerce ads', '3.0×', '₹43 on ₹129 QC AOV'],
-        ['Stop / reallocate below', '2.0×', '₹100'],
+        ['Blended (mkt % of revenue)', '', ''],
+        ['Marketplace ads (Flipkart twins)', '4.5×', ''],
+        ['Paid social (2-pack PDP)', '3.2×', ''],
+        ['D2C site / CRM', '4.0×', ''],
+        ['Influencer / UGC', '2.2×', ''],
+        ['Quick commerce ads', '3.0×', ''],
+        ['Stop / reallocate below', '2.0×', ''],
       ]
     },
-    { q: 'Maximum acceptable CAC', type: 'table',
+    { q: 'Maximum acceptable CAC', type: 'table', calc: 'max-cac',
       headers: ['Metric', 'Amount'],
-      rows: [['Maximum acceptable CAC', '₹75 site/MP · ₹100 QC launch for 8 weeks then ₹80 · never ₹2–3 L Blinkit min-spend']]
+      rows: [['Maximum acceptable CAC', '']]
     },
     { q: 'Stop-loss rules for campaigns', a: 'Pause any paid line whose trailing-7-day CAC exceeds ₹75/order (₹50 on QC) for 2 consecutive weeks. Reallocate to tasting, Flipkart twins, or the ₹199 PDP — do not protect the old 45/15/8 mix.' },
   ]
@@ -1233,29 +1237,29 @@ const SECTION14 = {
   note: 'The brief lists these as items the weekly execution structure must cover, without a separate "Need clear answers" block — treated the same way here: fill in a weekly target/owner for each. Applies from the September ramp start (August runs on the prep checklist in Section 6/10 instead).',
   questions: [
     { q: 'Revenue target', a: 'Follows the Monthly Targets table, split evenly across the month\'s weeks (Month 1 = Sep has its own explicit weekly breakdown in the calculator).' },
-    { q: 'Orders target', type: 'table',
+    { q: 'Orders target', type: 'table', calc: 'orders-os',
       headers: ['Period', 'Orders'],
       rows: [
-        ['Sep / month', '1,500'],
-        ['Sep / week', '~350'],
+        ['Sep / month', ''],
+        ['Sep / week', ''],
       ]
     },
-    { q: 'AOV target', type: 'table',
+    { q: 'AOV target', type: 'table', calc: 'aov-os',
       headers: ['Source', 'AOV'],
       rows: [
-        ['Weekly Planning tab', '₹249'],
-        ['Sep modeled (Section 4)', '₹199'],
+        ['Window blend (assumptions)', ''],
+        ['Sep modeled', ''],
       ]
     },
     { q: 'Website traffic target', type: 'table', calc: 'web-traffic',
       headers: ['Metric', 'Value'],
       rows: [['Weekly traffic', '']]
     },
-    { q: 'Conversion target', type: 'table',
+    { q: 'Conversion target', type: 'table', calc: 'conv-os',
       headers: ['Stage', 'Rate'],
       rows: [
-        ['Start', '2.5%'],
-        ['In 6 months', '4.0%'],
+        ['Start', ''],
+        ['In 6 months', ''],
       ]
     },
     { q: 'Content calendar', type: 'table',
@@ -1280,12 +1284,12 @@ const SECTION14 = {
       headers: ['Metric', 'Weekly'],
       rows: [['Videos live', '2 — Hema uploads']]
     },
-    { q: 'Paid ads', type: 'table',
-      headers: ['Channel', 'Weekly spend (Sep)', 'Owner'],
+    { q: 'Paid ads', type: 'table', calc: 'paid-ads',
+      headers: ['Channel', 'Weekly spend', 'Owner'],
       rows: [
-        ['Marketplace ads', '₹23 k', 'V'],
-        ['Paid social', '₹40 k', 'V'],
-        ['QC ads (from Nov)', '₹0 until Nov, then ₹35 k', 'V'],
+        ['Marketplace ads', '', 'V'],
+        ['Paid social', '', 'V'],
+        ['QC ads (from Nov)', '', 'V'],
       ]
     },
     { q: 'Community sales', type: 'table', calc: 'community-week',
@@ -1297,13 +1301,13 @@ const SECTION14 = {
         ['Dec', ''],
       ]
     },
-    { q: 'Corporate/B2B outreach', type: 'table',
+    { q: 'Corporate/B2B outreach', type: 'table', calc: 'b2b-outreach',
       headers: ['Metric', 'Weekly'],
       rows: [
         ['Leads', '20–25'],
         ['Samples', '8'],
-        ['Sep revenue', '₹2,300'],
-        ['Nov–Dec revenue', '₹11,600'],
+        ['Sep revenue', ''],
+        ['Nov–Dec revenue', ''],
       ]
     },
     { q: 'Marketplace follow-ups', type: 'table',
@@ -1346,15 +1350,15 @@ const SECTION15 = {
   note: '',
   questions: [
     { q: 'Monthly review date', a: '25th of each month.' },
-    { q: 'Monthly dashboard format', type: 'table',
+    { q: 'Monthly dashboard format', type: 'table', calc: 'dash',
       headers: ['Metric', 'Sep target', 'Dec target'],
       rows: [
-        ['Revenue', '₹3.20 L', '₹15.00 L'],
-        ['Orders', '1,500', '6,800'],
-        ['AOV', '₹213', '₹221'],
-        ['Channel-wise', 'Site 22 / MP 15 / QC 0 / WA 28 / B2B 5', 'Site 22 / MP 15 / QC 30 / WA 28 / B2B 5'],
-        ['Marketing spend vs revenue', '20% · ₹0.64 L', '20% · ₹3.00 L'],
-        ['Blended CAC vs ₹75 ceiling', '₹65', '₹65'],
+        ['Revenue', '', ''],
+        ['Orders', '', ''],
+        ['AOV', '', ''],
+        ['Channel-wise', '', ''],
+        ['Marketing spend vs revenue', '', ''],
+        ['Blended CAC vs ceiling', '', ''],
       ]
     },
     { q: 'Data sources', type: 'table',
@@ -1477,8 +1481,35 @@ function slugKey(s) { return String(s).toLowerCase().replace(/[^a-z0-9]/g, ''); 
 // Index 0 is always the row label (handled separately); indexes below match header order.
 const CALC_COLS = {
   channel:            ['label', 'src:pct', 'out:monthly', 'out:weekly', 'out:orders'],
+  'rev-month':         ['label', 'out:revenue', 'out:orders', 'out:aov'],
+  'sep-week':          ['label', 'src:pct', 'out:orders', 'out:revenue'],
+  'ord-week':          ['label', 'out:orders', 'out:weekly'],
+  'aov-floor':         ['label', 'out:amount', 'note'],
+  'sku-hero':          ['label', 'out:pack', 'out:monthly', 'out:weekly', 'out:margin', 'fit'],
+  'sku-packs':         ['label', 'out:packs'],
+  'sku-week':          ['label', 'out:packs'],
+  'sku-gm':            ['label', 'out:gm'],
+  mrp:                 ['label', 'out:amount'],
+  selling:             ['label', 'out:rule', 'out:price'],
+  'free-ship':         ['label', 'out:amount'],
+  'unit-econ':         ['label', 'out:site', 'out:qccombo', 'out:qcsingle'],
   margin:              ['label', 'out:margin', 'out:marginPct'],
   minaov:              ['label', 'out:minaov'],
+  'price-diff':        ['label', 'out:rule', 'out:note'],
+  'aov-month':         ['label', 'out:aov', 'out:orders', 'out:revenue'],
+  'aov-week':          ['label', 'out:aov', 'src:pct', 'out:orders'],
+  'combo-contents':    ['label', 'out:price', 'composition'],
+  'combo-price':       ['label', 'out:price', 'out:note'],
+  'combo-margin':      ['label', 'out:margin'],
+  'combo-sales':       ['label', 'out:combos', 'src:pct', 'out:revenue'],
+  'current-ship':      ['label', 'out:amount'],
+  'target-ship':       ['label', 'out:freight'],
+  'ship-pct':          ['label', 'out:pct'],
+  'logi-month':        ['label', 'out:freight', 'out:pack', 'out:labour', 'out:cod', 'out:perorder', 'out:monthly'],
+  'logi-week':         ['label', 'out:target'],
+  'pack-moq':          ['label', 'out:amount'],
+  'pack-invest':       ['label', 'out:budget'],
+  'conv-rate':         ['label', 'out:rate'],
   'platform-margin':   ['label', 'out:margin', 'out:marginPct'],
   'platform-sales':    ['label', 'out:monthly', 'out:weekly'],
   'platform-month':    ['label', 'out:m0', 'out:m1', 'out:m2', 'out:m3', 'out:total', 'aov', 'out:decorders'],
@@ -1487,8 +1518,20 @@ const CALC_COLS = {
   'community-week':    ['label', 'out:weekly'],
   'b2b-month':         ['label', 'out:revenue', 'out:orders', 'note'],
   'b2b-week':          ['label', 'out:weekly'],
+  'total-budget':      ['label', 'out:budget'],
+  'budget-month':      ['label', 'out:amount'],
+  'budget-week':       ['label', 'out:amount'],
   stream:              ['label', 'src:pct', 'out:amount', 'out:monthly'],
   'spend-rev':         ['label', 'out:revenue'],
+  cac:                 ['label', 'out:amount'],
+  roas:                ['label', 'out:roas', 'out:cac'],
+  'max-cac':           ['label', 'out:amount'],
+  'orders-os':         ['label', 'out:orders'],
+  'aov-os':            ['label', 'out:aov'],
+  'conv-os':           ['label', 'out:rate'],
+  'paid-ads':          ['label', 'out:weekly', 'owner'],
+  'b2b-outreach':      ['label', 'out:weekly'],
+  dash:                ['label', 'out:sep', 'out:dec'],
   'web-report':        ['label', 'formula', 'out:sep', 'out:dec'],
   'web-traffic':       ['label', 'out:value'],
 };
@@ -1539,8 +1582,12 @@ function renderAnswerField(item, sectionTitle) {
     const dataRows = rows.length ? rows : [headers.map((h,i) => i === 0 ? '' : '')];
     dataRows.forEach(r => {
       const rowKey = calcType ? slugKey(r[0]) : '';
-      // Quick Commerce has no fixed AOV floor — that row stays a free-text note, not a computed cell.
-      const staticRow = calcType === 'minaov' && rowKey === 'quickcommerce';
+      const staticRow = (calcType === 'minaov' && rowKey === 'quickcommerce')
+        || (calcType === 'unit-econ' && (rowKey === 'launchadsifpaid' || rowKey === 'verdict'))
+        || (calcType === 'pack-moq' && rowKey === 'ifyouscale')
+        || (calcType === 'budget-month' && rowKey === 'donotusetheold513lmonthfigure')
+        || (calcType === 'b2b-outreach' && (rowKey === 'leads' || rowKey === 'samples'))
+        || (calcType === 'logi-week' && (rowKey === 'ontime' || rowKey === 'damage' || rowKey === 'rto'));
       html += `<tr${calcType ? ` data-calc-row="${rowKey}"` : ''}>`;
       r.forEach((cell, ci) => {
         if (ci === 0) {
@@ -1697,7 +1744,9 @@ document.addEventListener('click', (e) => {
 // ---------------------------------------------------------------
 const AP_DEFAULTS = {
   targetRevenue: 4000000, startMonth: '2026-09', endMonth: '2026-12',
-  aov: 219, cogsPct: 44, logisticsCost: 90, mpCommission: 22, qcCommission: 30, mktPct: 20,
+  aov: 219, qcAov: 199, mpAov: 179, packPrice: 95,
+  cogsPct: 44, logisticsCost: 90, paidShip: 59, freeShip: 599,
+  mpCommission: 22, qcCommission: 30, mktPct: 20, convPct: 2.5,
 };
 function getAssumptions() {
   const num = (id, fallback) => {
@@ -1712,17 +1761,26 @@ function getAssumptions() {
     startMonth: (startEl && startEl.value) || AP_DEFAULTS.startMonth,
     endMonth: (endEl && endEl.value) || AP_DEFAULTS.endMonth,
     aov: num('ap_aov', AP_DEFAULTS.aov),
+    qcAov: num('ap_qcAov', AP_DEFAULTS.qcAov),
+    mpAov: num('ap_mpAov', AP_DEFAULTS.mpAov),
+    packPrice: num('ap_packPrice', AP_DEFAULTS.packPrice),
     cogsPct: num('ap_cogsPct', AP_DEFAULTS.cogsPct),
     logisticsCost: num('ap_logisticsCost', AP_DEFAULTS.logisticsCost),
+    paidShip: num('ap_paidShip', AP_DEFAULTS.paidShip),
+    freeShip: num('ap_freeShip', AP_DEFAULTS.freeShip),
     mpCommission: num('ap_mpCommission', AP_DEFAULTS.mpCommission),
     qcCommission: num('ap_qcCommission', AP_DEFAULTS.qcCommission),
     mktPct: num('ap_mktPct', AP_DEFAULTS.mktPct),
+    convPct: num('ap_convPct', AP_DEFAULTS.convPct),
   };
 }
 
 function setOut(tr, name, value) {
   const el = tr.querySelector('[data-calc-out="' + name + '"]');
   if (el) el.value = value;
+}
+function avgWeeksSafe(n, totalWeeks) {
+  return (n && totalWeeks) ? totalWeeks / n : 4.33;
 }
 function fmtMoneyOrDash(n) {
   return !n || n < 1 ? '—' : fmtINR(n);
@@ -1781,6 +1839,302 @@ function recalcTables() {
   const waTotal = A.targetRevenue * waPct / 100;
   const b2bTotal = A.targetRevenue * b2bPct / 100;
 
+  const CORE_RAMP = [0.08, 0.22, 0.325, 0.375];
+  const AOV_STEP = { sep: 213 / 219, oct: 220 / 219, nov: 220 / 219, dec: 221 / 219, jan: 229 / 219, feb: 240 / 219, mar: 250 / 219 };
+  const weights = (months.length === 4) ? CORE_RAMP : months.map(() => 1 / n);
+  const monthPlan = months.map((mo, i) => {
+    const rev = A.targetRevenue * (weights[i] || 0);
+    const mk = ['sep', 'oct', 'nov', 'dec'][i] || 'sep';
+    const aov = Math.round(A.aov * (AOV_STEP[mk] || 1));
+    return { mo, key: mk, slug: slugKey((['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mo.m - 1] || '') + " '" + String(mo.y).slice(-2)), rev, aov, orders: aov > 0 ? rev / aov : 0, weeks: weeksInMonth(mo.y, mo.m) };
+  });
+  const sepM = monthPlan[0] || { rev: A.targetRevenue / n, aov: A.aov, orders: 0, weeks: 4.3 };
+  const decM = monthPlan[Math.min(3, monthPlan.length - 1)] || sepM;
+  const ext = [
+    { slug: 'jan27', key: 'jan', rev: A.targetRevenue * 16 / 40, aov: Math.round(A.aov * AOV_STEP.jan) },
+    { slug: 'feb27', key: 'feb', rev: A.targetRevenue * 12 / 40, aov: Math.round(A.aov * AOV_STEP.feb) },
+    { slug: 'mar27', key: 'mar', rev: A.targetRevenue * 14 / 40, aov: Math.round(A.aov * AOV_STEP.mar) },
+  ].map(x => Object.assign(x, { orders: x.aov > 0 ? x.rev / x.aov : 0, weeks: 4.3 }));
+  const sevenRev = A.targetRevenue + ext.reduce((s, x) => s + x.rev, 0);
+  const sevenOrd = monthPlan.reduce((s, x) => s + x.orders, 0) + ext.reduce((s, x) => s + x.orders, 0);
+  const sevenAov = sevenOrd > 0 ? sevenRev / sevenOrd : A.aov;
+  const bySlug = {};
+  monthPlan.forEach(p => { bySlug[p.slug] = p; bySlug[p.key] = p; });
+  ext.forEach(p => { bySlug[p.slug] = p; });
+  const fillMonthRow = (tr, p) => {
+    if (!p) return;
+    setOut(tr, 'revenue', fmtINR(p.rev));
+    setOut(tr, 'orders', fmtNum(p.orders));
+    setOut(tr, 'aov', fmtRupee(p.aov));
+  };
+  document.querySelectorAll('table[data-calc-group="rev-month"] tr[data-calc-row], table[data-calc-group="aov-month"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'sepdectotal') {
+      fillMonthRow(tr, { rev: A.targetRevenue, orders: monthPlan.reduce((s, x) => s + x.orders, 0), aov: A.aov });
+    } else if (key === '7monthtotal' || key === '7monthtotalblend') {
+      fillMonthRow(tr, { rev: sevenRev, orders: sevenOrd, aov: sevenAov });
+    } else fillMonthRow(tr, bySlug[key]);
+  });
+  document.querySelectorAll('table[data-calc-group="ord-week"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === '7monthplan') {
+      setOut(tr, 'orders', fmtNum(sevenOrd));
+      setOut(tr, 'weekly', fmtNum(sevenOrd / (totalWeeks + 13)));
+      return;
+    }
+    const p = bySlug[key];
+    if (!p) return;
+    setOut(tr, 'orders', fmtNum(p.orders));
+    setOut(tr, 'weekly', fmtNum(p.orders / (p.weeks || 4.3)));
+  });
+  const twoPack = A.qcAov || Math.round(A.packPrice * 2);
+  const threePack = Math.round(twoPack * 349 / 199);
+  const twoThree = Math.round(twoPack * 249 / 199);
+  document.querySelectorAll('table[data-calc-group="aov-floor"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'impulsefirstorderfloor') setOut(tr, 'amount', fmtRupee(twoPack));
+    else if (key === 'paidship2pack') setOut(tr, 'amount', fmtRupee(twoPack) + ' + ' + fmtRupee(A.paidShip) + ' ship');
+    else if (key === 'freeshipbarcombinedcart') setOut(tr, 'amount', fmtRupee(A.freeShip));
+    else if (key === 'windowblendaov') setOut(tr, 'amount', fmtRupee(A.aov));
+  });
+  document.querySelectorAll('table[data-calc-group="sep-week"] tr[data-calc-row], table[data-calc-group="aov-week"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'septotal') {
+      setOut(tr, 'orders', fmtNum(sepM.orders));
+      setOut(tr, 'revenue', fmtINR(sepM.rev));
+      return;
+    }
+    if (key === 'weeklyreportingsteer') {
+      setOut(tr, 'aov', fmtRupee(A.paidShip) + ' ship until ' + fmtRupee(A.freeShip));
+      setOut(tr, 'orders', 'from Sep');
+      return;
+    }
+    const src = tr.querySelector('[data-calc-src="pct"]');
+    const pct = src ? (parseFloat(src.value) || 0) : 0;
+    const wkAov = key === 'week1' ? twoPack : key === 'week4' ? twoThree : sepM.aov;
+    setOut(tr, 'aov', fmtRupee(wkAov));
+    setOut(tr, 'orders', fmtNum(sepM.orders * pct / 100));
+    setOut(tr, 'revenue', fmtINR(sepM.rev * pct / 100));
+  });
+
+  const avgMonthlyPacks = A.packPrice > 0 ? (A.targetRevenue / n) / A.packPrice : 0;
+  const SKU_META = {
+    bananachipscoconutoil: { share: 0.20, packRatio: 99 / 95, gmAdj: -2, grams: 70 },
+    chillitapiocachips: { share: 0.1833, packRatio: 89 / 95, gmAdj: 0, grams: 70 },
+    babymurukku: { share: 0.1833, packRatio: 79 / 95, gmAdj: 2, grams: 60 },
+    jackfruitchips: { share: 0.10, packRatio: 129 / 95, gmAdj: -2, grams: 70 },
+    kantharimurukku: { share: 0.1167, packRatio: 79 / 95, gmAdj: 2, grams: 60 },
+    kozhikodanmixture: { share: 0.1167, packRatio: 89 / 95, gmAdj: 2, grams: 70 },
+    madhuraseva: { share: 0.10, packRatio: 89 / 95, gmAdj: 0, grams: 60 },
+  };
+  const skuPacks = (key) => avgMonthlyPacks * ((SKU_META[key] && SKU_META[key].share) || 0);
+  document.querySelectorAll('table[data-calc-group="sku-hero"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'total') {
+      setOut(tr, 'pack', 'trial line');
+      setOut(tr, 'monthly', fmtNum(avgMonthlyPacks) + ' packs');
+      setOut(tr, 'weekly', fmtNum(avgMonthlyPacks / avgWeeksSafe(n, totalWeeks)));
+      setOut(tr, 'margin', '—');
+      return;
+    }
+    const meta = SKU_META[key];
+    if (!meta) return;
+    const packs = skuPacks(key);
+    setOut(tr, 'pack', meta.grams + 'g trial · ' + fmtRupee(A.packPrice * meta.packRatio));
+    setOut(tr, 'monthly', fmtNum(packs) + ' packs');
+    setOut(tr, 'weekly', fmtNum(packs / avgWeeksSafe(n, totalWeeks)));
+    setOut(tr, 'margin', fmtPct(100 - A.cogsPct + meta.gmAdj));
+  });
+  document.querySelectorAll('table[data-calc-group="sku-packs"] tr[data-calc-row], table[data-calc-group="sku-week"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    const weekly = tr.closest('table').dataset.calcGroup === 'sku-week';
+    if (key === 'total') {
+      setOut(tr, 'packs', fmtNum(weekly ? avgMonthlyPacks / avgWeeksSafe(n, totalWeeks) : avgMonthlyPacks));
+      return;
+    }
+    const packs = skuPacks(key);
+    setOut(tr, 'packs', fmtNum(weekly ? packs / avgWeeksSafe(n, totalWeeks) : packs));
+  });
+  document.querySelectorAll('table[data-calc-group="sku-gm"] tr[data-calc-row]').forEach(tr => {
+    const meta = SKU_META[tr.dataset.calcRow];
+    if (!meta) return;
+    const gm = 100 - A.cogsPct + meta.gmAdj;
+    setOut(tr, 'gm', Math.round(gm - 2) + '–' + Math.round(gm + 2) + '%');
+  });
+
+  document.querySelectorAll('table[data-calc-group="mrp"] tr[data-calc-row]').forEach(tr => {
+    if (tr.dataset.calcRow === 'low') setOut(tr, 'amount', fmtRupee(Math.round(A.packPrice * 79 / 95)) + ' (impulse murukku trial)');
+    else if (tr.dataset.calcRow === 'high') setOut(tr, 'amount', fmtRupee(A.freeShip) + ' (free-ship combined cart)');
+  });
+  document.querySelectorAll('table[data-calc-group="selling"] tr[data-calc-row], table[data-calc-group="price-diff"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'website') {
+      setOut(tr, 'rule', 'Singles listed; cart default 2-pack. ' + fmtRupee(A.paidShip) + ' ship under ' + fmtRupee(A.freeShip) + ' combined');
+      setOut(tr, 'price', fmtRupee(A.packPrice) + ' singles · ' + fmtRupee(twoPack) + ' twin');
+      setOut(tr, 'note', 'Freight is per order — one pouch loses money');
+    } else if (key === 'marketplace') {
+      setOut(tr, 'rule', 'Twin ' + fmtRupee(twoThree) + '; Flipkart < ₹1,000');
+      setOut(tr, 'price', fmtRupee(A.packPrice) + '–' + fmtRupee(twoThree));
+      setOut(tr, 'note', fmtPct(A.mpCommission) + ' if not Flipkart grocery');
+    } else if (key === 'quickcommerce') {
+      setOut(tr, 'rule', 'Hero = ' + fmtRupee(twoPack) + ' combo (platform MOV). Singles as add-ons');
+      setOut(tr, 'price', 'Do not lead with a lone pouch');
+      setOut(tr, 'note', fmtPct(A.qcCommission) + ' bundled; ~8% MRP premium vs site');
+    }
+  });
+  document.querySelectorAll('table[data-calc-group="free-ship"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'freeshippingthreshold') setOut(tr, 'amount', fmtRupee(A.freeShip) + ' combined order value');
+    else if (key === 'paidshippingbelowthreshold') setOut(tr, 'amount', fmtRupee(A.paidShip));
+    else if (key === 'firstorderaov') setOut(tr, 'amount', fmtRupee(twoPack) + ' (does not qualify)');
+    else if (key === 'gaptofreeship') setOut(tr, 'amount', fmtRupee(A.freeShip - A.aov) + ' — add flavours, do not waive the bar');
+  });
+  const twinCogs = twoPack * cogsFrac;
+  const singleCogs = A.packPrice * cogsFrac;
+  const siteContrib = twoPack + A.paidShip - twinCogs - A.logisticsCost;
+  const qcComboContrib = twoPack - twinCogs - twoPack * A.qcCommission / 100;
+  const qcSingleContrib = A.packPrice - singleCogs - A.packPrice * A.qcCommission / 100;
+  document.querySelectorAll('table[data-calc-group="unit-econ"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'customerpays') {
+      setOut(tr, 'site', fmtRupee(twoPack) + ' + ' + fmtRupee(A.paidShip) + ' ship');
+      setOut(tr, 'qccombo', fmtRupee(twoPack) + ' (inside grocery MOV)');
+      setOut(tr, 'qcsingle', fmtRupee(A.packPrice));
+    } else if (key === 'cogs') {
+      setOut(tr, 'site', fmtRupee(twinCogs));
+      setOut(tr, 'qccombo', fmtRupee(twinCogs));
+      setOut(tr, 'qcsingle', fmtRupee(singleCogs));
+    } else if (key === 'commission') {
+      setOut(tr, 'site', '₹0');
+      setOut(tr, 'qccombo', fmtRupee(twoPack * A.qcCommission / 100));
+      setOut(tr, 'qcsingle', fmtRupee(A.packPrice * A.qcCommission / 100));
+    } else if (key === 'freightfulfilment') {
+      setOut(tr, 'site', fmtRupee(A.logisticsCost) + ' courier; ' + fmtRupee(A.paidShip) + ' collected');
+      setOut(tr, 'qccombo', 'bundled in comm');
+      setOut(tr, 'qcsingle', 'bundled');
+    } else if (key === 'contributionbeforeads') {
+      setOut(tr, 'site', fmtRupee(siteContrib) + ' with ship collected');
+      setOut(tr, 'qccombo', fmtRupee(qcComboContrib));
+      setOut(tr, 'qcsingle', fmtRupee(qcSingleContrib));
+    }
+  });
+  const comboPrices = {
+    twoflavourstart: twoPack,
+    saltytrio: threePack,
+    freeshipbox: A.freeShip,
+    officetin: 249,
+    '2packdefaultfirstorder': twoPack,
+    '23pack': twoThree,
+    '34pack': threePack,
+  };
+  document.querySelectorAll('table[data-calc-group="combo-contents"] tr[data-calc-row]').forEach(tr => {
+    const p = comboPrices[tr.dataset.calcRow];
+    if (p != null) setOut(tr, 'price', tr.dataset.calcRow === 'officetin' ? fmtRupee(p) + ' / head' : fmtRupee(p));
+  });
+  document.querySelectorAll('table[data-calc-group="combo-price"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    const p = comboPrices[key];
+    if (p == null) return;
+    setOut(tr, 'price', fmtRupee(p));
+    setOut(tr, 'note', p >= A.freeShip ? 'Free ship at combined bar' : 'Paid ' + fmtRupee(A.paidShip) + ' ship');
+  });
+  document.querySelectorAll('table[data-calc-group="combo-margin"] tr[data-calc-row]').forEach(tr => {
+    const p = comboPrices[tr.dataset.calcRow];
+    if (p == null) return;
+    const gm = p * (1 - cogsFrac);
+    const afterShip = p >= A.freeShip ? gm - A.logisticsCost : gm - A.logisticsCost + A.paidShip;
+    setOut(tr, 'margin', fmtPct(p ? afterShip / p * 100 : 0) + ' site after ship; QC ~' + fmtPct((1 - cogsFrac - A.qcCommission / 100) * 100));
+  });
+  const comboOrdersMo = monthPlan.reduce((s, x) => s + x.orders, 0) / n * 0.42;
+  document.querySelectorAll('table[data-calc-group="combo-sales"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    const src = tr.querySelector('[data-calc-src="pct"]');
+    const pct = src ? (parseFloat(src.value) || 0) : 0;
+    const price = comboPrices[key] || 0;
+    if (key === 'total') {
+      setOut(tr, 'combos', fmtNum(comboOrdersMo) + ' (subset of window orders)');
+      setOut(tr, 'revenue', 'overlay inside ' + fmtINR(A.targetRevenue) + ', not extra');
+      return;
+    }
+    if (key === 'ifheldsepmar') {
+      setOut(tr, 'revenue', 'Stay inside the ' + fmtINR(sevenRev) + ' 7-month plan');
+      return;
+    }
+    const qty = comboOrdersMo * pct / 100;
+    setOut(tr, 'combos', fmtNum(qty));
+    setOut(tr, 'revenue', fmtINR(qty * price));
+  });
+
+  const d2cShare = (webPct + mpPct) / 100;
+  const peakD2cOrders = decM.orders * d2cShare;
+  document.querySelectorAll('table[data-calc-group="current-ship"] tr[data-calc-row]').forEach(tr => {
+    setOut(tr, 'amount', fmtRupee(A.logisticsCost) + ' on a 2-pouch satchel');
+  });
+  const shipScale = { now10orders: 1, '50orders': 1.055, '150orders': 1.10, '500orders': 1.167, peakd2cmonth: 1.222 };
+  document.querySelectorAll('table[data-calc-group="target-ship"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'nationalscaletarget') setOut(tr, 'freight', '≤ ' + fmtRupee(A.logisticsCost) + ' blended — QC/community have no D2C freight');
+    else setOut(tr, 'freight', fmtRupee(A.logisticsCost * (shipScale[key] || 1)));
+  });
+  document.querySelectorAll('table[data-calc-group="ship-pct"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'd2cfreightblendedaov') setOut(tr, 'pct', A.aov ? fmtPct(A.logisticsCost / A.aov * 100) : '—');
+    else if (key === 'paidshipcollectedaov') setOut(tr, 'pct', A.aov ? fmtPct(A.paidShip / A.aov * 100) : '—');
+    else if (key === 'freeshipbaraov') setOut(tr, 'pct', A.aov ? fmtPct(A.freeShip / A.aov * 100) + ' (bar / blend, not freight)' : '—');
+  });
+  const logiVol = { now10: 10, '50orders': 50, '150orders': 150, '500orders': 500, peakd2cmonth: Math.max(500, Math.round(peakD2cOrders)) };
+  const logiFr = { now10: 1, '50orders': 1.055, '150orders': 1.10, '500orders': 1.167, peakd2cmonth: 1.222 };
+  const logiPk = { now10: 12, '50orders': 12, '150orders': 11, '500orders': 10, peakd2cmonth: 9 };
+  const logiLb = { now10: 12, '50orders': 12, '150orders': 14, '500orders': 15, peakd2cmonth: 18 };
+  const logiCod = { now10: 0, '50orders': 0, '150orders': 0, '500orders': 20, peakd2cmonth: 25 };
+  document.querySelectorAll('table[data-calc-group="logi-month"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    const vol = logiVol[key]; if (!vol) return;
+    const freight = A.logisticsCost * (logiFr[key] || 1);
+    const pack = logiPk[key], labour = logiLb[key], cod = logiCod[key];
+    const per = freight + pack + labour + cod;
+    setOut(tr, 'freight', fmtRupee(freight));
+    setOut(tr, 'pack', fmtRupee(pack));
+    setOut(tr, 'labour', fmtRupee(labour));
+    setOut(tr, 'cod', fmtRupee(cod));
+    setOut(tr, 'perorder', fmtRupee(per));
+    setOut(tr, 'monthly', fmtINR(per * vol));
+  });
+  const d2cOrdersMo = (A.targetRevenue / n / (A.aov || 1)) * d2cShare;
+  document.querySelectorAll('table[data-calc-group="logi-week"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'ordersshipped') setOut(tr, 'target', fmtNum(d2cOrdersMo / avgWeeksSafe(n, totalWeeks)) + ' D2C / week');
+    else if (key === 'aov') setOut(tr, 'target', fmtRupee(A.aov));
+    else if (key === 'freightorder') setOut(tr, 'target', '≤ ' + fmtRupee(A.logisticsCost + 9) + ' on D2C');
+    else if (key === 'freightasofaov') setOut(tr, 'target', A.aov ? '≤ ' + fmtPct(A.logisticsCost / twoPack * 100) + ' on site 2-pack; blended ' + fmtPct(A.logisticsCost * d2cShare / A.aov * 100) : '—');
+    else if (key === 'packagingorder') setOut(tr, 'target', '≤ ₹12 (trial film)');
+    else if (key === 'totallogisticsorder') setOut(tr, 'target', '≤ ' + fmtRupee(A.logisticsCost + 40) + ' D2C');
+  });
+  const pilotTotal = Math.max(20000, Math.round(avgMonthlyPacks * 1.7));
+  document.querySelectorAll('table[data-calc-group="pack-moq"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'pilotpackspersku') setOut(tr, 'amount', fmtNum(pilotTotal / 7));
+    else if (key === 'pilotpackstotal') setOut(tr, 'amount', fmtNum(pilotTotal));
+    else if (key === 'pilotcash') setOut(tr, 'amount', fmtINR(pilotTotal * 7.5));
+  });
+  const art = 100000, proto = 15000, film = pilotTotal * 7, test = 15000, contig = 20000;
+  document.querySelectorAll('table[data-calc-group="pack-invest"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'packagingstrategytrialartwork7skus') setOut(tr, 'budget', fmtINR(art));
+    else if (key === 'prototypesphysicalsamples') setOut(tr, 'budget', fmtINR(proto));
+    else if (key === 'initialpackagingtrialpouches') setOut(tr, 'budget', fmtINR(film));
+    else if (key === 'testingcolourproofsrevisions') setOut(tr, 'budget', fmtINR(test));
+    else if (key === 'contingency') setOut(tr, 'budget', fmtINR(contig));
+    else if (key === 'total') setOut(tr, 'budget', fmtINR(art + proto + film + test + contig));
+  });
+  const startCvr = A.convPct, laterCvr = A.convPct + 1.5, heroCvr = A.convPct + 2.5;
+  document.querySelectorAll('table[data-calc-group="conv-rate"] tr[data-calc-row], table[data-calc-group="conv-os"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'start') setOut(tr, 'rate', fmtPct(startCvr));
+    else if (key === 'in6months') setOut(tr, 'rate', fmtPct(laterCvr));
+    else if (key === 'herotrialpdps') setOut(tr, 'rate', fmtPct(heroCvr) + '–' + fmtPct(heroCvr + 2));
+  });
+
   // ---- Contribution margin per order (Sec 3) — also feeds Platform-wise margin (Sec 10) ----
   const margins = {
     website: A.aov * (1 - cogsFrac) - A.logisticsCost,
@@ -1822,8 +2176,8 @@ function recalcTables() {
   monthRev.quickcommercetotal = [0, 1, 2, 3].map(i =>
     (monthRev.zeptobengaluru[i] || 0) + (monthRev.blinkitbengaluru[i] || 0) + (monthRev.instamartbengaluru[i] || 0));
   const aovByPlatform = {
-    flipkart: 179, amazon: 179, marketplacetotal: 179,
-    zeptobengaluru: 199, blinkitbengaluru: 199, instamartbengaluru: 199, amazonnow: 199, quickcommercetotal: 199,
+    flipkart: A.mpAov, amazon: A.mpAov, marketplacetotal: A.mpAov,
+    zeptobengaluru: A.qcAov, blinkitbengaluru: A.qcAov, instamartbengaluru: A.qcAov, amazonnow: A.qcAov, quickcommercetotal: A.qcAov,
   };
   document.querySelectorAll('table[data-calc-group="platform-month"] tr[data-calc-row]').forEach(tr => {
     const vals = monthRev[tr.dataset.calcRow];
@@ -1843,7 +2197,7 @@ function recalcTables() {
   // ---- Community (Sec 11 + 14) and B2B (Sec 12) — ramp × channel % ----
   const waMonth = MONTH_KEYS.map(k => waTotal * RAMP_WA[k]);
   const b2bMonth = MONTH_KEYS.map(k => b2bTotal * RAMP_B2B[k]);
-  const communityAov = 199;
+  const communityAov = A.qcAov || 199;
   const b2bBox = 25 * 249;
   document.querySelectorAll('table[data-calc-group="community-month"] tr[data-calc-row]').forEach(tr => {
     const idx = MONTH_KEYS.indexOf(tr.dataset.calcRow);
@@ -1875,9 +2229,9 @@ function recalcTables() {
   });
 
   // ---- Website weekly scorecard + traffic (Sec 7 + 14) ----
-  const sepCvr = 0.025, decCvr = 0.035;
-  const sepAov = A.aov;
-  const decAov = A.aov <= 219 ? 249 : Math.round(A.aov * 1.12);
+  const sepCvr = (A.convPct || 2.5) / 100, decCvr = ((A.convPct || 2.5) + 1) / 100;
+  const sepAov = sepM.aov || A.aov;
+  const decAov = decM.aov || (A.aov <= 219 ? 249 : Math.round(A.aov * 1.12));
   const avgWeeks = totalWeeks / n;
   const sepOrdersW = sepAov > 0 ? (webTotal / n / sepAov) / avgWeeks : 0;
   const sepSessW = sepCvr > 0 ? sepOrdersW / sepCvr : 0;
@@ -1891,8 +2245,8 @@ function recalcTables() {
       setOut(tr, 'sep', fmtNum(sepSessW));
       setOut(tr, 'dec', fmtNum(decSessW));
     } else if (key === 'conversionrate') {
-      setOut(tr, 'sep', '2.5%');
-      setOut(tr, 'dec', '3.5%');
+      setOut(tr, 'sep', fmtPct(A.convPct));
+      setOut(tr, 'dec', fmtPct(A.convPct + 1));
     } else if (key === 'ordersweek') {
       setOut(tr, 'sep', fmtNum(sepOrdersW));
       setOut(tr, 'dec', fmtNum(decOrdersW));
@@ -1932,6 +2286,84 @@ function recalcTables() {
     else if (key === 'communitywhatsapp') rev = waTotal;
     setOut(tr, 'revenue', fmtINR(rev));
   });
+
+  const sevenBudget = sevenRev * A.mktPct / 100;
+  const windowOrders = monthPlan.reduce((s, x) => s + x.orders, 0);
+  const blendedCac = windowOrders > 0 ? totalBudget / windowOrders : 0;
+  document.querySelectorAll('table[data-calc-group="total-budget"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'sepdecwindow') setOut(tr, 'budget', fmtINR(totalBudget) + ' (' + fmtPct(A.mktPct) + ' of ' + fmtINR(A.targetRevenue) + ')');
+    else if (key === '7monthplan') setOut(tr, 'budget', fmtINR(sevenBudget) + ' if ' + fmtPct(A.mktPct) + ' holds');
+  });
+  document.querySelectorAll('table[data-calc-group="budget-month"] tr[data-calc-row]').forEach(tr => {
+    if (tr.dataset.calcRow === 'marketingwindowmonths') setOut(tr, 'amount', fmtINR(totalBudget / n) + ' / month');
+  });
+  document.querySelectorAll('table[data-calc-group="budget-week"] tr[data-calc-row]').forEach(tr => {
+    setOut(tr, 'amount', fmtINR(totalBudget / totalWeeks) + ' / week');
+  });
+  document.querySelectorAll('table[data-calc-group="cac"] tr[data-calc-row]').forEach(tr => {
+    setOut(tr, 'amount', fmtRupee(blendedCac) + ' blended (' + fmtINR(totalBudget) + ' / ' + fmtNum(windowOrders) + ' orders). Paid lines ' + fmtRupee(Math.min(75, A.aov * 0.34)) + '–' + fmtRupee(Math.min(75, A.aov * 0.34)) + '. QC launch ' + fmtRupee(80) + '–' + fmtRupee(150) + ' as acquisition.');
+  });
+  const ROAS_FIXED = {
+    blendedmktsofrevenue: A.mktPct > 0 ? 100 / A.mktPct : 5,
+    marketplaceadsflipkarttwins: 4.5,
+    paidsocial2packpdp: 3.2,
+    d2csitecrm: 4.0,
+    influencerugc: 2.2,
+    quickcommerceads: 3.0,
+    stopreallocatebelow: 2.0,
+  };
+  document.querySelectorAll('table[data-calc-group="roas"] tr[data-calc-row]').forEach(tr => {
+    const r = ROAS_FIXED[tr.dataset.calcRow];
+    if (r == null) return;
+    setOut(tr, 'roas', r.toFixed(1) + '×');
+    const aovFor = tr.dataset.calcRow === 'quickcommerceads' ? A.qcAov : (tr.dataset.calcRow.indexOf('paid') === 0 || tr.dataset.calcRow === 'd2csitecrm' || tr.dataset.calcRow === 'influencerugc' ? twoPack : A.aov);
+    setOut(tr, 'cac', fmtRupee(aovFor / r));
+  });
+  document.querySelectorAll('table[data-calc-group="max-cac"] tr[data-calc-row]').forEach(tr => {
+    setOut(tr, 'amount', fmtRupee(75) + ' site/MP · ' + fmtRupee(100) + ' QC launch for 8 weeks then ' + fmtRupee(80) + ' · never ₹2–3 L Blinkit min-spend');
+  });
+  document.querySelectorAll('table[data-calc-group="orders-os"] tr[data-calc-row]').forEach(tr => {
+    if (tr.dataset.calcRow === 'sepmonth') setOut(tr, 'orders', fmtNum(sepM.orders));
+    else if (tr.dataset.calcRow === 'sepweek') setOut(tr, 'orders', '~' + fmtNum(sepM.orders / (sepM.weeks || 4.3)));
+  });
+  document.querySelectorAll('table[data-calc-group="aov-os"] tr[data-calc-row]').forEach(tr => {
+    if (tr.dataset.calcRow === 'windowblendassumptions') setOut(tr, 'aov', fmtRupee(A.aov));
+    else if (tr.dataset.calcRow === 'sepmodeled') setOut(tr, 'aov', fmtRupee(sepM.aov));
+  });
+  const streamWeekly = {};
+  document.querySelectorAll('table[data-calc-group="stream"] tr[data-calc-row]').forEach(tr => {
+    const srcInput = tr.querySelector('[data-calc-src="pct"]');
+    const pct = srcInput ? (parseFloat(srcInput.value) || 0) : 0;
+    streamWeekly[tr.dataset.calcRow] = totalBudget * pct / 100 / totalWeeks;
+  });
+  document.querySelectorAll('table[data-calc-group="paid-ads"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'marketplaceads') setOut(tr, 'weekly', fmtINR(streamWeekly.marketplaceads || 0));
+    else if (key === 'paidsocial') setOut(tr, 'weekly', fmtINR(streamWeekly.paidsocial || 0));
+    else if (key === 'qcadsfromnov') setOut(tr, 'weekly', '₹0 until Nov, then ' + fmtINR(streamWeekly.qcadfromnov || streamWeekly.qcadsfromnov || 0));
+  });
+  const b2bWeekSep = (b2bTotal * RAMP_B2B.sep) / (MONTH_WEEKS[0] || 4.3);
+  const b2bWeekNd = ((b2bTotal * RAMP_B2B.nov) / (MONTH_WEEKS[2] || 4.3) + (b2bTotal * RAMP_B2B.dec) / (MONTH_WEEKS[3] || 4.3)) / 2;
+  document.querySelectorAll('table[data-calc-group="b2b-outreach"] tr[data-calc-row]').forEach(tr => {
+    if (tr.dataset.calcRow === 'seprevenue') setOut(tr, 'weekly', fmtINR(b2bWeekSep));
+    else if (tr.dataset.calcRow === 'novdecrevenue') setOut(tr, 'weekly', fmtINR(b2bWeekNd));
+  });
+  const mixStr = (qc) => 'Site ' + Math.round(webPct) + ' / MP ' + Math.round(mpPct) + ' / QC ' + qc + ' / WA ' + Math.round(waPct) + ' / B2B ' + Math.round(b2bPct);
+  document.querySelectorAll('table[data-calc-group="dash"] tr[data-calc-row]').forEach(tr => {
+    const key = tr.dataset.calcRow;
+    if (key === 'revenue') { setOut(tr, 'sep', fmtINR(sepM.rev)); setOut(tr, 'dec', fmtINR(decM.rev)); }
+    else if (key === 'orders') { setOut(tr, 'sep', fmtNum(sepM.orders)); setOut(tr, 'dec', fmtNum(decM.orders)); }
+    else if (key === 'aov') { setOut(tr, 'sep', fmtRupee(sepM.aov)); setOut(tr, 'dec', fmtRupee(decM.aov)); }
+    else if (key === 'channelwise') { setOut(tr, 'sep', mixStr(0)); setOut(tr, 'dec', mixStr(Math.round(qcPct))); }
+    else if (key === 'marketingspendvsrevenue') {
+      setOut(tr, 'sep', fmtPct(A.mktPct) + ' · ' + fmtINR(sepM.rev * A.mktPct / 100));
+      setOut(tr, 'dec', fmtPct(A.mktPct) + ' · ' + fmtINR(decM.rev * A.mktPct / 100));
+    } else if (key === 'blendedcacvsceiling') {
+      setOut(tr, 'sep', fmtRupee(blendedCac));
+      setOut(tr, 'dec', fmtRupee(blendedCac));
+    }
+  });
   fitWrapFields();
 }
 
@@ -1955,11 +2387,17 @@ document.getElementById('apResetBtn').addEventListener('click', () => {
   document.getElementById('ap_startMonth').value = AP_DEFAULTS.startMonth;
   document.getElementById('ap_endMonth').value = AP_DEFAULTS.endMonth;
   document.getElementById('ap_aov').value = AP_DEFAULTS.aov;
+  document.getElementById('ap_qcAov').value = AP_DEFAULTS.qcAov;
+  document.getElementById('ap_mpAov').value = AP_DEFAULTS.mpAov;
+  document.getElementById('ap_packPrice').value = AP_DEFAULTS.packPrice;
   document.getElementById('ap_cogsPct').value = AP_DEFAULTS.cogsPct;
   document.getElementById('ap_logisticsCost').value = AP_DEFAULTS.logisticsCost;
+  document.getElementById('ap_paidShip').value = AP_DEFAULTS.paidShip;
+  document.getElementById('ap_freeShip').value = AP_DEFAULTS.freeShip;
   document.getElementById('ap_mpCommission').value = AP_DEFAULTS.mpCommission;
   document.getElementById('ap_qcCommission').value = AP_DEFAULTS.qcCommission;
   document.getElementById('ap_mktPct').value = AP_DEFAULTS.mktPct;
+  document.getElementById('ap_convPct').value = AP_DEFAULTS.convPct;
   recalcTables();
 });
 recalcTables();
@@ -2008,7 +2446,7 @@ document.getElementById('printBtn').addEventListener('click', () => window.print
 // file), no separate download. Reopen this same HTML file later in the
 // same browser and your edits are restored automatically.
 // ---------------------------------------------------------------
-const STORAGE_KEY = 'krispino-trial-pack-worksheet-v3';
+const STORAGE_KEY = 'krispino-trial-pack-worksheet-v4';
 const saveStatusEl = document.getElementById('saveStatus');
 function showSaveStatus(msg) { saveStatusEl.textContent = msg; }
 
@@ -2060,11 +2498,17 @@ function applySaveData(data) {
     setIf('ap_startMonth', A.startMonth);
     setIf('ap_endMonth', A.endMonth);
     setIf('ap_aov', A.aov);
+    setIf('ap_qcAov', A.qcAov);
+    setIf('ap_mpAov', A.mpAov);
+    setIf('ap_packPrice', A.packPrice);
     setIf('ap_cogsPct', A.cogsPct);
     setIf('ap_logisticsCost', A.logisticsCost);
+    setIf('ap_paidShip', A.paidShip);
+    setIf('ap_freeShip', A.freeShip);
     setIf('ap_mpCommission', A.mpCommission);
     setIf('ap_qcCommission', A.qcCommission);
     setIf('ap_mktPct', A.mktPct);
+    setIf('ap_convPct', A.convPct);
   }
 
   // 2. Fields — flexbox-shaped questions ("... — item N") are restored by position and can
